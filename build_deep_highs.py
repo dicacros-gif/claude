@@ -47,6 +47,7 @@ DATA_DIR.mkdir(exist_ok=True)
 ENRICHED_HIGH_CSV  = DATA_DIR / "52_week_highs_enriched_history.csv"
 VOLUME_SURGE_CSV   = DATA_DIR / "volume_surge_history.csv"
 FLOW_HISTORY_CSV   = DATA_DIR / "flow_history.csv"
+CUSIP_CACHE_JSON   = DATA_DIR / "cusip_cache.json"
 OUTPUT_HTML        = ROOT / "index.html"
 
 TIMEZONE = timezone(timedelta(hours=9), name="KST")
@@ -117,24 +118,32 @@ _HIGH_GROWTH_THEMES = {"AI반도체", "AI인프라", "로봇/자동화", "방산
 
 # ── 유명기관 13F ────────────────────────────────
 FAMOUS_MANAGERS = [
-    ("Berkshire Hathaway",              "0001067983"),
-    ("Bridgewater Associates",          "0001350694"),
-    ("Citadel Advisors",                "0001423053"),
-    ("Gates Foundation Trust",          "0001166559"),
-    ("Tiger Global",                    "0001167483"),
+    ("Berkshire Hathaway",              "0001067983"),  # Warren Buffett
+    ("Bridgewater Associates",          "0001350694"),  # Ray Dalio
+    ("Citadel Advisors",                "0001423053"),  # Ken Griffin
+    ("Gates Foundation Trust",          "0001166559"),  # Bill Gates
+    ("Tiger Global",                    "0001167483"),  # Chase Coleman
     ("Wellington Management",           "0000902219"),
-    ("Renaissance Technologies",        "0001037389"),
-    ("Pershing Square",                 "0001336528"),
-    ("Soros Fund Management",           "0001029160"),
-    # ── 추가 유명 운용사 ──────────────────────────
+    ("Renaissance Technologies",        "0001037389"),  # Jim Simons
+    ("Pershing Square",                 "0001336528"),  # Bill Ackman
+    ("Soros Fund Management",           "0001029160"),  # George Soros
     ("Duquesne Family Office",          "0001536411"),  # Stanley Druckenmiller
     ("Third Point LLC",                 "0001040273"),  # Dan Loeb
-    ("D.E. Shaw",                       "0001179821"),
+    ("D. E. Shaw",                      "0001179821"),  # David Shaw
     ("Baupost Group",                   "0001061768"),  # Seth Klarman
     ("Appaloosa Management",            "0001006438"),  # David Tepper
-    ("Viking Global Investors",         "0001341439"),
+    ("Viking Global Investors",         "0001341439"),  # Andreas Halvorsen
     ("Coatue Management",               "0001336919"),  # Philippe Laffont
     ("Lone Pine Capital",               "0001061219"),  # Stephen Mandel
+    # ── 추가 유명 운용사 (2차) ──────────────────────
+    ("Scion Asset Management",          "0001331287"),  # Michael Burry
+    ("Paulson & Co",                    "0001035173"),  # John Paulson
+    ("Greenlight Capital",              "0001079294"),  # David Einhorn
+    ("Elliott Investment Management",   "0001039399"),  # Paul Singer
+    ("Starboard Value",                 "0001371174"),  # Jeff Smith
+    ("ValueAct Capital",                "0001129816"),  # Mason Morfit
+    ("Highbridge Capital",              "0001199392"),
+    ("Glenview Capital",                "0001228454"),  # Larry Robbins
 ]
 
 # ── 한국 기업명 사전 ──────────────────────────
@@ -462,6 +471,67 @@ def enrich_korean_rows_with_fnguide(rows: list):
         list(ex.map(_enrich, kr_rows))
 
 
+def _load_cusip_cache() -> dict[str, str]:
+    """CUSIP → 티커 캐시 로드 (data/cusip_cache.json)"""
+    if CUSIP_CACHE_JSON.exists():
+        try:
+            return json.loads(CUSIP_CACHE_JSON.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+    return {}
+
+
+def _save_cusip_cache(cache: dict[str, str]) -> None:
+    try:
+        CUSIP_CACHE_JSON.write_text(
+            json.dumps(cache, ensure_ascii=False, indent=2), encoding="utf-8")
+    except Exception:
+        pass
+
+
+def _resolve_cusips(cusips: list[str]) -> dict[str, str]:
+    """OpenFIGI API로 CUSIP → 티커 변환 (배치 25개, 캐시 우선).
+
+    무료 티어: 25개/요청, ~5 req/min → 2초 딜레이.
+    최초 실행 시 최대 200개 조회; 이후 캐시로 즉시 처리.
+    """
+    cache = _load_cusip_cache()
+    unknown = list(dict.fromkeys(
+        c for c in cusips if c and c not in cache
+    ))[:200]
+
+    if unknown:
+        batch_size = 25
+        for i in range(0, len(unknown), batch_size):
+            batch = unknown[i:i + batch_size]
+            try:
+                r = requests.post(
+                    "https://api.openfigi.com/v3/mapping",
+                    json=[{"idType": "ID_CUSIP", "idValue": c} for c in batch],
+                    headers={"Content-Type": "application/json"},
+                    timeout=15, verify=False,
+                )
+                if r.status_code == 200:
+                    for cusip, item in zip(batch, r.json()):
+                        found = ""
+                        if isinstance(item, dict):
+                            for entry in (item.get("data") or []):
+                                tk   = entry.get("ticker", "")
+                                sec2 = entry.get("securityType2", "")
+                                if tk and sec2 == "Common Stock":
+                                    found = tk
+                                    break
+                                elif tk and not found:
+                                    found = tk
+                        cache[cusip] = found
+            except Exception:
+                pass
+            time.sleep(2)
+        _save_cusip_cache(cache)
+
+    return cache
+
+
 def _parse_13f_xml(xml_text: str) -> list[dict]:
     """정규식으로 13F infotable XML 파싱 (네임스페이스 무관)"""
     # 네임스페이스 접두어 제거
@@ -630,6 +700,18 @@ def fetch_famous_manager_rows() -> list[dict]:
         except Exception as e:
             print(f"[13F] {mgr_name}: {e}")
     result.sort(key=lambda x: -(x.get("보유가치_USD") or 0))
+
+    # ── CUSIP → 실제 티커 변환 (캐시 + OpenFIGI) ──────────────────────
+    all_cusips = [r.get("CUSIP", "") for r in result]
+    cusip_map  = _resolve_cusips(all_cusips)
+    for r in result:
+        cusip    = r.get("CUSIP", "")
+        resolved = cusip_map.get(cusip, "")
+        if resolved:
+            r["티커"] = resolved
+        elif not r.get("티커"):
+            r["티커"] = cusip  # CUSIP을 fallback 티커로 사용
+
     save_13f_history(result, DATA_DIR / "13f_history.csv")
     return result
 
@@ -2162,9 +2244,9 @@ THEME_HEADERS = [
     "대표종목","최고점수종목","최고점수",
 ]
 
-# 유명기관_13F
+# 유명기관_13F (CUSIP은 내부용, 표시하지 않음)
 SEC_HEADERS = [
-    "기관명","보고일","종목명","티커","CUSIP",
+    "기관명","보고일","종목명","티커",
     "포지션변화","주식수_변화율%","보유가치_USD","주식수","전분기_주식수","주식종류",
 ]
 
@@ -2986,7 +3068,7 @@ def main():
                 print(f"    {name} 오류: {e}")
                 return None
 
-        r13f      = _safe_result(fut_13f,      "13F",     120)
+        r13f      = _safe_result(fut_13f,      "13F",     300)
         r_market  = _safe_result(fut_market,   "시장지표",  30)
         r_fg      = _safe_result(fut_fg,       "Fear&Greed",20)
         r_insider = _safe_result(fut_insider,  "내부자거래", 30)
