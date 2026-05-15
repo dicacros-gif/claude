@@ -1775,6 +1775,7 @@ def _esc(s: object) -> str:
 
 
 def _fmt_val(v: object) -> str:
+    """셀 값 포맷. _esc는 _make_table_html에서 한 번만 처리."""
     if v is None or (isinstance(v, float) and math.isnan(v)):
         return ""
     if isinstance(v, float):
@@ -1783,7 +1784,7 @@ def _fmt_val(v: object) -> str:
         return f"{v:.1f}"
     if isinstance(v, int):
         return f"{v:,}"
-    return _esc(str(v))
+    return str(v)
 
 
 _BIG_NUM_COLS = frozenset({
@@ -1806,7 +1807,7 @@ def _fmt_big(v: object) -> str:
         if a >= 1e3:  return f"{sign}{a/1e3:.0f}K"
         return f"{f:.0f}"
     except Exception:
-        return _esc(str(v))
+        return str(v)
 
 
 def _date_short(v: object) -> str:
@@ -1819,8 +1820,8 @@ def _date_short(v: object) -> str:
 
 
 def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
-    bg_odd = "#F2F6FC" if odd else "#FFFFFF"
-    base = f"background:{bg_odd};"
+    # CSS 변수 → 다크모드 자동 전환 (no !important conflict)
+    base = "background:var(--cell-odd);" if odd else "background:var(--cell-even);"
     R = "text-align:right;"
     C = "text-align:center;"
     S = "font-size:9px;"
@@ -1902,9 +1903,9 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
 
     # ── 섹터/산업 ────────────────────────────────────
     if col in ("섹터", "산업"):
-        return base + S + "color:#4A148C;", _fmt_val(val)
+        return base + S + "color:var(--t2);font-style:italic;", _fmt_val(val)
     if col == "미래산업테마":
-        return base + B + S + "color:#4A148C;", _fmt_val(val)
+        return base + B + S + "color:var(--ac);", _fmt_val(val)
 
     # ── 수급 flow 컬럼 — bg 포함 ────────────────────
     if col in _FLOW_COLS:
@@ -2357,11 +2358,37 @@ def _make_dashboard_html(enriched: list[dict], collected_at: str) -> str:
 
 def _make_theme_summary_html(enriched: list[dict]) -> str:
     theme_map: dict[str, list[dict]] = {}
+    # 1. 미래산업 키워드 테마
     for r in enriched:
         for t in str(r.get("미래산업테마", "")).split(","):
             t = t.strip()
             if t:
                 theme_map.setdefault(t, []).append(r)
+
+    # 2. 성장 정량 테마 (★ 접두어로 상위 표시)
+    _GROWTH_RULES = [
+        ("★ 매출급성장(NextFY≥20%)",
+         lambda r: (r.get("예상매출성장률_NextFY%") or 0) >= 20),
+        ("★ 이익급성장(NextFY≥25%)",
+         lambda r: (r.get("예상EPS성장률_NextFY%") or 0) >= 25),
+        ("★ 고수익성(OPM≥20%)",
+         lambda r: (r.get("영업이익률%") or 0) >= 20),
+        ("★ 저평가성장(0<PEG<1)",
+         lambda r: 0 < (r.get("PEG_TTM") or 0) < 1),
+        ("★ 강수급(외국인점수≥65)",
+         lambda r: (r.get("외국인수급점수") or 0) >= 65),
+        ("★ 고현금흐름(FCF마진≥15%)",
+         lambda r: (r.get("FCF마진%") or 0) >= 15),
+    ]
+    for gtheme, rule in _GROWTH_RULES:
+        for r in enriched:
+            try:
+                if rule(r):
+                    lst = theme_map.setdefault(gtheme, [])
+                    if r not in lst:
+                        lst.append(r)
+            except Exception:
+                pass
 
     rows = []
     for theme, members in sorted(theme_map.items(), key=lambda x: -len(x[1])):
@@ -2506,11 +2533,15 @@ _HTML_CSS = '''
   --bd:#BBF7D0; --hdr:#1A3A2A; --tbg:rgba(255,255,255,0.92);
   --tgB:#BBF7D0; --tgK:#16A34A; --glow:rgba(22,163,74,0.4);
   --shadow:0 4px 18px rgba(15,23,42,0.08);
+  --cell-odd:#F2F6FC; --cell-even:#FFFFFF;
+  --hover-bg:#DCFCE7; --hover-fg:#1A3A2A;
 }
 [data-t=dark] {
   --ac:#4ADE80; --acL:rgba(74,222,128,0.12); --bg:#071510; --card:#0D1F15;
   --card2:#122B1C; --t1:#E2E8F0; --t2:#94A3B8; --t3:#475569;
   --bd:#1A3A2A; --tbg:rgba(7,21,16,0.92); --tgB:#1A3A2A; --tgK:#4ADE80;
+  --cell-odd:#141e2e; --cell-even:#0f1824;
+  --hover-bg:#1A3A2A; --hover-fg:#D4F5DC;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;font-size:14px;}
@@ -2569,29 +2600,47 @@ main{padding:0.8rem 1rem;max-width:100%;}
 .tbl-wrap::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px;}
 table.dtbl{border-collapse:collapse;width:max-content;min-width:100%;}
 table.dtbl thead tr th{position:sticky;top:0;z-index:2;}
+/* 행 전체 호버 하이라이트 */
 table.dtbl tr.drow:hover td{
-  filter:brightness(0.93);transition:filter 0.12s;}
-[data-t=dark] table.dtbl tr.drow:hover td{filter:brightness(1.15);}
-/* dark mode cell bg invert for colored cells */
-[data-t=dark] table.dtbl td{border-bottom-color:#2a3444 !important;
+  background:var(--hover-bg) !important;
+  color:var(--hover-fg) !important;
+  transition:background 0.1s;}
+/* 다크모드 셀 테두리 */
+[data-t=dark] table.dtbl td{
+  border-bottom-color:#2a3444 !important;
   border-right-color:#2a3444 !important;}
-[data-t=dark] table.dtbl tr.drow:nth-child(odd) td{
-  background-color:#141e2e !important;}
-[data-t=dark] table.dtbl tr.drow:nth-child(even) td{
-  background-color:#0f1824 !important;}
-/* override colored cells in dark mode for readability */
+/* 다크모드 컬러 셀 오버라이드 (CSS 변수 기반 기본 셀은 자동 전환) */
 [data-t=dark] td[style*="background:#D4EDDA"]{background:#1a3a25 !important;color:#86efac !important;}
+[data-t=dark] td[style*="background:#D4F5DC"]{background:#1a3a25 !important;color:#86efac !important;}
 [data-t=dark] td[style*="background:#EAF7EA"]{background:#152a1e !important;color:#6ee7b7 !important;}
-[data-t=dark] td[style*="background:#FFF0F0"],[data-t=dark] td[style*="background:#FFD0D0"]{background:#3a1515 !important;color:#fca5a5 !important;}
-[data-t=dark] td[style*="background:#EBF5FF"]{background:#0f2040 !important;color:#93c5fd !important;}
-[data-t=dark] td[style*="background:#FFE0E0"]{background:#3a1010 !important;color:#fca5a5 !important;}
-[data-t=dark] td[style*="background:#E3F2FD"]{background:#0c1f38 !important;color:#93c5fd !important;}
-[data-t=dark] td[style*="background:#FFF9C4"],[data-t=dark] td[style*="background:#FFD700"]{background:#2a2200 !important;color:#fde68a !important;}
 [data-t=dark] td[style*="background:#E8F5E9"]{background:#0d2218 !important;color:#86efac !important;}
 [data-t=dark] td[style*="background:#E0F5E0"]{background:#0d2218 !important;color:#86efac !important;}
+[data-t=dark] td[style*="background:#FFF0F0"]{background:#3a1515 !important;color:#fca5a5 !important;}
+[data-t=dark] td[style*="background:#FFD0D0"]{background:#3a1515 !important;color:#fca5a5 !important;}
+[data-t=dark] td[style*="background:#EBF5FF"]{background:#0f2040 !important;color:#93c5fd !important;}
+[data-t=dark] td[style*="background:#E3F2FD"]{background:#0c1f38 !important;color:#93c5fd !important;}
+[data-t=dark] td[style*="background:#FFE0E0"]{background:#3a1010 !important;color:#fca5a5 !important;}
+[data-t=dark] td[style*="background:#FFF9C4"]{background:#2a2200 !important;color:#fde68a !important;}
+[data-t=dark] td[style*="background:#FFD700"]{background:#2a2200 !important;color:#fde68a !important;}
 [data-t=dark] td[style*="background:#FFE8CC"]{background:#2a1800 !important;color:#fcd34d !important;}
-[data-t=dark] td[style*="background:#155724"]{background:#1a4a2e !important;}
-[data-t=dark] td[style*="background:#1E6B00"]{background:#1a4a2e !important;}
+[data-t=dark] td[style*="background:#155724"]{background:#1a4a2e !important;color:#d4f5dc !important;}
+[data-t=dark] td[style*="background:#1E6B00"]{background:#1a4a2e !important;color:#86efac !important;}
+[data-t=dark] td[style*="background:#0069B4"]{background:#0a2d50 !important;color:#93c5fd !important;}
+[data-t=dark] td[style*="background:#1B6B1B"]{background:#0d3b0d !important;color:#86efac !important;}
+[data-t=dark] td[style*="background:#A30000"]{background:#3b0d0d !important;color:#fca5a5 !important;}
+/* 다크모드 텍스트 색상 오버라이드 (배경 없는 컬러 텍스트) */
+[data-t=dark] td[style*="color:#1E6B00"]:not([style*="background:#"]){color:#6ee7b7 !important;}
+[data-t=dark] td[style*="color:#155724"]:not([style*="background:#"]){color:#86efac !important;}
+[data-t=dark] td[style*="color:#1B6B1B"]:not([style*="background:#"]){color:#6ee7b7 !important;}
+[data-t=dark] td[style*="color:#CC0000"]{color:#fca5a5 !important;}
+[data-t=dark] td[style*="color:#AA0000"]{color:#fca5a5 !important;}
+[data-t=dark] td[style*="color:#A30000"]{color:#fca5a5 !important;}
+[data-t=dark] td[style*="color:#0D47A1"]{color:#93c5fd !important;}
+[data-t=dark] td[style*="color:#003399"]{color:#93c5fd !important;}
+[data-t=dark] td[style*="color:#0069B4"]{color:#93c5fd !important;}
+[data-t=dark] td[style*="color:#856404"]{color:#fde68a !important;}
+[data-t=dark] td[style*="color:#7B3300"]{color:#fcd34d !important;}
+[data-t=dark] td[style*="color:#7B0000"]{color:#fca5a5 !important;}
 .empty-msg{padding:2rem;text-align:center;color:var(--t3);font-size:0.9rem;}
 /* search bar */
 .search-bar{padding:0.5rem 1rem;background:var(--card2);
@@ -2926,8 +2975,15 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
             "수급패턴": "", "선행매매점수": 0, "투자우선점수": 0, "등급": "-",
         }
 
-    vol_us_e = [_vol_row(r, "US") for r in volume_us]
-    vol_kr_e = [_vol_row(r, "KR") for r in volume_kr]
+    # 신고가 종목과 중복되는 거래량급증 종목 제거
+    _high_tickers = {r.get("티커","") for r in enriched}
+    _high_raw     = {r.get("_ticker","").split(":")[-1] for r in enriched}
+    _is_dup = lambda r, country: (
+        (r.get("_ticker","").split(":")[-1] if country=="US" else _bare_kr_code(r.get("_ticker","")))
+        in (_high_tickers | _high_raw)
+    )
+    vol_us_e = [_vol_row(r, "US") for r in volume_us if not _is_dup(r, "US")]
+    vol_kr_e = [_vol_row(r, "KR") for r in volume_kr if not _is_dup(r, "KR")]
     panels_html.append(_panel_wrap("vol_us", "거래량급증 미국",
                                    len(vol_us_e),
                                    _make_table_html(vol_us_e, VOLUME_HEADERS)))
