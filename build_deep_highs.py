@@ -3155,11 +3155,24 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     by_tracking = sorted(enriched,
                          key=lambda x: (x.get("수집일",""), x.get("_ticker","")))
 
+    # "일별_트래킹" 탭 옆에 업데이트 시각 표시
+    _m  = str(_NOW.month)
+    _d  = str(_NOW.day)
+    _ts_short = f"{_m}/{_d} {_NOW.strftime('%H:%M')} KST"
     tab_buttons = []
     for tid, tlabel, tcolor in _TAB_CONFIG:
-        tab_buttons.append(
-            f'<button class="tab-btn" data-tab="{tid}">{_esc(tlabel)}</button>'
-        )
+        if tid == "tracking":
+            tab_buttons.append(
+                f'<button class="tab-btn" data-tab="{tid}">'
+                f'{_esc(tlabel)}'
+                f'<span style="margin-left:5px;font-size:0.6rem;font-weight:400;'
+                f'opacity:0.85;white-space:nowrap;">{_esc(_ts_short)}</span>'
+                f'</button>'
+            )
+        else:
+            tab_buttons.append(
+                f'<button class="tab-btn" data-tab="{tid}">{_esc(tlabel)}</button>'
+            )
 
     panels_html = []
 
@@ -3286,6 +3299,47 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     # 거래량급증_미국
     _kr_names = kr_names or {}
 
+    def _score_vol_row(r: dict) -> tuple:
+        """거래량 급증 행에 대한 간소화된 투자우선점수 및 등급 계산."""
+        score = 50.0
+        rv = r.get("relative_volume_10d_calc") or 0
+        score += min(15, float(rv) * 3)
+        perf1m = r.get("Perf.1M") or 0
+        score += max(-10.0, min(10.0, float(perf1m) * 0.5))
+        fpe = r.get("price_earnings_forward_fy")
+        if fpe is not None:
+            fpe = float(fpe)
+            if 5 < fpe < 25:
+                score += 5
+            elif fpe < 0:
+                score -= 5
+        opm = r.get("operating_margin_ttm") or 0
+        opm = float(opm)
+        if opm >= 20:   score += 8
+        elif opm >= 10: score += 4
+        elif opm < 0:   score -= 8
+        rev_g = r.get("total_revenue_yoy_growth_fq") or 0
+        rev_g = float(rev_g)
+        if rev_g >= 20:    score += 8
+        elif rev_g >= 10:  score += 4
+        elif rev_g < -10:  score -= 5
+        debt = r.get("debt_to_equity_fq") or 0
+        debt = float(debt)
+        if debt > 200:   score -= 5
+        elif debt < 50:  score += 3
+        fcf = r.get("free_cash_flow_margin_ttm") or 0
+        fcf = float(fcf)
+        if fcf >= 15:   score += 5
+        elif fcf < 0:   score -= 5
+        rsi = r.get("RSI") or 50
+        rsi = float(rsi)
+        if 40 <= rsi <= 70: score += 3
+        elif rsi > 80:      score -= 3
+        score = max(0.0, min(100.0, score))
+        grade = ("A" if score >= 80 else "B" if score >= 65
+                 else "C" if score >= 50 else "D" if score >= 35 else "F")
+        return round(score, 1), grade
+
     def _vol_row(r, country):
         code  = _bare_kr_code(r.get("_ticker",""))
         nm    = r.get("description","")
@@ -3300,6 +3354,8 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
         lo52  = r.get("price_52_week_low")  or 0
         close = r.get("close") or 0
         pos52 = (close - lo52) / (hi52 - lo52) * 100 if (hi52 - lo52) > 0 else None
+
+        vol_score, vol_grade = _score_vol_row(r)
 
         row = {
             "국가":            country,
@@ -3325,8 +3381,8 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
             "FCF마진%":        r.get("free_cash_flow_margin_ttm"),
             "수급패턴":        "",
             "선행매매점수":    0,
-            "투자우선점수":    0,
-            "등급":            "-",
+            "투자우선점수":    vol_score,
+            "등급":            vol_grade,
         }
         # KR 전용: Naver 수급 플로우 추가
         if country == "KR":
