@@ -1,0 +1,47 @@
+name: Daily Stock Analysis
+
+on:
+  schedule:
+    # 22:00 UTC = 07:00 KST (다음날)
+    - cron: '0 22 * * *'
+  workflow_dispatch:   # 수동 실행 허용
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Run build_deep_highs
+        env:
+          PYTHONHTTPSVERIFY: "0"
+          PYTHONIOENCODING: "utf-8"
+          TZ: Asia/Seoul
+        run: python build_deep_highs.py
+
+      - name: Commit and push index.html + data/
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html data/
+          if git diff --staged --quiet; then
+            echo "변경 없음 — 커밋 생략"
+          else
+            git commit -m "Daily update $(TZ=Asia/Seoul date +'%Y-%m-%d %H:%M KST')"
+            git push
+          fi
