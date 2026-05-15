@@ -144,6 +144,15 @@ FAMOUS_MANAGERS = [
     ("ValueAct Capital",                "0001129816"),  # Mason Morfit
     ("Highbridge Capital",              "0001199392"),
     ("Glenview Capital",                "0001228454"),  # Larry Robbins
+    # ── 추가 유명 운용사 (3차) ──────────────────────
+    ("Icahn Capital",                   "0000921669"),  # Carl Icahn
+    ("Trian Fund Management",           "0001418135"),  # Nelson Peltz
+    ("Point72 Asset Management",        "0001603466"),  # Steve Cohen
+    ("Two Sigma Investments",           "0001179392"),  # David Siegel
+    ("Oaktree Capital Management",      "0001061165"),  # Howard Marks
+    ("Harris Associates",               "0000778070"),  # Bill Nygren (Oakmark)
+    ("Gotham Asset Management",         "0001336215"),  # Joel Greenblatt
+    ("Sachem Head Capital",             "0001594686"),  # Scott Ferguson
 ]
 
 # ── 한국 기업명 사전 ──────────────────────────
@@ -710,7 +719,17 @@ def fetch_famous_manager_rows() -> list[dict]:
         if resolved:
             r["티커"] = resolved
         elif not r.get("티커"):
-            r["티커"] = cusip  # CUSIP을 fallback 티커로 사용
+            r["티커"] = cusip
+
+    # ── 기관별 포트폴리오 총액 → 포트폴리오비중% ────────────────────────
+    from collections import defaultdict as _dd
+    _inst_total: dict[str, float] = _dd(float)
+    for r in result:
+        _inst_total[r["기관명"]] += float(r.get("보유가치_USD") or 0)
+    for r in result:
+        total = _inst_total[r["기관명"]]
+        val   = float(r.get("보유가치_USD") or 0)
+        r["포트폴리오비중%"] = round(val / total * 100, 2) if total > 0 else None
 
     save_13f_history(result, DATA_DIR / "13f_history.csv")
     return result
@@ -1723,7 +1742,7 @@ _COL_CATEGORY: dict[str, str] = {
     "저점매집여부": "flow", "고점청산여부": "flow",
     "수급반전일수": "flow", "수급_종합해석": "flow",
     # 13F 포지션 변화
-    "포지션변화": "flow", "주식수_변화율%": "flow",
+    "포지션변화": "flow", "포트폴리오비중%": "score", "주식수_변화율%": "flow",
     "신규기관수": "flow", "증가기관수": "flow", "감소기관수": "risk",
     "컨센서스점수": "score", "신규기관": "flow", "증가기관": "flow",
     # 선행매매
@@ -2054,6 +2073,15 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
         return (f"background:{bg2};color:{fg2};font-weight:700;text-align:center;"
                 f"font-size:8.5px;border-radius:3px;"), pat
 
+    # ── 포트폴리오비중% ──────────────────────────────
+    if col == "포트폴리오비중%":
+        fv = _fv()
+        if fv is not None:
+            if fv >= 10: return f"background:#0069B4;color:#fff;{B}{R}{S}", _fmt_val(val)
+            if fv >= 5:  return f"background:#1565C0;color:#fff;{R}{S}", _fmt_val(val)
+            if fv >= 2:  return base + B + "color:#1565C0;" + R + S, _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
     # ── 컨센서스점수 (기관중복보유) ─────────────────
     if col == "컨센서스점수":
         fv = _fv()
@@ -2248,7 +2276,7 @@ THEME_HEADERS = [
 # 유명기관_13F (CUSIP은 내부용, 표시하지 않음)
 SEC_HEADERS = [
     "기관명","보고일","종목명","티커",
-    "포지션변화","주식수_변화율%","보유가치_USD","주식수","전분기_주식수","주식종류",
+    "포지션변화","포트폴리오비중%","주식수_변화율%","보유가치_USD","주식수","전분기_주식수","주식종류",
 ]
 
 # 일별_트래킹
@@ -2498,20 +2526,42 @@ def _make_13f_html(sec_rows: list[dict]) -> str:
         by_mgr.setdefault(r.get("기관명", "Unknown"), []).append(r)
 
     _chg_order = {"신규": 0, "증가": 1, "유지": 2, "감소": 3}
+
+    def _mgr_sort_key(item: tuple) -> tuple:
+        mgr, holdings = item
+        n_new = sum(1 for h in holdings if h.get("포지션변화") == "신규")
+        n_inc = sum(1 for h in holdings if h.get("포지션변화") == "증가")
+        n_dec = sum(1 for h in holdings if h.get("포지션변화") == "감소")
+        # 신규/증가가 많을수록, 포트폴리오비중%가 높은 신규/증가 종목이 많을수록 상단
+        buy_score = n_new * 3 + n_inc * 2 - n_dec
+        top_buy_wt = max(
+            (h.get("포트폴리오비중%") or 0)
+            for h in holdings if h.get("포지션변화") in ("신규", "증가")
+        ) if any(h.get("포지션변화") in ("신규", "증가") for h in holdings) else 0
+        return (-buy_score, -top_buy_wt)
+
     sections = []
-    for mgr, holdings in sorted(by_mgr.items()):
+    for mgr, holdings in sorted(by_mgr.items(), key=_mgr_sort_key):
         total_val = sum(h.get("보유가치_USD", 0) or 0 for h in holdings)
         n_new = sum(1 for h in holdings if h.get("포지션변화") == "신규")
         n_inc = sum(1 for h in holdings if h.get("포지션변화") == "증가")
         n_dec = sum(1 for h in holdings if h.get("포지션변화") == "감소")
+        buy_score = n_new * 3 + n_inc * 2 - n_dec
         summary = (f"신규 {n_new}건 / 증가 {n_inc}건 / 감소 {n_dec}건"
                    if n_new + n_inc + n_dec > 0 else "")
-        sorted_h = sorted(holdings,
-                          key=lambda x: (_chg_order.get(x.get("포지션변화","유지"), 2),
-                                         -(x.get("보유가치_USD") or 0)))
+        # 헤더 색상: 매수 활동 강도에 따라 다름
+        hdr_bg = "#1B5E20" if buy_score >= 10 else "#1565C0" if buy_score >= 5 else "#1F4E79"
+        sorted_h = sorted(
+            holdings,
+            key=lambda x: (
+                _chg_order.get(x.get("포지션변화", "유지"), 2),
+                -(x.get("포트폴리오비중%") or 0),
+                -(x.get("보유가치_USD") or 0),
+            ),
+        )
         sections.append(
             f'<div style="margin-bottom:20px;">'
-            f'<div style="background:#1F4E79;color:#fff;padding:6px 12px;'
+            f'<div style="background:{hdr_bg};color:#fff;padding:6px 12px;'
             f'font-weight:700;border-radius:4px 4px 0 0;display:flex;gap:12px;align-items:center;">'
             f'<span>{_esc(mgr)}</span>'
             f'<span style="font-size:0.75rem;opacity:0.85;">총 ${total_val/1e9:.2f}B</span>'
