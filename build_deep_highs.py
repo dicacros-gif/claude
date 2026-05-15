@@ -1449,64 +1449,240 @@ def _fmt_val(v: object) -> str:
 
 
 def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
-    bg_odd = "#F8F8F8" if odd else "#FFFFFF"
-    base_style = f"background:{bg_odd};"
+    bg_odd = "#F2F6FC" if odd else "#FFFFFF"
+    base = f"background:{bg_odd};"
+    R = "text-align:right;"
+    C = "text-align:center;"
+    S = "font-size:9px;"
+    B = "font-weight:700;"
 
+    def _fv():
+        try:
+            return float(val)
+        except Exception:
+            return None
+
+    def _c(bg, fg, bold=True, align="right", fs="9px"):
+        b = "font-weight:700;" if bold else ""
+        return (f"background:{bg};color:{fg};{b}text-align:{align};font-size:{fs};",
+                _fmt_val(val))
+
+    # ── 등급 pill ──────────────────────────────────
     if col == "등급":
-        grade = str(val or "")
-        if grade in _GRADE_COLORS:
-            bg, fg = _GRADE_COLORS[grade]
-            return f"background:{bg};color:{fg};font-weight:700;text-align:center;", val or ""
+        g = str(val or "").strip()
+        gmap = {"A": ("#155724","#D4EDDA"), "B": ("#1E6B00","#C3E6CB"),
+                "C": ("#856404","#FFF3CD"), "D": ("#7B3300","#FFE0C0"),
+                "F": ("#7B0000","#FFD0D0")}
+        if g in gmap:
+            fg, bg = gmap[g]
+            return (f"background:{bg};color:{fg};font-weight:900;text-align:center;"
+                    f"font-size:10px;letter-spacing:0.5px;"), g
+        return base + C + S, str(val or "")
 
+    # ── 수급패턴 pill ───────────────────────────────
     if col == "수급패턴":
         pat = str(val or "")
-        if pat in _PAT_COLORS:
-            bg, fg = _PAT_COLORS[pat]
-            return f"background:{bg};color:{fg};font-weight:700;text-align:center;", pat
-        return base_style + "text-align:center;", pat
+        pmap = {
+            "저점매집":          ("#ffffff","#0069B4"),
+            "기관외국인동반반전": ("#ffffff","#5B2D8E"),
+            "반전신호":          ("#ffffff","#6A0DAD"),
+            "고점추세":          ("#ffffff","#1B6B1B"),
+            "고점청산":          ("#ffffff","#A30000"),
+        }
+        for key, (fg, bg) in pmap.items():
+            if key in pat:
+                return (f"background:{bg};color:{fg};font-weight:700;text-align:center;"
+                        f"font-size:8.5px;white-space:nowrap;border-radius:3px;"), key
+        return base + C + S, pat
 
+    # ── 투자우선점수 — 강한 heatmap ────────────────
     if col == "투자우선점수":
-        return base_style + "font-weight:700;font-size:11px;color:#1F3864;text-align:right;", _fmt_val(val)
+        fv = _fv()
+        if fv is not None:
+            if fv >= 75: return _c("#155724","#D4F5DC", fs="11px")
+            if fv >= 60: return _c("#1E6B00","#E8F5E9", fs="11px")
+            if fv >= 45: return _c("#856404","#FFF9E6", fs="11px")
+            if fv >= 30: return _c("#7B3300","#FFF0E0", fs="11px")
+            return _c("#7B0000","#FFE8E8", fs="11px")
+        return base + B + R + "font-size:11px;", _fmt_val(val)
 
+    # ── 점수 컬럼 heatmap ───────────────────────────
     if col in _SCORE_COLS:
-        return base_style + "font-weight:700;font-size:10px;text-align:right;", _fmt_val(val)
+        fv = _fv()
+        if fv is not None:
+            if fv >= 70: return base + B + R + S + "color:#155724;background:#D4EDDA;", _fmt_val(val)
+            if fv >= 50: return base + B + R + S + "color:#1E6B00;", _fmt_val(val)
+            if fv >= 30: return base + B + R + S + "color:#856404;", _fmt_val(val)
+            return base + B + R + S + "color:#7B0000;background:#FFF0F0;", _fmt_val(val)
+        return base + B + R + S, _fmt_val(val)
 
+    # ── 티커 / 기업명 ────────────────────────────────
     if col == "티커":
-        return base_style + "font-weight:700;color:#1F3864;font-size:9px;", _fmt_val(val)
-
+        return base + B + S + "color:#0D47A1;letter-spacing:0.3px;", _fmt_val(val)
     if col == "기업명":
-        return base_style + "font-weight:700;font-size:9px;", _fmt_val(val)
+        return base + B + S, _fmt_val(val)
 
+    # ── 섹터/산업 ────────────────────────────────────
+    if col in ("섹터", "산업"):
+        return base + S + "color:#4A148C;", _fmt_val(val)
+    if col == "미래산업테마":
+        return base + B + S + "color:#4A148C;", _fmt_val(val)
+
+    # ── 수급 flow 컬럼 — bg 포함 ────────────────────
     if col in _FLOW_COLS:
-        try:
-            fv = float(val)
-            if fv >= 0:
-                return base_style + "font-weight:700;color:#003399;text-align:right;font-size:9px;", _fmt_val(val)
-            else:
-                return base_style + "font-weight:700;color:#CC0000;text-align:right;font-size:9px;", _fmt_val(val)
-        except Exception:
-            pass
+        fv = _fv()
+        if fv is not None:
+            if fv > 0:
+                return f"background:#EBF5FF;{B}color:#003399;{R}{S}", _fmt_val(val)
+            if fv < 0:
+                return f"background:#FFF0F0;{B}color:#CC0000;{R}{S}", _fmt_val(val)
+        return base + R + S, _fmt_val(val)
 
+    # ── 성장률 컬럼 — bg 포함 ────────────────────────
     if col in _GROWTH_COLS:
-        try:
-            fv = float(val)
-            if fv >= 0:
-                return base_style + "font-weight:700;color:#005500;text-align:right;font-size:9px;", _fmt_val(val)
-            else:
-                return base_style + "font-weight:700;color:#880000;text-align:right;font-size:9px;", _fmt_val(val)
-        except Exception:
-            pass
+        fv = _fv()
+        if fv is not None:
+            if fv >= 30:  return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
+            if fv >= 10:  return f"background:#EAF7EA;{B}color:#1E6B00;{R}{S}", _fmt_val(val)
+            if fv >= 0:   return base + "color:#2E7D32;" + R + S, _fmt_val(val)
+            if fv >= -10: return base + B + "color:#CC0000;" + R + S, _fmt_val(val)
+            return f"background:#FFF0F0;{B}color:#AA0000;{R}{S}", _fmt_val(val)
+        return base + R + S, _fmt_val(val)
 
+    # ── 변동률% ──────────────────────────────────────
+    if col == "변동률%":
+        fv = _fv()
+        if fv is not None:
+            if fv >= 5:   return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
+            if fv > 0:    return base + B + "color:#1E6B00;" + R + S, _fmt_val(val)
+            if fv <= -5:  return f"background:#FFF0F0;{B}color:#AA0000;{R}{S}", _fmt_val(val)
+            return base + B + "color:#CC0000;" + R + S, _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── 52주 고가 대비 위치% ─────────────────────────
+    if col == "52주고가대비위치%":
+        fv = _fv()
+        if fv is not None:
+            if fv >= 95:  return f"background:#FFD700;{B}color:#3D2800;{R}{S}", _fmt_val(val)
+            if fv >= 80:  return f"background:#FFF9C4;{B}color:#6D4C00;{R}{S}", _fmt_val(val)
+            if fv <= 30:  return f"background:#E8F5E9;{B}color:#1E6B00;{R}{S}", _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── RSI ──────────────────────────────────────────
+    if col == "RSI":
+        fv = _fv()
+        if fv is not None:
+            if fv >= 70: return f"background:#FFE0E0;{B}color:#AA0000;{R}{S}", _fmt_val(val)
+            if fv <= 30: return f"background:#E0F5E0;{B}color:#1E6B00;{R}{S}", _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── 공매도비율% ──────────────────────────────────
+    if col == "공매도비율%":
+        fv = _fv()
+        if fv is not None:
+            if fv >= 20: return f"background:#FFD0D0;{B}color:#7B0000;{R}{S}", _fmt_val(val)
+            if fv >= 10: return f"background:#FFE8CC;{B}color:#7B3300;{R}{S}", _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── 목표가상승여력% ──────────────────────────────
+    if col == "목표가상승여력%":
+        fv = _fv()
+        if fv is not None:
+            if fv >= 30: return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
+            if fv >= 10: return base + B + "color:#1E6B00;" + R + S, _fmt_val(val)
+            if fv < 0:   return f"background:#FFF0F0;{B}color:#AA0000;{R}{S}", _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── EPS/매출 서프라이즈 ──────────────────────────
+    if col in ("EPS_서프라이즈%", "매출_서프라이즈%"):
+        fv = _fv()
+        if fv is not None:
+            if fv > 5:  return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
+            if fv > 0:  return base + B + "color:#1E6B00;" + R + S, _fmt_val(val)
+            return base + B + "color:#CC0000;" + R + S, _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── 상대거래량 ───────────────────────────────────
+    if col == "상대거래량":
+        fv = _fv()
+        if fv is not None:
+            if fv >= 5: return f"background:#E3F2FD;{B}color:#0D47A1;{R}{S}", _fmt_val(val)
+            if fv >= 2: return base + B + "color:#1565C0;" + R + S, _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── 수익률% ──────────────────────────────────────
+    if col in {"1주수익률%","1개월수익률%","3개월수익률%",
+               "6개월수익률%","1년수익률%","YTD수익률%"}:
+        fv = _fv()
+        if fv is not None:
+            if fv >= 20: return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
+            if fv > 0:   return base + "color:#1E6B00;" + R + S, _fmt_val(val)
+            return base + "color:#CC0000;" + R + S, _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── 품질 지표 (수익성) ───────────────────────────
+    if col in {"영업이익률%","ROE%","ROA%","ROIC%",
+               "FCF마진%","FCF수익률%","매출총이익률%","순이익률%"}:
+        fv = _fv()
+        if fv is not None:
+            if fv >= 25: return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
+            if fv >= 10: return base + "color:#1E6B00;" + R + S, _fmt_val(val)
+            if fv < 0:   return base + "color:#CC0000;" + R + S, _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── PER / Forward_PER ────────────────────────────
+    if col in ("Forward_PER", "PER_TTM"):
+        fv = _fv()
+        if fv is not None and fv > 0:
+            if fv <= 15: return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
+            if fv >= 50: return f"background:#FFF0F0;color:#AA0000;{R}{S}", _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── 수출섹터여부 ──────────────────────────────────
+    if col == "수출섹터여부":
+        if str(val or "") == "Y":
+            return f"background:#E8F5E9;{B}color:#1E6B00;{C}{S}", "Y"
+        return base + C + S, _fmt_val(val)
+
+    # ── 전일비% (시장지표) ───────────────────────────
+    if col == "전일비%":
+        fv = _fv()
+        if fv is not None:
+            disp = f"+{_fmt_val(val)}" if fv > 0 else _fmt_val(val)
+            if fv > 0: return base + B + "color:#1E6B00;" + R + S, disp
+            if fv < 0: return base + B + "color:#CC0000;" + R + S, disp
+        return base + R + S, _fmt_val(val)
+
+    # ── 저점매집여부 / 고점청산여부 ──────────────────
+    if col == "저점매집여부":
+        if str(val or "") == "Y":
+            return f"background:#E3F2FD;{B}color:#003399;{C}{S}", "Y"
+        return base + C + S, _fmt_val(val)
+    if col == "고점청산여부":
+        if str(val or "") == "Y":
+            return f"background:#FFF0F0;{B}color:#AA0000;{C}{S}", "Y"
+        return base + C + S, _fmt_val(val)
+
+    # ── 부채비율 ─────────────────────────────────────
+    if col == "부채비율":
+        fv = _fv()
+        if fv is not None:
+            if fv >= 200: return f"background:#FFF0F0;{B}color:#AA0000;{R}{S}", _fmt_val(val)
+            if fv <= 50:  return f"background:#E8F5E9;color:#1E6B00;{R}{S}", _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── 텍스트 wrap 컬럼 ────────────────────────────
     if col in _WRAP_COLS:
-        return base_style + "white-space:normal;word-break:break-all;font-size:9px;max-width:200px;", _fmt_val(val)
+        return base + "white-space:normal;word-break:break-all;font-size:9px;max-width:200px;", _fmt_val(val)
 
+    # ── 나머지 숫자 오른쪽 정렬 ─────────────────────
     try:
         float(val)
-        return base_style + "text-align:right;font-size:9px;", _fmt_val(val)
+        return base + R + S, _fmt_val(val)
     except Exception:
         pass
 
-    return base_style + "font-size:9px;", _fmt_val(val)
+    return base + S, _fmt_val(val)
 
 
 def _make_table_html(rows: list[dict], headers: list[str],
@@ -1521,9 +1697,10 @@ def _make_table_html(rows: list[dict], headers: list[str],
         bg  = _HDR_BG.get(cat, "#2F2F2F")
         hdr_cells.append(
             f'<th style="background:{bg};color:#fff;font-weight:700;'
-            f'font-size:9px;white-space:nowrap;padding:4px 6px;'
-            f'border:1px solid #555;text-align:center;vertical-align:middle;'
-            f'position:sticky;top:0;z-index:2;">{_esc(h)}</th>'
+            f'font-size:9px;white-space:nowrap;padding:5px 7px;'
+            f'border-bottom:2px solid rgba(255,255,255,0.2);border-right:1px solid rgba(255,255,255,0.15);'
+            f'text-align:center;vertical-align:middle;'
+            f'position:sticky;top:0;z-index:2;letter-spacing:0.2px;">{_esc(h)}</th>'
         )
 
     # 데이터 행
@@ -1534,8 +1711,8 @@ def _make_table_html(rows: list[dict], headers: list[str],
         for h in headers:
             val = row.get(h, "")
             style, disp = _cell_style(h, val, odd)
-            cells.append(f'<td style="{style}padding:3px 5px;border:1px solid #DDD;">{_esc(disp)}</td>')
-        body_rows.append(f'<tr>{"".join(cells)}</tr>')
+            cells.append(f'<td style="{style}padding:4px 6px;border-bottom:1px solid #E2E8F0;border-right:1px solid #E2E8F0;">{_esc(disp)}</td>')
+        body_rows.append(f'<tr class="drow">{"".join(cells)}</tr>')
 
     return f'''
 <div class="tbl-wrap">
@@ -1663,9 +1840,12 @@ def _make_dashboard_html(enriched: list[dict], collected_at: str) -> str:
     country_cnt = Counter(r.get("국가", "?") for r in enriched)
 
     def _grade_badge(g: str, cnt: int) -> str:
-        bg, fg = _GRADE_COLORS.get(g, ("#888", "#FFF"))
+        gmap = {"A": ("#155724","#D4EDDA"), "B": ("#1E6B00","#C3E6CB"),
+                "C": ("#856404","#FFF3CD"), "D": ("#7B3300","#FFE0C0"), "F": ("#7B0000","#FFD0D0")}
+        fg, bg = gmap.get(g, ("#555","#EEE"))
         return (f'<span style="display:inline-block;background:{bg};color:{fg};'
-                f'font-weight:700;border-radius:6px;padding:2px 10px;margin:2px;">'
+                f'font-weight:900;border-radius:999px;padding:3px 12px;margin:2px;'
+                f'font-size:0.8rem;letter-spacing:0.5px;">'
                 f'{g}: {cnt}</span>')
 
     grades_html = "".join(_grade_badge(g, grade_cnt.get(g, 0)) for g in ["A","B","C","D","F"])
@@ -1678,18 +1858,24 @@ def _make_dashboard_html(enriched: list[dict], collected_at: str) -> str:
     def _top5_section(title: str, icon: str, sorted_rows: list[dict], score_field: str) -> str:
         top5 = sorted_rows[:5]
         rows_html = ""
-        for r in top5:
+        gmap = {"A": ("#155724","#D4EDDA"), "B": ("#1E6B00","#C3E6CB"),
+                "C": ("#856404","#FFF3CD"), "D": ("#7B3300","#FFE0C0"), "F": ("#7B0000","#FFD0D0")}
+        for i, r in enumerate(top5):
             grade = r.get("등급", "F")
-            bg, fg = _GRADE_COLORS.get(grade, ("#888", "#FFF"))
+            gfg, gbg = gmap.get(grade, ("#555","#EEE"))
             sc = r.get(score_field) or r.get("투자우선점수") or 0
+            row_bg = "#FAFBFF" if i % 2 == 0 else "#FFFFFF"
             rows_html += (
-                f'<tr>'
-                f'<td style="padding:4px 8px;font-weight:700;font-size:0.82rem;">{_esc(r.get("기업명",""))}</td>'
-                f'<td style="padding:4px 6px;font-size:0.8rem;color:#555;">{_esc(r.get("티커",""))}</td>'
-                f'<td style="padding:4px 6px;text-align:center;">'
-                f'<span style="background:{bg};color:{fg};font-weight:700;border-radius:4px;padding:1px 8px;">{grade}</span>'
+                f'<tr style="background:{row_bg};">'
+                f'<td style="padding:5px 8px;font-weight:700;font-size:0.82rem;">'
+                f'<span style="color:#888;font-size:0.75rem;margin-right:5px;">#{i+1}</span>'
+                f'{_esc(r.get("기업명",""))}</td>'
+                f'<td style="padding:5px 6px;font-size:0.78rem;color:#0D47A1;font-weight:700;">{_esc(r.get("티커",""))}</td>'
+                f'<td style="padding:5px 6px;text-align:center;">'
+                f'<span style="background:{gbg};color:{gfg};font-weight:900;border-radius:999px;'
+                f'padding:1px 9px;font-size:0.78rem;">{grade}</span>'
                 f'</td>'
-                f'<td style="padding:4px 8px;text-align:right;font-weight:700;color:#1F3864;">{sc:.1f}</td>'
+                f'<td style="padding:5px 8px;text-align:right;font-weight:900;font-size:0.88rem;color:#1F3864;">{sc:.1f}</td>'
                 f'</tr>'
             )
         return f'''
@@ -1697,11 +1883,11 @@ def _make_dashboard_html(enriched: list[dict], collected_at: str) -> str:
   <div class="dash-card-title">{icon} {_esc(title)}</div>
   <table style="width:100%;border-collapse:collapse;">
     <thead>
-      <tr style="background:#1F1F1F;color:#fff;">
-        <th style="padding:4px 8px;text-align:left;font-size:0.8rem;">기업명</th>
-        <th style="padding:4px 6px;font-size:0.8rem;">티커</th>
-        <th style="padding:4px 6px;font-size:0.8rem;">등급</th>
-        <th style="padding:4px 8px;font-size:0.8rem;">점수</th>
+      <tr style="background:#1F2937;color:#fff;">
+        <th style="padding:5px 8px;text-align:left;font-size:0.78rem;">기업명</th>
+        <th style="padding:5px 6px;font-size:0.78rem;">티커</th>
+        <th style="padding:5px 6px;font-size:0.78rem;">등급</th>
+        <th style="padding:5px 8px;font-size:0.78rem;">점수</th>
       </tr>
     </thead>
     <tbody>{rows_html}</tbody>
@@ -1867,7 +2053,7 @@ main{padding:0.8rem 1rem;max-width:100%;}
   font-size:0.82rem;font-weight:800;}
 .dash-card table{width:100%;}
 .dash-card td{border-bottom:1px solid var(--bd);font-size:0.8rem;color:var(--t1);}
-/* table */
+/* table panel */
 .panel-head{padding:0.7rem 1rem;border-bottom:1px solid var(--bd);
   background:var(--card2);display:flex;align-items:center;gap:0.5rem;
   border-radius:12px 12px 0 0;}
@@ -1875,10 +2061,35 @@ main{padding:0.8rem 1rem;max-width:100%;}
 .panel-count{font-size:0.7rem;color:var(--t3);margin-left:auto;}
 .panel-body{background:var(--card);border:1px solid var(--bd);
   border-radius:0 0 12px 12px;overflow:hidden;box-shadow:var(--shadow);}
-.tbl-wrap{overflow-x:auto;max-height:75vh;overflow-y:auto;}
-table.dtbl{border-collapse:collapse;width:max-content;min-width:100%;font-size:9px;}
-table.dtbl th,table.dtbl td{border:1px solid #ddd;padding:3px 6px;vertical-align:middle;}
+.tbl-wrap{overflow-x:auto;max-height:76vh;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:var(--bd) transparent;}
+.tbl-wrap::-webkit-scrollbar{width:6px;height:6px;}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px;}
+table.dtbl{border-collapse:collapse;width:max-content;min-width:100%;}
 table.dtbl thead tr th{position:sticky;top:0;z-index:2;}
+table.dtbl tr.drow:hover td{
+  filter:brightness(0.93);transition:filter 0.12s;}
+[data-t=dark] table.dtbl tr.drow:hover td{filter:brightness(1.15);}
+/* dark mode cell bg invert for colored cells */
+[data-t=dark] table.dtbl td{border-bottom-color:#2a3444 !important;
+  border-right-color:#2a3444 !important;}
+[data-t=dark] table.dtbl tr.drow:nth-child(odd) td{
+  background-color:#141e2e !important;}
+[data-t=dark] table.dtbl tr.drow:nth-child(even) td{
+  background-color:#0f1824 !important;}
+/* override colored cells in dark mode for readability */
+[data-t=dark] td[style*="background:#D4EDDA"]{background:#1a3a25 !important;color:#86efac !important;}
+[data-t=dark] td[style*="background:#EAF7EA"]{background:#152a1e !important;color:#6ee7b7 !important;}
+[data-t=dark] td[style*="background:#FFF0F0"],[data-t=dark] td[style*="background:#FFD0D0"]{background:#3a1515 !important;color:#fca5a5 !important;}
+[data-t=dark] td[style*="background:#EBF5FF"]{background:#0f2040 !important;color:#93c5fd !important;}
+[data-t=dark] td[style*="background:#FFE0E0"]{background:#3a1010 !important;color:#fca5a5 !important;}
+[data-t=dark] td[style*="background:#E3F2FD"]{background:#0c1f38 !important;color:#93c5fd !important;}
+[data-t=dark] td[style*="background:#FFF9C4"],[data-t=dark] td[style*="background:#FFD700"]{background:#2a2200 !important;color:#fde68a !important;}
+[data-t=dark] td[style*="background:#E8F5E9"]{background:#0d2218 !important;color:#86efac !important;}
+[data-t=dark] td[style*="background:#E0F5E0"]{background:#0d2218 !important;color:#86efac !important;}
+[data-t=dark] td[style*="background:#FFE8CC"]{background:#2a1800 !important;color:#fcd34d !important;}
+[data-t=dark] td[style*="background:#155724"]{background:#1a4a2e !important;}
+[data-t=dark] td[style*="background:#1E6B00"]{background:#1a4a2e !important;}
 .empty-msg{padding:2rem;text-align:center;color:var(--t3);font-size:0.9rem;}
 /* search bar */
 .search-bar{padding:0.5rem 1rem;background:var(--card2);
@@ -1886,7 +2097,7 @@ table.dtbl thead tr th{position:sticky;top:0;z-index:2;}
 .search-bar input{border:1px solid var(--bd);border-radius:6px;
   padding:0.3rem 0.6rem;font-size:0.75rem;background:var(--bg);
   color:var(--t1);outline:none;font-family:inherit;}
-.search-bar input:focus{border-color:var(--ac);}
+.search-bar input:focus{border-color:var(--ac);box-shadow:0 0 0 2px var(--acL);}
 @media(max-width:600px){
   .topbar{padding:0.3rem 0.5rem;}
   .tab-btn{font-size:0.62rem;padding:0.22rem 0.5rem;}
