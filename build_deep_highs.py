@@ -496,8 +496,56 @@ def _parse_13f_xml(xml_text: str) -> list[dict]:
     return out[:150]
 
 
-def fetch_famous_manager_rows() -> list:
-    """SEC EDGAR 13F 수집 (정규식 XML 파싱). 한국 6자리 티커 제외."""
+def _fetch_one_13f_xml(cik: str, acc_nodash: str, acc_orig: str,
+                        ua: dict) -> list[dict]:
+    """단일 13F 신고의 infotable XML을 파싱하여 holdings 반환."""
+    base = (f"https://www.sec.gov/Archives/edgar/data/"
+            f"{int(cik)}/{acc_nodash}/")
+    xml_file = None
+    try:
+        idx = requests.get(f"{base}{acc_orig}-index.json",
+                           timeout=10, verify=False, headers=ua)
+        items = idx.json().get("directory", {}).get("item", [])
+        for it in items:
+            n = it.get("name", "")
+            if n.lower().endswith(".xml") and "infotable" in n.lower():
+                xml_file = n
+                break
+        if not xml_file:
+            for it in items:
+                n = it.get("name", "")
+                if n.lower().endswith(".xml") and "primary" not in n.lower():
+                    xml_file = n
+                    break
+    except Exception:
+        pass
+    if not xml_file and _HAS_BS4:
+        try:
+            dir_r = requests.get(base, timeout=10, verify=False, headers=ua)
+            soup  = BeautifulSoup(dir_r.text, "lxml")
+            for a in soup.select("a[href]"):
+                h = a["href"]
+                if h.endswith(".xml") and "infotable" in h.lower():
+                    xml_file = h.split("/")[-1]
+                    break
+        except Exception:
+            pass
+    if not xml_file:
+        return []
+    try:
+        xml_r = requests.get(f"{base}{xml_file}", timeout=20,
+                              verify=False, headers=ua)
+        return _parse_13f_xml(xml_r.text)
+    except Exception:
+        return []
+
+
+def fetch_famous_manager_rows() -> list[dict]:
+    """SEC EDGAR 13F 수집 + 전분기 대비 포지션 변화 계산.
+
+    각 기관의 최근 2개 13F-HR 신고를 비교해 신규/증가/감소/유지 판정.
+    한국 6자리 티커 완전 제외.
+    """
     result = []
     ua = {"User-Agent": "deepdive-research/1.0 contact@example.com"}
     for mgr_name, cik in FAMOUS_MANAGERS:
@@ -507,138 +555,145 @@ def fetch_famous_manager_rows() -> list:
             resp = requests.get(sub_url, timeout=12, verify=False, headers=ua)
             if resp.status_code != 200:
                 continue
-            recent = resp.json().get("filings", {}).get("recent", {})
+            recent   = resp.json().get("filings", {}).get("recent", {})
             forms    = recent.get("form", [])
             acc_nums = recent.get("accessionNumber", [])
             dates    = (recent.get("filingDate") or
                         recent.get("reportDate") or
                         [""] * len(forms))
-            target_acc_orig = target_acc_nodash = target_date = None
+
+            # 최근 2개 13F-HR 찾기 (현재 분기 + 전분기)
+            filings_13f = []
             for form, acc, dt in zip(forms, acc_nums, dates):
                 if form in ("13F-HR", "13F-HR/A"):
-                    target_acc_orig   = acc                   # e.g. "0001067983-24-003244"
-                    target_acc_nodash = acc.replace("-", "")  # e.g. "000106798324003244"
-                    target_date       = dt
-                    break
-            if not target_acc_nodash:
+                    filings_13f.append((acc, dt))
+                    if len(filings_13f) >= 2:
+                        break
+            if not filings_13f:
                 continue
 
-            base = (f"https://www.sec.gov/Archives/edgar/data/"
-                    f"{int(cik)}/{target_acc_nodash}/")
-            # SEC 파일 인덱스: {acc_original}-index.json
-            idx = requests.get(
-                f"{base}{target_acc_orig}-index.json",
-                timeout=10, verify=False, headers=ua)
-            xml_file = None
-            try:
-                items = idx.json().get("directory", {}).get("item", [])
-                for it in items:
-                    n = it.get("name", "")
-                    if n.lower().endswith(".xml") and "infotable" in n.lower():
-                        xml_file = n
-                        break
-                if not xml_file:
-                    for it in items:
-                        n = it.get("name", "")
-                        if n.lower().endswith(".xml") and "primary" not in n.lower():
-                            xml_file = n
-                            break
-            except Exception:
-                pass
+            curr_acc_orig   = filings_13f[0][0]
+            curr_acc_nodash = curr_acc_orig.replace("-", "")
+            curr_date       = filings_13f[0][1]
 
-            # fallback: HTML 디렉터리에서 탐색
-            if not xml_file and _HAS_BS4:
-                dir_r = requests.get(base, timeout=10, verify=False, headers=ua)
-                soup  = BeautifulSoup(dir_r.text, "lxml")
-                for a in soup.select("a[href]"):
-                    h = a["href"]
-                    if h.endswith(".xml") and "infotable" in h.lower():
-                        xml_file = h.split("/")[-1]
-                        break
+            curr_holdings = _fetch_one_13f_xml(cik, curr_acc_nodash,
+                                                curr_acc_orig, ua)
 
-            if not xml_file:
-                continue
+            # 전분기 파싱 → ticker → shares 맵
+            prev_shares_map: dict[str, float] = {}
+            if len(filings_13f) >= 2:
+                prev_acc_orig   = filings_13f[1][0]
+                prev_acc_nodash = prev_acc_orig.replace("-", "")
+                prev_h = _fetch_one_13f_xml(cik, prev_acc_nodash,
+                                             prev_acc_orig, ua)
+                for ph in prev_h:
+                    tk = ph["ticker"]
+                    if tk and not re.fullmatch(r"\d{6}", tk):
+                        prev_shares_map[tk] = float(ph["shares"] or 0)
 
-            xml_r = requests.get(f"{base}{xml_file}", timeout=20,
-                                  verify=False, headers=ua)
-            holdings = _parse_13f_xml(xml_r.text)
-            for h in holdings:
+            for h in curr_holdings:
                 tk = h["ticker"]
                 if re.fullmatch(r"\d{6}", tk):
                     continue
+                curr_sh = float(h["shares"] or 0)
+                prev_sh = prev_shares_map.get(tk)
+
+                if prev_sh is None:
+                    change_type = "신규"
+                    change_pct  = None
+                elif curr_sh > prev_sh * 1.01:
+                    change_type = "증가"
+                    change_pct  = round((curr_sh - prev_sh) / prev_sh * 100, 1) \
+                                  if prev_sh else None
+                elif curr_sh < prev_sh * 0.99:
+                    change_type = "감소"
+                    change_pct  = round((curr_sh - prev_sh) / prev_sh * 100, 1) \
+                                  if prev_sh else None
+                else:
+                    change_type = "유지"
+                    change_pct  = 0.0
+
                 result.append({
-                    "기관명":       mgr_name,
-                    "보고일":       target_date or "",
-                    "종목명":       h["name"],
-                    "티커":         tk or h["cusip"],
-                    "CUSIP":        h["cusip"],
-                    "보유가치_USD":  h["value"],
-                    "주식수":       h["shares"],
-                    "주식종류":     h["class"],
-                    "_수집일":      _NOW.strftime("%Y-%m-%d"),
+                    "기관명":        mgr_name,
+                    "보고일":        curr_date or "",
+                    "종목명":        h["name"],
+                    "티커":          tk or h["cusip"],
+                    "CUSIP":         h["cusip"],
+                    "보유가치_USD":   h["value"],
+                    "주식수":        curr_sh,
+                    "전분기_주식수":  prev_sh,
+                    "주식수_변화율%": change_pct,
+                    "포지션변화":    change_type,
+                    "주식종류":      h["class"],
+                    "_수집일":       _NOW.strftime("%Y-%m-%d"),
                 })
         except Exception as e:
             print(f"[13F] {mgr_name}: {e}")
     result.sort(key=lambda x: -(x.get("보유가치_USD") or 0))
-
-    # ── 13F 히스토리 CSV 누적 저장 ───────────────────────────────────
-    # 복합키: _수집일 + 기관명 + 티커 → 같은 날 덮어쓰기, 이전 날짜 유지
     save_13f_history(result, DATA_DIR / "13f_history.csv")
     return result
 
 
 def fetch_institutional_overlap(all_holdings: list[dict]) -> list[dict]:
-    """여러 기관이 공통 보유한 종목 집계 (2개 이상 기관 = 컨센서스 매수).
+    """다수 기관의 포지션 변화 집계 (2개 이상 기관 보유 종목).
 
-    Parameters
-    ----------
-    all_holdings : list[dict]
-        fetch_famous_manager_rows() 의 반환값.
-        각 dict 키: 기관명, 보고일, 종목명, 티커, CUSIP, 보유가치_USD, 주식수, 주식종류
-
-    Returns
-    -------
-    list[dict]
-        기관이 2개 이상인 종목만, 기관수 내림차순 → 총보유가치 내림차순 정렬.
-        각 dict 키: 티커, 종목명, 기관수, 기관목록(list[str]),
-                    총보유가치_USD(float, USD 원본), 보고일(가장 최근 str)
+    신규/증가 기관이 많을수록 컨센서스점수 높음.
+    컨센서스점수 = 신규기관수×3 + 증가기관수×2 - 감소기관수
     """
     from collections import defaultdict
     ticker_map: dict[str, dict] = defaultdict(lambda: {
-        "기관목록": [], "총보유가치_USD": 0.0, "종목명": "", "티커": "",
+        "기관목록": [], "신규기관목록": [], "증가기관목록": [], "감소기관목록": [],
+        "총보유가치_USD": 0.0, "종목명": "", "티커": "",
         "보고일_set": set(),
     })
     for h in all_holdings:
         tk = h.get("티커", "")
         if not tk or re.fullmatch(r"\d{6}", tk):
             continue
-        d    = ticker_map[tk]
-        mgr  = h.get("기관명", "")
-        date = h.get("보고일", "")
+        d   = ticker_map[tk]
+        mgr = h.get("기관명", "")
+        chg = h.get("포지션변화", "유지")
+        dt  = h.get("보고일", "")
         if mgr and mgr not in d["기관목록"]:
             d["기관목록"].append(mgr)
+        if chg == "신규" and mgr not in d["신규기관목록"]:
+            d["신규기관목록"].append(mgr)
+        elif chg == "증가" and mgr not in d["증가기관목록"]:
+            d["증가기관목록"].append(mgr)
+        elif chg == "감소" and mgr not in d["감소기관목록"]:
+            d["감소기관목록"].append(mgr)
         d["총보유가치_USD"] += float(h.get("보유가치_USD", 0) or 0)
         if not d["종목명"]:
             d["종목명"] = h.get("종목명", "")
         d["티커"] = tk
-        if date:
-            d["보고일_set"].add(date)
+        if dt:
+            d["보고일_set"].add(dt)
 
     rows = []
     for tk, d in ticker_map.items():
         n_inst = len(d["기관목록"])
         if n_inst < 2:
             continue
-        latest_date = max(d["보고일_set"]) if d["보고일_set"] else ""
+        n_new  = len(d["신규기관목록"])
+        n_inc  = len(d["증가기관목록"])
+        n_dec  = len(d["감소기관목록"])
+        score  = n_new * 3 + n_inc * 2 - n_dec
+        latest = max(d["보고일_set"]) if d["보고일_set"] else ""
         rows.append({
-            "티커":           tk,
-            "종목명":         d["종목명"],
-            "기관수":         n_inst,
-            "기관목록":       sorted(d["기관목록"]),         # list[str] 반환
-            "총보유가치_USD":  round(d["총보유가치_USD"], 0), # USD 단위 원본값
-            "보고일":         latest_date,
+            "티커":          tk,
+            "종목명":        d["종목명"],
+            "기관수":        n_inst,
+            "신규기관수":    n_new,
+            "증가기관수":    n_inc,
+            "감소기관수":    n_dec,
+            "컨센서스점수":  score,
+            "신규기관":      " / ".join(d["신규기관목록"]) if d["신규기관목록"] else "",
+            "증가기관":      " / ".join(d["증가기관목록"]) if d["증가기관목록"] else "",
+            "기관목록":      " / ".join(sorted(d["기관목록"])),
+            "총보유가치_USD": round(d["총보유가치_USD"], 0),
+            "보고일":        latest,
         })
-    rows.sort(key=lambda x: (-x["기관수"], -x["총보유가치_USD"]))
+    rows.sort(key=lambda x: (-x["컨센서스점수"], -x["총보유가치_USD"]))
     return rows
 
 
@@ -1585,6 +1640,10 @@ _COL_CATEGORY: dict[str, str] = {
     "수급패턴": "flow", "수급가속도": "flow",
     "저점매집여부": "flow", "고점청산여부": "flow",
     "수급반전일수": "flow", "수급_종합해석": "flow",
+    # 13F 포지션 변화
+    "포지션변화": "flow", "주식수_변화율%": "flow",
+    "신규기관수": "flow", "증가기관수": "flow", "감소기관수": "risk",
+    "컨센서스점수": "score", "신규기관": "flow", "증가기관": "flow",
     # 선행매매
     "선행매매점수": "lead",
     # 수출
@@ -1620,7 +1679,8 @@ _GROWTH_COLS = {
     "EPS성장률_QoQ%","EPS성장률_YoY%","예상매출성장률_NextFY%","예상EPS성장률_NextFY%",
 }
 _WRAP_COLS   = {"수급_종합해석","신고가_정량해석","미래_컨센서스_긍정요인",
-                "리스크_확인사항","장기투자_체크리스트","사업개요","미래산업근거","해외확장근거"}
+                "리스크_확인사항","장기투자_체크리스트","사업개요","미래산업근거","해외확장근거",
+                "신규기관","증가기관","기관목록"}
 _SCORE_COLS  = {
     "투자우선점수","밸류점수","성장점수","품질점수","현금흐름점수",
     "외국인수급점수","기관수급점수","선행매매점수","미래산업점수",
@@ -1829,6 +1889,15 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
             if fv < 0:   return f"background:#FFF0F0;{B}color:#AA0000;{R}{S}", _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
+    # ── 주식수_변화율% (13F 분기 변화) ──────────────
+    if col == "주식수_변화율%":
+        fv = _fv()
+        if fv is not None:
+            if fv >= 100: return f"background:#D4EDDA;{B}color:#0069B4;{R}{S}", f"+{_fmt_val(val)}%"
+            if fv > 0:    return base + B + "color:#1B6B1B;" + R + S, f"+{_fmt_val(val)}%"
+            if fv < 0:    return base + B + "color:#A30000;" + R + S, f"{_fmt_val(val)}%"
+        return base + R + S, _fmt_val(val)
+
     # ── EPS/매출 서프라이즈 ──────────────────────────
     if col in ("EPS_서프라이즈%", "매출_서프라이즈%"):
         fv = _fv()
@@ -1888,6 +1957,29 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
             if fv > 0: return base + B + "color:#1E6B00;" + R + S, disp
             if fv < 0: return base + B + "color:#CC0000;" + R + S, disp
         return base + R + S, _fmt_val(val)
+
+    # ── 포지션변화 (13F 분기 비교) ──────────────────
+    if col == "포지션변화":
+        pat = str(val or "")
+        pmap = {
+            "신규": ("#fff", "#0069B4"),
+            "증가": ("#fff", "#1B6B1B"),
+            "감소": ("#fff", "#A30000"),
+            "유지": ("#555", "#E8E8E8"),
+        }
+        fg2, bg2 = pmap.get(pat, ("#555", "#F0F0F0"))
+        return (f"background:{bg2};color:{fg2};font-weight:700;text-align:center;"
+                f"font-size:8.5px;border-radius:3px;"), pat
+
+    # ── 컨센서스점수 (기관중복보유) ─────────────────
+    if col == "컨센서스점수":
+        fv = _fv()
+        if fv is not None:
+            if fv >= 9:  return f"background:#0069B4;color:#fff;{B}{R}{S}", _fmt_val(val)
+            if fv >= 6:  return f"background:#1B6B1B;color:#fff;{B}{R}{S}", _fmt_val(val)
+            if fv >= 3:  return base + B + "color:#1E6B00;" + R + S, _fmt_val(val)
+            if fv <= 0:  return base + "color:#888;" + R + S, _fmt_val(val)
+        return base + B + R + S, _fmt_val(val)
 
     # ── 저점매집여부 / 고점청산여부 ──────────────────
     if col == "저점매집여부":
@@ -2072,7 +2164,8 @@ THEME_HEADERS = [
 
 # 유명기관_13F
 SEC_HEADERS = [
-    "기관명","보고일","종목명","티커","CUSIP","보유가치_USD","주식수","주식종류",
+    "기관명","보고일","종목명","티커","CUSIP",
+    "포지션변화","주식수_변화율%","보유가치_USD","주식수","전분기_주식수","주식종류",
 ]
 
 # 일별_트래킹
@@ -2295,18 +2388,29 @@ def _make_13f_html(sec_rows: list[dict]) -> str:
     for r in sec_rows:
         by_mgr.setdefault(r.get("기관명", "Unknown"), []).append(r)
 
+    _chg_order = {"신규": 0, "증가": 1, "유지": 2, "감소": 3}
     sections = []
     for mgr, holdings in sorted(by_mgr.items()):
         total_val = sum(h.get("보유가치_USD", 0) or 0 for h in holdings)
+        n_new = sum(1 for h in holdings if h.get("포지션변화") == "신규")
+        n_inc = sum(1 for h in holdings if h.get("포지션변화") == "증가")
+        n_dec = sum(1 for h in holdings if h.get("포지션변화") == "감소")
+        summary = (f"신규 {n_new}건 / 증가 {n_inc}건 / 감소 {n_dec}건"
+                   if n_new + n_inc + n_dec > 0 else "")
+        sorted_h = sorted(holdings,
+                          key=lambda x: (_chg_order.get(x.get("포지션변화","유지"), 2),
+                                         -(x.get("보유가치_USD") or 0)))
         sections.append(
             f'<div style="margin-bottom:20px;">'
             f'<div style="background:#1F4E79;color:#fff;padding:6px 12px;'
-            f'font-weight:700;border-radius:4px 4px 0 0;">'
-            f'{_esc(mgr)} (총 ${total_val/1e9:.2f}B)</div>'
-            + _make_table_html(
-                sorted(holdings, key=lambda x: -(x.get("보유가치_USD") or 0)),
-                SEC_HEADERS
-            )
+            f'font-weight:700;border-radius:4px 4px 0 0;display:flex;gap:12px;align-items:center;">'
+            f'<span>{_esc(mgr)}</span>'
+            f'<span style="font-size:0.75rem;opacity:0.85;">총 ${total_val/1e9:.2f}B</span>'
+            + (f'<span style="font-size:0.72rem;background:rgba(255,255,255,0.2);'
+               f'border-radius:4px;padding:2px 8px;">{_esc(summary)}</span>'
+               if summary else '')
+            + '</div>'
+            + _make_table_html(sorted_h, SEC_HEADERS)
             + '</div>'
         )
     return "".join(sections)
@@ -2639,7 +2743,12 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
 </section>''')
 
     # 기관중복보유
-    INST_OVERLAP_HEADERS = ["티커","종목명","기관수","기관목록","총보유가치_USD"]
+    INST_OVERLAP_HEADERS = [
+        "컨센서스점수","티커","종목명",
+        "기관수","신규기관수","증가기관수","감소기관수",
+        "신규기관","증가기관","기관목록",
+        "총보유가치_USD","보고일",
+    ]
     panels_html.append(f'''
 <section class="panel" id="panel-inst_overlap">
   <div class="panel-head"><h2>기관 중복 보유 종목 (다수 기관 동시 포지션)</h2>
@@ -2648,7 +2757,7 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
   <div class="search-bar">
     <input class="tbl-search" data-tbl="tbl-inst_overlap"
            placeholder="🔍 검색 (티커/기관명)..." style="width:240px;">
-    <span style="font-size:0.75rem;color:#666;margin-left:8px;">💡 2개 이상 유명기관이 동시 보유 = 컨센서스 매수 신호</span>
+    <span style="font-size:0.75rem;color:#666;margin-left:8px;">💡 컨센서스점수 = 신규×3 + 증가×2 - 감소 | 전분기 대비 포지션 변화 기반</span>
   </div>
   <div class="panel-body" id="tbl-inst_overlap">
     {_make_table_html(inst_overlap, INST_OVERLAP_HEADERS) if inst_overlap
