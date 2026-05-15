@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 build_deep_highs.py
 52주 신고가 딥다이브 - TradingView + yfinance + FnGuide + Naver 통합 분석
@@ -117,15 +117,24 @@ _HIGH_GROWTH_THEMES = {"AI반도체", "AI인프라", "로봇/자동화", "방산
 
 # ── 유명기관 13F ────────────────────────────────
 FAMOUS_MANAGERS = [
-    ("Berkshire Hathaway",    "0001067983"),
-    ("Bridgewater Associates","0001350694"),
-    ("Citadel Advisors",      "0001423053"),
-    ("Gates Foundation Trust","0001166559"),
-    ("Tiger Global",          "0001167483"),
-    ("Wellington Management", "0000902219"),
-    ("Renaissance Technologies","0001037389"),
-    ("Pershing Square",       "0001336528"),
-    ("Soros Fund Management", "0001029160"),
+    ("Berkshire Hathaway",              "0001067983"),
+    ("Bridgewater Associates",          "0001350694"),
+    ("Citadel Advisors",                "0001423053"),
+    ("Gates Foundation Trust",          "0001166559"),
+    ("Tiger Global",                    "0001167483"),
+    ("Wellington Management",           "0000902219"),
+    ("Renaissance Technologies",        "0001037389"),
+    ("Pershing Square",                 "0001336528"),
+    ("Soros Fund Management",           "0001029160"),
+    # ── 추가 유명 운용사 ──────────────────────────
+    ("Duquesne Family Office",          "0001536411"),  # Stanley Druckenmiller
+    ("Third Point LLC",                 "0001040273"),  # Dan Loeb
+    ("D.E. Shaw",                       "0001179821"),
+    ("Baupost Group",                   "0001061768"),  # Seth Klarman
+    ("Appaloosa Management",            "0001006438"),  # David Tepper
+    ("Viking Global Investors",         "0001341439"),
+    ("Coatue Management",               "0001336919"),  # Philippe Laffont
+    ("Lone Pine Capital",               "0001061219"),  # Stephen Mandel
 ]
 
 # ── 한국 기업명 사전 ──────────────────────────
@@ -135,18 +144,49 @@ _INVALID_KR_NAMES = frozenset({
     "null","none","undefined","nan",
 })
 _KNOWN_KR_NAMES = {
+    # 반도체
     "005930": "삼성전자",       "000660": "SK하이닉스",      "042700": "한미반도체",
+    "009150": "삼성전기",       "023590": "다이나믹디자인",   "336370": "솔브레인홀딩스",
+    "357780": "솔브레인",       "102710": "이오테크닉스",     "240210": "어보브반도체",
+    "112610": "씨에스윈드",     "095720": "웨이브일렉트로",   "166090": "하나머티리얼즈",
+    "108490": "로체시스템즈",   "036090": "에스엔유",         "139480": "이마트",
+    # 2차전지/EV
     "373220": "LG에너지솔루션", "006400": "삼성SDI",          "247540": "에코프로비엠",
-    "047810": "한국항공우주",   "012450": "한화에어로스페이스","042660": "한화오션",
-    "329180": "HD현대중공업",   "267250": "HD한국조선해양",    "009540": "HD현대",
+    "086520": "에코프로",       "096530": "씨젠",             "003670": "포스코퓨처엠",
+    "043270": "에코프로에이치엔","018880": "한온시스템",
+    # 방산/항공
+    "047810": "한국항공우주",   "012450": "한화에어로스페이스","079550": "LIG넥스원",
+    "064350": "현대로템",       "015210": "OCI홀딩스",        "272210": "한화시스템",
+    # 조선/중공업
+    "042660": "한화오션",       "329180": "HD현대중공업",      "267250": "HD한국조선해양",
+    "009540": "HD현대",         "010140": "삼성중공업",        "006260": "LS",
+    # 자동차
     "005380": "현대자동차",     "000270": "기아",              "012330": "현대모비스",
-    "005490": "POSCO홀딩스",    "207940": "삼성바이오로직스",  "068270": "셀트리온",
-    "035420": "NAVER",          "035720": "카카오",            "105560": "KB금융",
-    "055550": "신한지주",       "066570": "LG전자",            "051910": "LG화학",
-    "086520": "에코프로",       "183300": "코미코",            "115500": "케이씨에스",
-    "006110": "삼아알미늄",     "079550": "LIG넥스원",         "277810": "레인보우로보틱스",
-    "267260": "HD현대일렉트릭", "196170": "알테오젠",          "128940": "한미약품",
-    "003230": "삼양식품",       "009150": "삼성전기",          "009540": "HD현대",
+    "018880": "한온시스템",     "204320": "현대위아",
+    # 소재/철강
+    "005490": "POSCO홀딩스",    "051910": "LG화학",            "010950": "S-Oil",
+    "011170": "롯데케미칼",     "006490": "인산철",
+    # 바이오/제약
+    "207940": "삼성바이오로직스","068270": "셀트리온",          "196170": "알테오젠",
+    "128940": "한미약품",        "326030": "SK바이오팜",        "214150": "클래시스",
+    "145020": "휴젤",            "009290": "광동제약",
+    # IT/플랫폼
+    "035420": "NAVER",           "035720": "카카오",            "259960": "크래프톤",
+    "036570": "엔씨소프트",      "251270": "넷마블",            "293490": "카카오게임즈",
+    # 금융
+    "105560": "KB금융",          "055550": "신한지주",          "086790": "하나금융지주",
+    "316140": "우리금융지주",    "138930": "BNK금융지주",       "029780": "삼성카드",
+    # 전자/IT부품
+    "066570": "LG전자",          "183300": "코미코",            "115500": "케이씨에스",
+    "006110": "삼아알미늄",      "267260": "HD현대일렉트릭",
+    # 로봇/자동화
+    "277810": "레인보우로보틱스","090355": "노루홀딩스",        "335890": "비올",
+    # 기타 대형주
+    "003230": "삼양식품",        "004170": "신세계",            "028260": "삼성물산",
+    "000830": "삼성화재",        "018260": "삼성에스디에스",    "009830": "한화솔루션",
+    "373220": "LG에너지솔루션",  "011780": "금호석유",          "006800": "미래에셋증권",
+    "030200": "KT",              "017670": "SK텔레콤",          "032640": "LG유플러스",
+    "015760": "한국전력",        "036460": "한국가스공사",
 }
 
 TV_COLUMNS = [
@@ -470,21 +510,24 @@ def fetch_famous_manager_rows() -> list:
             recent = resp.json().get("filings", {}).get("recent", {})
             forms    = recent.get("form", [])
             acc_nums = recent.get("accessionNumber", [])
-            dates    = recent.get("filedDate", [])
-            target_acc = target_date = None
+            dates    = (recent.get("filingDate") or
+                        recent.get("reportDate") or
+                        [""] * len(forms))
+            target_acc_orig = target_acc_nodash = target_date = None
             for form, acc, dt in zip(forms, acc_nums, dates):
                 if form in ("13F-HR", "13F-HR/A"):
-                    target_acc  = acc.replace("-", "")
-                    target_date = dt
+                    target_acc_orig   = acc                   # e.g. "0001067983-24-003244"
+                    target_acc_nodash = acc.replace("-", "")  # e.g. "000106798324003244"
+                    target_date       = dt
                     break
-            if not target_acc:
+            if not target_acc_nodash:
                 continue
 
             base = (f"https://www.sec.gov/Archives/edgar/data/"
-                    f"{int(cik)}/{target_acc}/")
-            # index.json으로 infotable XML 파일명 찾기
+                    f"{int(cik)}/{target_acc_nodash}/")
+            # SEC 파일 인덱스: {acc_original}-index.json
             idx = requests.get(
-                f"{base}{target_acc.replace('','')}-index.json",
+                f"{base}{target_acc_orig}-index.json",
                 timeout=10, verify=False, headers=ua)
             xml_file = None
             try:
@@ -524,19 +567,90 @@ def fetch_famous_manager_rows() -> list:
                 if re.fullmatch(r"\d{6}", tk):
                     continue
                 result.append({
-                    "기관명":      mgr_name,
-                    "보고일":      target_date or "",
-                    "종목명":      h["name"],
-                    "티커":        tk or h["cusip"],
-                    "CUSIP":       h["cusip"],
-                    "보유가치_USD": h["value"],
-                    "주식수":      h["shares"],
-                    "주식종류":    h["class"],
+                    "기관명":       mgr_name,
+                    "보고일":       target_date or "",
+                    "종목명":       h["name"],
+                    "티커":         tk or h["cusip"],
+                    "CUSIP":        h["cusip"],
+                    "보유가치_USD":  h["value"],
+                    "주식수":       h["shares"],
+                    "주식종류":     h["class"],
+                    "_수집일":      _NOW.strftime("%Y-%m-%d"),
                 })
         except Exception as e:
             print(f"[13F] {mgr_name}: {e}")
     result.sort(key=lambda x: -(x.get("보유가치_USD") or 0))
+
+    # ── 13F 히스토리 CSV 누적 저장 ───────────────────────────────────
+    # 복합키: _수집일 + 기관명 + 티커 → 같은 날 덮어쓰기, 이전 날짜 유지
+    save_13f_history(result, DATA_DIR / "13f_history.csv")
     return result
+
+
+def fetch_institutional_overlap(all_holdings: list[dict]) -> list[dict]:
+    """여러 기관이 공통 보유한 종목 집계 (2개 이상 기관 = 컨센서스 매수).
+
+    Parameters
+    ----------
+    all_holdings : list[dict]
+        fetch_famous_manager_rows() 의 반환값.
+        각 dict 키: 기관명, 보고일, 종목명, 티커, CUSIP, 보유가치_USD, 주식수, 주식종류
+
+    Returns
+    -------
+    list[dict]
+        기관이 2개 이상인 종목만, 기관수 내림차순 → 총보유가치 내림차순 정렬.
+        각 dict 키: 티커, 종목명, 기관수, 기관목록(list[str]),
+                    총보유가치_USD(float, USD 원본), 보고일(가장 최근 str)
+    """
+    from collections import defaultdict
+    ticker_map: dict[str, dict] = defaultdict(lambda: {
+        "기관목록": [], "총보유가치_USD": 0.0, "종목명": "", "티커": "",
+        "보고일_set": set(),
+    })
+    for h in all_holdings:
+        tk = h.get("티커", "")
+        if not tk or re.fullmatch(r"\d{6}", tk):
+            continue
+        d    = ticker_map[tk]
+        mgr  = h.get("기관명", "")
+        date = h.get("보고일", "")
+        if mgr and mgr not in d["기관목록"]:
+            d["기관목록"].append(mgr)
+        d["총보유가치_USD"] += float(h.get("보유가치_USD", 0) or 0)
+        if not d["종목명"]:
+            d["종목명"] = h.get("종목명", "")
+        d["티커"] = tk
+        if date:
+            d["보고일_set"].add(date)
+
+    rows = []
+    for tk, d in ticker_map.items():
+        n_inst = len(d["기관목록"])
+        if n_inst < 2:
+            continue
+        latest_date = max(d["보고일_set"]) if d["보고일_set"] else ""
+        rows.append({
+            "티커":           tk,
+            "종목명":         d["종목명"],
+            "기관수":         n_inst,
+            "기관목록":       sorted(d["기관목록"]),         # list[str] 반환
+            "총보유가치_USD":  round(d["총보유가치_USD"], 0), # USD 단위 원본값
+            "보고일":         latest_date,
+        })
+    rows.sort(key=lambda x: (-x["기관수"], -x["총보유가치_USD"]))
+    return rows
+
+
+def save_13f_history(rows: list[dict], csv_path: Path):
+    """13F 결과 누적 저장 (날짜+기관+티커 복합키, 기존 데이터 유지)"""
+    existing = _read_csv_as_list(csv_path)
+    today = _NOW.strftime("%Y-%m-%d")
+    today_keys = {f"{today}|{r.get('기관명','')}|{r.get('티커','')}": True for r in rows}
+    kept = [r for r in existing
+            if f"{r.get('_수집일','')}|{r.get('기관명','')}|{r.get('티커','')}" not in today_keys]
+    merged = kept + [dict(r, _수집일=today) for r in rows if r.get("티커")]
+    _write_csv(csv_path, merged)
 
 
 # ───────────────────────────────────────────────
@@ -649,6 +763,84 @@ def fetch_insider_buys() -> list[dict]:
         return rows
     except Exception:
         return []
+
+
+def fetch_sector_performance() -> list[dict]:
+    """미국 섹터 ETF 성과 (XLK, XLF, XLE 등)"""
+    if not _HAS_YF:
+        return []
+    sectors = [
+        ("XLK", "기술"),  ("XLF", "금융"),  ("XLE", "에너지"),
+        ("XLV", "헬스케어"),("XLI", "산업"), ("XLY", "소비재"),
+        ("XLP", "필수소비"),("XLU", "유틸리티"),("XLB", "소재"),
+        ("XLRE","부동산"), ("XLC", "통신"),  ("QQQ", "NASDAQ100"),
+        ("IWM", "Russell2000"),("EEM","신흥국"),("EWY","한국ETF"),
+    ]
+    out = []
+    for sym, label in sectors:
+        try:
+            fi = yf.Ticker(sym).fast_info
+            cur  = _safe(fi.get("lastPrice"))
+            prev = _safe(fi.get("regularMarketPreviousClose"))
+            hi52 = _safe(fi.get("yearHigh"))
+            lo52 = _safe(fi.get("yearLow"))
+            chg_1d = round((cur - prev) / prev * 100, 2) if cur and prev else None
+            pos = round((cur - lo52)/(hi52 - lo52)*100,1) if cur and hi52 and lo52 and (hi52-lo52)>0 else None
+            # 1달 수익률 (approx via 1M history)
+            try:
+                hist = yf.Ticker(sym).history(period="1mo", auto_adjust=True)
+                chg_1m = round((hist["Close"].iloc[-1]/hist["Close"].iloc[0]-1)*100,1) if len(hist)>2 else None
+            except Exception:
+                chg_1m = None
+            out.append({
+                "섹터":      label,
+                "심볼":      sym,
+                "현재가":    cur,
+                "전일비%":   chg_1d,
+                "1개월수익%": chg_1m,
+                "52주위치%": pos,
+            })
+        except Exception:
+            continue
+    return out
+
+
+def fetch_earnings_calendar() -> list[dict]:
+    """향후 2주 실적 발표 예정 종목 (TradingView 52주 신고가 목록 기반)"""
+    if not _HAS_YF:
+        return []
+    # 52주 신고가 목록에서 티커 추출해 실적일 확인
+    # TV 결과가 없을 때는 주요 대형주 고정 목록 사용
+    watch = ["AAPL","MSFT","NVDA","GOOGL","AMZN","META","TSLA",
+             "AVGO","AMD","ORCL","CRM","NFLX","JPM","GS","BAC",
+             "LLY","JNJ","UNH","WMT","COST","HD","V","MA"]
+    rows = []
+    today = _NOW.date()
+    two_weeks = today + timedelta(days=14)
+    for sym in watch:
+        try:
+            info = yf.Ticker(sym).info
+            rd = info.get("earningsDate") or info.get("earningsTimestamp")
+            if rd:
+                if isinstance(rd, (int, float)):
+                    from datetime import date as _date
+                    rd = datetime.utcfromtimestamp(rd).date()
+                elif hasattr(rd, "date"):
+                    rd = rd.date()
+                if today <= rd <= two_weeks:
+                    rows.append({
+                        "실적일":     rd.strftime("%m/%d"),
+                        "티커":       sym,
+                        "회사명":     info.get("shortName",""),
+                        "섹터":       info.get("sector",""),
+                        "예상EPS":    info.get("epsForward",""),
+                        "Forward_PER": info.get("forwardPE",""),
+                        "매출_YoY%":  info.get("revenueGrowth",""),
+                    })
+        except Exception:
+            continue
+    rows.sort(key=lambda x: x.get("실적일",""))
+    return rows
 
 
 # ───────────────────────────────────────────────
@@ -1448,6 +1640,15 @@ def _fmt_val(v: object) -> str:
     return _esc(str(v))
 
 
+def _date_short(v: object) -> str:
+    """YYYY-MM-DD → M/D 형식으로 변환"""
+    s = str(v or "")
+    m = re.match(r"(\d{4})-(\d{2})-(\d{2})", s)
+    if m:
+        return f"{int(m.group(2))}/{int(m.group(3))}"
+    return s
+
+
 def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
     bg_odd = "#F2F6FC" if odd else "#FFFFFF"
     base = f"background:{bg_odd};"
@@ -1455,6 +1656,10 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
     C = "text-align:center;"
     S = "font-size:9px;"
     B = "font-weight:700;"
+
+    # ── 수집일 / 날짜 컬럼 M/D 형식 ────────────────
+    if col in ("수집일", "최초수집일", "보고일", "다음실적일"):
+        return base + S + "color:#64748B;text-align:center;", _date_short(val)
 
     def _fv():
         try:
@@ -1809,8 +2014,9 @@ LONG_TERM_HEADERS = [
 # 테마_요약: 테마 집계
 THEME_HEADERS = [
     "미래산업테마","종목수","평균_투자우선점수",
-    "A등급수","B등급수","C이하등급수",
+    "A등급수","B등급수","C이하등급수","수급신호_종목수",
     "평균_선행매매점수","평균_성장점수","평균_미래산업점수","평균_수출해외점수",
+    "평균_RSI","평균_52주위치%","평균_1개월수익률%",
     "대표종목","최고점수종목","최고점수",
 ]
 
@@ -1934,32 +2140,102 @@ def _make_theme_summary_html(enriched: list[dict]) -> str:
 
     rows = []
     for theme, members in sorted(theme_map.items(), key=lambda x: -len(x[1])):
-        avg_score = sum(m.get("투자우선점수", 0) or 0 for m in members) / len(members)
-        avg_lead  = sum(m.get("선행매매점수", 0) or 0 for m in members) / len(members)
-        avg_grow  = sum(m.get("성장점수", 0) or 0 for m in members) / len(members)
-        avg_mt    = sum(m.get("미래산업점수", 0) or 0 for m in members) / len(members)
-        avg_exp   = sum(m.get("수출해외점수", 0) or 0 for m in members) / len(members)
+        n = len(members)
+        avg_score = sum(m.get("투자우선점수", 0) or 0 for m in members) / n
+        avg_lead  = sum(m.get("선행매매점수", 0) or 0 for m in members) / n
+        avg_grow  = sum(m.get("성장점수", 0) or 0 for m in members) / n
+        avg_mt    = sum(m.get("미래산업점수", 0) or 0 for m in members) / n
+        avg_exp   = sum(m.get("수출해외점수", 0) or 0 for m in members) / n
+        avg_rsi   = sum((m.get("RSI") or 50) for m in members) / n
+        avg_pos   = sum((m.get("52주고가대비위치%") or 50) for m in members) / n
+        avg_mom   = sum((m.get("1개월수익률%") or 0) for m in members) / n
         best      = max(members, key=lambda x: x.get("투자우선점수", 0) or 0)
-        reps      = ", ".join(m.get("티커", "") for m in members[:3])
+        reps      = ", ".join(m.get("티커", "") for m in members[:4])
         cnt_a = sum(1 for m in members if m.get("등급") == "A")
         cnt_b = sum(1 for m in members if m.get("등급") == "B")
         cnt_c = sum(1 for m in members if m.get("등급") not in ("A", "B") and m.get("등급"))
+        # 수급 신호 있는 종목 수
+        flow_cnt = sum(1 for m in members if m.get("수급패턴") and "청산" not in str(m.get("수급패턴","")))
         rows.append({
             "미래산업테마":      theme,
-            "종목수":            len(members),
+            "종목수":            n,
             "평균_투자우선점수": round(avg_score, 1),
             "A등급수":           cnt_a,
             "B등급수":           cnt_b,
             "C이하등급수":       cnt_c,
+            "수급신호_종목수":   flow_cnt,
             "평균_선행매매점수": round(avg_lead, 1),
             "평균_성장점수":     round(avg_grow, 1),
             "평균_미래산업점수": round(avg_mt, 1),
             "평균_수출해외점수": round(avg_exp, 1),
+            "평균_RSI":          round(avg_rsi, 1),
+            "평균_52주위치%":    round(avg_pos, 1),
+            "평균_1개월수익률%": round(avg_mom, 1),
             "대표종목":          reps,
             "최고점수종목":      best.get("티커", ""),
             "최고점수":          round(best.get("투자우선점수", 0) or 0, 1),
         })
-    return _make_table_html(rows, THEME_HEADERS, title="테마 요약")
+
+    # 테이블 요약
+    tbl_html = _make_table_html(rows, THEME_HEADERS, title="테마 요약")
+
+    # 테마 카드 (상위 8개)
+    cards = []
+    gmap = {"A":("#155724","#D4EDDA"),"B":("#1E6B00","#C3E6CB"),
+            "C":("#856404","#FFF3CD"),"D":("#7B3300","#FFE0C0"),"F":("#7B0000","#FFD0D0")}
+    for r in rows[:8]:
+        theme_name = r["미래산업테마"]
+        members_sorted = sorted(theme_map[theme_name],
+                                key=lambda x: x.get("투자우선점수",0) or 0, reverse=True)[:6]
+        member_html = ""
+        for m in members_sorted:
+            g = m.get("등급","F")
+            gfg, gbg = gmap.get(g, ("#555","#EEE"))
+            sc = m.get("투자우선점수",0) or 0
+            pat = m.get("수급패턴","") or ""
+            pat_color = "#0069B4" if "매집" in pat else ("#6A0DAD" if "반전" in pat else ("#AA0000" if "청산" in pat else "#1B6B1B" if "추세" in pat else "#888"))
+            member_html += (
+                f'<div style="display:flex;align-items:center;gap:6px;'
+                f'padding:5px 8px;border-bottom:1px solid #f0f0f0;">'
+                f'<span style="font-weight:700;font-size:0.78rem;min-width:60px;">{_esc(m.get("티커",""))}</span>'
+                f'<span style="font-size:0.75rem;color:#555;flex:1;">{_esc(m.get("기업명",""))}</span>'
+                f'<span style="background:{gbg};color:{gfg};font-weight:900;border-radius:999px;'
+                f'padding:1px 7px;font-size:0.72rem;">{g}</span>'
+                f'<span style="font-weight:700;font-size:0.78rem;color:#1A3A2A;min-width:32px;text-align:right;">{sc:.0f}</span>'
+                + (f'<span style="font-size:0.68rem;color:{pat_color};min-width:50px;text-align:right;">{_esc(pat[:5])}</span>' if pat else '')
+                + '</div>'
+            )
+        score_color = "#155724" if r["평균_투자우선점수"] >= 60 else ("#856404" if r["평균_투자우선점수"] >= 40 else "#7B0000")
+        cards.append(f'''
+<div style="background:#fff;border:1px solid #BBF7D0;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+  <div style="background:#1A3A2A;color:#fff;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+    <span style="font-weight:900;font-size:0.85rem;">{_esc(theme_name)}</span>
+    <span style="margin-left:auto;font-size:0.75rem;opacity:0.8;">{r["종목수"]}종목</span>
+    <span style="background:#D4EDDA;color:{score_color};font-weight:900;border-radius:6px;padding:2px 8px;font-size:0.75rem;">{r["평균_투자우선점수"]:.1f}점</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:1px solid #f0f0f0;">
+    <div style="padding:6px 8px;text-align:center;border-right:1px solid #f0f0f0;">
+      <div style="font-size:0.65rem;color:#888;">A등급</div>
+      <div style="font-weight:900;color:#155724;font-size:0.9rem;">{r["A등급수"]}</div>
+    </div>
+    <div style="padding:6px 8px;text-align:center;border-right:1px solid #f0f0f0;">
+      <div style="font-size:0.65rem;color:#888;">수급신호</div>
+      <div style="font-weight:900;color:#0069B4;font-size:0.9rem;">{r["수급신호_종목수"]}</div>
+    </div>
+    <div style="padding:6px 8px;text-align:center;border-right:1px solid #f0f0f0;">
+      <div style="font-size:0.65rem;color:#888;">RSI</div>
+      <div style="font-weight:700;font-size:0.85rem;">{r["평균_RSI"]:.0f}</div>
+    </div>
+    <div style="padding:6px 8px;text-align:center;">
+      <div style="font-size:0.65rem;color:#888;">1M수익률</div>
+      <div style="font-weight:700;font-size:0.85rem;color:{"#1E6B00" if r["평균_1개월수익률%"]>=0 else "#AA0000"};">{r["평균_1개월수익률%"]:+.1f}%</div>
+    </div>
+  </div>
+  <div style="max-height:200px;overflow-y:auto;">{member_html}</div>
+</div>''')
+
+    cards_html = f'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem;margin-bottom:1.5rem;">{"".join(cards)}</div>'
+    return cards_html + tbl_html
 
 
 def _make_13f_html(sec_rows: list[dict]) -> str:
@@ -1987,29 +2263,19 @@ def _make_13f_html(sec_rows: list[dict]) -> str:
 
 
 _HTML_CSS = '''
-:root,[data-p=default]{--ac:#2563EB;--acL:#DBEAFE;}
-[data-p=ocean]  {--ac:#0d9488;--acL:#ccfbf1;}
-[data-p=sunset] {--ac:#ea580c;--acL:#ffedd5;}
-[data-p=violet] {--ac:#7c3aed;--acL:#ede9fe;}
-[data-p=rose]   {--ac:#e11d48;--acL:#ffe4e6;}
 :root {
+  --ac:#16A34A; --acL:#DCFCE7;
   --bg:#F5F7FA; --card:#FFFFFF;
-  --card2:#F8FAFC; --t1:#111827; --t2:#475569; --t3:#94A3B8;
-  --bd:#D8DFE9; --hdr:#2F2F2F; --tbg:rgba(255,255,255,0.92);
-  --tgB:#CBD5E1; --tgK:#94A3B8; --glow:rgba(37,99,235,0.4);
+  --card2:#F0FDF4; --t1:#111827; --t2:#475569; --t3:#94A3B8;
+  --bd:#BBF7D0; --hdr:#1A3A2A; --tbg:rgba(255,255,255,0.92);
+  --tgB:#BBF7D0; --tgK:#16A34A; --glow:rgba(22,163,74,0.4);
   --shadow:0 4px 18px rgba(15,23,42,0.08);
 }
 [data-t=dark] {
-  --ac:#60A5FA; --acL:rgba(96,165,250,0.1); --bg:#0A0E1A; --card:#111827;
-  --card2:#1E2D4A; --t1:#E2E8F0; --t2:#94A3B8; --t3:#475569;
-  --bd:#1E2D4A; --tbg:rgba(10,14,26,0.92); --tgB:#374151; --tgK:#60A5FA;
+  --ac:#4ADE80; --acL:rgba(74,222,128,0.12); --bg:#071510; --card:#0D1F15;
+  --card2:#122B1C; --t1:#E2E8F0; --t2:#94A3B8; --t3:#475569;
+  --bd:#1A3A2A; --tbg:rgba(7,21,16,0.92); --tgB:#1A3A2A; --tgK:#4ADE80;
 }
-.pb{width:18px;height:18px;border-radius:50%;border:2px solid transparent;
-  cursor:pointer;transition:all 0.2s;flex-shrink:0;}
-.pb:hover{transform:scale(1.2);}
-.pb.on{border-color:var(--t1);box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--t1);}
-.palette{display:flex;align-items:center;gap:0.3rem;margin-left:0.5rem;}
-.palette-label{font-size:0.6rem;color:var(--t3);white-space:nowrap;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;font-size:14px;}
 body{font-family:"Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
@@ -2107,17 +2373,6 @@ table.dtbl tr.drow:hover td{
 
 _HTML_JS = '''
 (function(){
-  // ── 팔레트 스위처 ──
-  function sp(c){
-    document.documentElement.dataset.p=c;
-    localStorage.setItem('palette',c);
-    document.querySelectorAll('.pb').forEach(b=>b.classList.toggle('on',b.dataset.c===c));
-  }
-  window.sp=sp;
-  const savedP=localStorage.getItem('palette')||'default';
-  document.documentElement.dataset.p=savedP;
-  document.querySelectorAll('.pb').forEach(b=>b.classList.toggle('on',b.dataset.c===savedP));
-
   // ── 탭 전환 ──
   const tabs=[...document.querySelectorAll('.tab-btn')];
   const panels=[...document.querySelectorAll('.panel')];
@@ -2180,20 +2435,23 @@ _HTML_JS = '''
 
 
 _TAB_CONFIG = [
-    ("dashboard",      "대시보드",        "#FF0000"),
-    ("priority_top",   "우선순위_TOP",     "#FF6600"),
-    ("lead_signal",    "선행매매_시그널",  "#7030A0"),
-    ("export_top",     "수출해외_상위",    "#006600"),
-    ("long_term",      "장기투자_후보",    "#005F00"),
-    ("flow_detail",    "외국인_수급",      "#003399"),
-    ("theme_summary",  "테마_요약",        "#9900CC"),
-    ("market",         "시장지표",         "#1F4E79"),
-    ("sec_detail",     "유명기관_13F",     "#006699"),
-    ("highs_us",       "신고가_미국",      "#808080"),
-    ("highs_kr",       "신고가_한국",      "#808080"),
-    ("vol_us",         "거래량급증_미국",  "#808080"),
-    ("vol_kr",         "거래량급증_한국",  "#808080"),
-    ("tracking",       "일별_트래킹",      "#444444"),
+    ("dashboard",      "대시보드",         "#155724"),
+    ("priority_top",   "우선순위_TOP",      "#1E6B00"),
+    ("lead_signal",    "선행매매_시그널",   "#7030A0"),
+    ("export_top",     "수출해외_상위",     "#005F00"),
+    ("long_term",      "장기투자_후보",     "#1A4A00"),
+    ("flow_detail",    "외국인_수급",       "#003399"),
+    ("theme_summary",  "테마_요약",         "#6B0080"),
+    ("market",         "시장지표",          "#1F4E79"),
+    ("inst_overlap",   "기관중복보유",      "#004C6D"),
+    ("sec_detail",     "유명기관_13F",      "#006699"),
+    ("earnings_cal",   "실적캘린더",        "#7B3300"),
+    ("sector_perf",    "섹터성과",          "#2B5219"),
+    ("highs_us",       "신고가_미국",       "#555555"),
+    ("highs_kr",       "신고가_한국",       "#555555"),
+    ("vol_us",         "거래량급증_미국",   "#555555"),
+    ("vol_kr",         "거래량급증_한국",   "#555555"),
+    ("tracking",       "일별_트래킹",       "#333333"),
 ]
 
 
@@ -2258,7 +2516,8 @@ def _make_market_panel_html(market_data: list[dict], fg: dict,
 def generate_html(enriched: list[dict], volume_us: list[dict],
                   volume_kr: list[dict], sec_rows: list[dict],
                   market_data: list[dict], fg: dict,
-                  insider_rows: list[dict],
+                  insider_rows: list[dict], inst_overlap: list[dict],
+                  sector_rows: list[dict], earnings_rows: list[dict],
                   collected_at: str) -> str:
 
     enr_us  = sorted([r for r in enriched if r.get("국가") == "US"],
@@ -2288,22 +2547,6 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
         tab_buttons.append(
             f'<button class="tab-btn" data-tab="{tid}">{_esc(tlabel)}</button>'
         )
-
-    # ── 팔레트 picker HTML ──
-    palette_html = '''
-<div class="palette">
-  <span class="palette-label">색상</span>
-  <button class="pb" data-c="default" onclick="sp('default')" title="기본 블루"
-    style="background:linear-gradient(135deg,#2563eb,#60a5fa);"></button>
-  <button class="pb" data-c="ocean"   onclick="sp('ocean')"   title="오션"
-    style="background:linear-gradient(135deg,#0d9488,#2dd4bf);"></button>
-  <button class="pb" data-c="sunset"  onclick="sp('sunset')"  title="선셋"
-    style="background:linear-gradient(135deg,#ea580c,#fb923c);"></button>
-  <button class="pb" data-c="violet"  onclick="sp('violet')"  title="바이올렛"
-    style="background:linear-gradient(135deg,#7c3aed,#a78bfa);"></button>
-  <button class="pb" data-c="rose"    onclick="sp('rose')"    title="로즈"
-    style="background:linear-gradient(135deg,#e11d48,#fb7185);"></button>
-</div>'''
 
     panels_html = []
 
@@ -2345,10 +2588,28 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
   </div>
 </section>''')
 
+    # 기관중복보유
+    INST_OVERLAP_HEADERS = ["티커","종목명","기관수","기관목록","총보유가치_USD"]
+    panels_html.append(f'''
+<section class="panel" id="panel-inst_overlap">
+  <div class="panel-head"><h2>기관 중복 보유 종목 (다수 기관 동시 포지션)</h2>
+    <span class="panel-count">{len(inst_overlap)}종목</span>
+  </div>
+  <div class="search-bar">
+    <input class="tbl-search" data-tbl="tbl-inst_overlap"
+           placeholder="🔍 검색 (티커/기관명)..." style="width:240px;">
+    <span style="font-size:0.75rem;color:#666;margin-left:8px;">💡 2개 이상 유명기관이 동시 보유 = 컨센서스 매수 신호</span>
+  </div>
+  <div class="panel-body" id="tbl-inst_overlap">
+    {_make_table_html(inst_overlap, INST_OVERLAP_HEADERS) if inst_overlap
+     else '<div class="empty-msg">13F 데이터 수집 후 표시 (SEC EDGAR 분기 공시)</div>'}
+  </div>
+</section>''')
+
     # 유명기관_13F
     panels_html.append(f'''
 <section class="panel" id="panel-sec_detail">
-  <div class="panel-head"><h2>유명기관 13F (Berkshire·Bridgewater 등)</h2>
+  <div class="panel-head"><h2>유명기관 13F 보유 상세</h2>
     <span class="panel-count">{len(sec_rows)}건</span>
   </div>
   <div class="search-bar">
@@ -2366,6 +2627,32 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
   <div class="panel-head"><h2>시장지표 &amp; 내부자거래</h2></div>
   <div class="panel-body">
     {_make_market_panel_html(market_data, fg, insider_rows)}
+  </div>
+</section>''')
+
+    # 실적캘린더
+    EARNINGS_HEADERS = ["실적일","티커","회사명","섹터","예상EPS","Forward_PER","매출_YoY%"]
+    panels_html.append(f'''
+<section class="panel" id="panel-earnings_cal">
+  <div class="panel-head"><h2>실적 캘린더 (향후 2주)</h2>
+    <span class="panel-count">{len(earnings_rows)}건</span>
+  </div>
+  <div class="panel-body">
+    {_make_table_html(earnings_rows, EARNINGS_HEADERS) if earnings_rows
+     else '<div class="empty-msg">향후 2주 실적 발표 예정 없음 (또는 수집 실패)</div>'}
+  </div>
+</section>''')
+
+    # 섹터성과
+    SECTOR_HEADERS = ["섹터","심볼","현재가","전일비%","1개월수익%","52주위치%"]
+    panels_html.append(f'''
+<section class="panel" id="panel-sector_perf">
+  <div class="panel-head"><h2>미국 섹터 ETF 성과</h2>
+    <span class="panel-count">{len(sector_rows)}개 섹터</span>
+  </div>
+  <div class="panel-body">
+    {_make_table_html(sector_rows, SECTOR_HEADERS) if sector_rows
+     else '<div class="empty-msg">섹터 데이터 수집 실패</div>'}
   </div>
 </section>''')
 
@@ -2413,7 +2700,7 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
                                    _make_table_html(by_tracking, TRACKING_HEADERS)))
 
     return f'''<!DOCTYPE html>
-<html lang="ko" data-t="light" data-p="default">
+<html lang="ko" data-t="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -2426,7 +2713,6 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
 <body>
 <div class="topbar">
   <nav class="nav">{"".join(tab_buttons)}</nav>
-  {palette_html}
   <div class="tt" id="dm-toggle" style="margin-left:0.4rem;">
     <span class="tt-label">🌙</span>
     <div class="tk"><div class="kn"></div></div>
@@ -2521,39 +2807,54 @@ def main():
     flow_recs = build_flow_history_records(enriched)
     save_flow_history(flow_recs, FLOW_HISTORY_CSV)
 
-    # 7. SEC 13F + 시장 데이터 병렬 수집
-    print("[7] SEC 13F + 시장지표 + 내부자거래 수집...")
-    sec_rows, market_data, fg, insider_rows = [], [], {}, []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as ex:
-        fut_13f     = ex.submit(fetch_famous_manager_rows)
-        fut_market  = ex.submit(fetch_yahoo_market)
-        fut_fg      = ex.submit(fetch_fear_greed)
-        fut_insider = ex.submit(fetch_insider_buys)
-        try:
-            sec_rows = fut_13f.result(timeout=60)
-            print(f"    13F: {len(sec_rows)}개")
-        except Exception as e:
-            print(f"    13F 오류: {e}")
-        try:
-            market_data = fut_market.result(timeout=30)
-            print(f"    시장지표: {len(market_data)}개")
-        except Exception as e:
-            print(f"    시장지표 오류: {e}")
-        try:
-            fg = fut_fg.result(timeout=20)
-            print(f"    Fear&Greed: {fg.get('score','?')}")
-        except Exception as e:
-            print(f"    Fear&Greed 오류: {e}")
-        try:
-            insider_rows = fut_insider.result(timeout=30)
-            print(f"    내부자거래: {len(insider_rows)}개")
-        except Exception as e:
-            print(f"    내부자거래 오류: {e}")
+    # 7. 외부 데이터 병렬 수집 (13F / 시장 / F&G / 내부자 / 섹터 / 실적)
+    print("[7] 외부 데이터 병렬 수집...")
+    sec_rows, market_data, fg = [], [], {}
+    insider_rows, sector_rows, earnings_rows = [], [], []
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as ex:
+        fut_13f      = ex.submit(fetch_famous_manager_rows)
+        fut_market   = ex.submit(fetch_yahoo_market)
+        fut_fg       = ex.submit(fetch_fear_greed)
+        fut_insider  = ex.submit(fetch_insider_buys)
+        fut_sector   = ex.submit(fetch_sector_performance)
+        fut_earnings = ex.submit(fetch_earnings_calendar)
+
+        def _safe_result(fut, name, timeout=60):
+            try:
+                return fut.result(timeout=timeout)
+            except Exception as e:
+                print(f"    {name} 오류: {e}")
+                return None
+
+        r13f      = _safe_result(fut_13f,      "13F",     120)
+        r_market  = _safe_result(fut_market,   "시장지표",  30)
+        r_fg      = _safe_result(fut_fg,       "Fear&Greed",20)
+        r_insider = _safe_result(fut_insider,  "내부자거래", 30)
+        r_sector  = _safe_result(fut_sector,   "섹터ETF",   60)
+        r_earn    = _safe_result(fut_earnings, "실적캘린더", 60)
+
+    if r13f      is not None: sec_rows     = r13f
+    if r_market  is not None: market_data  = r_market
+    if r_fg      is not None: fg           = r_fg
+    if r_insider is not None: insider_rows = r_insider
+    if r_sector  is not None: sector_rows  = r_sector
+    if r_earn    is not None: earnings_rows = r_earn
+
+    print(f"    13F:{len(sec_rows)} 시장:{len(market_data)} F&G:{fg.get('score','?')} "
+          f"내부자:{len(insider_rows)} 섹터:{len(sector_rows)} 실적:{len(earnings_rows)}")
+
+    # 13F 중복 보유 분석 + 히스토리 저장
+    inst_overlap = fetch_institutional_overlap(sec_rows)
+    if sec_rows:
+        save_13f_history(sec_rows, DATA_DIR / "13f_history.csv")
+    print(f"    기관중복보유: {len(inst_overlap)}종목")
 
     # 8. HTML 생성
     print("[8] index.html 생성...")
     html = generate_html(enriched, vol_us, vol_kr, sec_rows,
-                         market_data, fg, insider_rows, collected_at)
+                         market_data, fg, insider_rows, inst_overlap,
+                         sector_rows, earnings_rows, collected_at)
     out  = write_html(html, OUTPUT_HTML)
     print(f"    저장: {out}")
     print(f"[딥다이브] 완료. 총 {len(enriched)}개 종목 | 파일: {out.stat().st_size // 1024}KB")
