@@ -687,7 +687,7 @@ def fetch_yahoo_market() -> list[dict]:
         return []
     symbols = [
         ("^VIX",     "VIX 공포지수"),
-        ("^GSPC",    "S&P 500"),
+        ("^GSPC",    "S&P500"),
         ("^IXIC",    "NASDAQ"),
         ("^DJI",     "Dow Jones"),
         ("^KS11",    "KOSPI"),
@@ -1636,8 +1636,35 @@ def _fmt_val(v: object) -> str:
     if v is None or (isinstance(v, float) and math.isnan(v)):
         return ""
     if isinstance(v, float):
-        return f"{v:,.2f}".rstrip("0").rstrip(".")
+        if v == int(v):
+            return f"{int(v):,}"
+        return f"{v:.1f}"
+    if isinstance(v, int):
+        return f"{v:,}"
     return _esc(str(v))
+
+
+_BIG_NUM_COLS = frozenset({
+    "시가총액", "FCF_TTM", "설비투자_TTM", "순현금",
+    "보유가치_USD", "총보유가치_USD",
+})
+
+
+def _fmt_big(v: object) -> str:
+    """큰 숫자를 K/M/B/T 단위로 축약"""
+    if v is None or (isinstance(v, float) and math.isnan(v)):
+        return ""
+    try:
+        f = float(v)
+        a = abs(f)
+        sign = "-" if f < 0 else ""
+        if a >= 1e12: return f"{sign}{a/1e12:.1f}T"
+        if a >= 1e9:  return f"{sign}{a/1e9:.1f}B"
+        if a >= 1e6:  return f"{sign}{a/1e6:.1f}M"
+        if a >= 1e3:  return f"{sign}{a/1e3:.0f}K"
+        return f"{f:.0f}"
+    except Exception:
+        return _esc(str(v))
 
 
 def _date_short(v: object) -> str:
@@ -1660,6 +1687,10 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
     # ── 수집일 / 날짜 컬럼 M/D 형식 ────────────────
     if col in ("수집일", "최초수집일", "보고일", "다음실적일"):
         return base + S + "color:#64748B;text-align:center;", _date_short(val)
+
+    # ── 큰 숫자 K/M/B 단위 ────────────────────────
+    if col in _BIG_NUM_COLS:
+        return base + R + S, _fmt_big(val)
 
     def _fv():
         try:
@@ -1929,24 +1960,43 @@ def _make_table_html(rows: list[dict], headers: list[str],
 
 
 # ── 탭별 헤더 정의 (탭마다 고유 컬럼, 중복 최소화) ──────────────
-# 신고가_미국/한국: 전체 상세 (가격·밸류·성장·수익성·재무·수급·텍스트)
-DETAIL_HEADERS = [
-    "수집일","국가","티커","기업명","거래소","섹터","산업","미래산업테마",
+# 신고가_미국: 미국 전용 상세 (밸류·성장·수익성·재무·수급·텍스트)
+US_DETAIL_HEADERS = [
+    "수집일","티커","기업명","거래소","섹터","산업","미래산업테마",
     "종가","52주고가대비위치%","변동률%","시가총액",
     "투자우선점수","등급","데이터충분성%",
     "PER_TTM","Forward_PER","PEG_TTM","P/S","P/B","EV/EBITDA",
     "매출성장률_YoY%","EPS성장률_YoY%","예상매출성장률_NextFY%","예상EPS성장률_NextFY%",
     "영업이익률%","매출총이익률%","순이익률%","ROE%","ROA%","FCF마진%","ROIC%",
-    "부채비율","유동비율","순현금/시총%","Beta_1Y","Beta_3Y",
-    "외국인_순매수_5일","외국인_순매수_20일","외국인_지분율%",
-    "기관_순매수_5일","기관_순매수_20일","기관_보유%",
-    "수급패턴","선행매매점수","수출섹터여부","수출해외점수",
-    "RSI","1주수익률%","1개월수익률%","3개월수익률%","6개월수익률%","1년수익률%","YTD수익률%",
-    "목표가평균","목표가상승여력%","목표가최고","목표가최저","다음실적일",
+    "부채비율","유동비율","순현금/시총%","Beta_1Y",
+    "외국인_지분율%","기관_보유%","내부자_보유%",
+    "수급패턴","선행매매점수","수출섹터여부",
+    "RSI","1주수익률%","1개월수익률%","3개월수익률%","6개월수익률%","1년수익률%",
+    "목표가평균","목표가상승여력%","다음실적일",
     "EPS_서프라이즈%","매출_서프라이즈%","공매도비율%","공매도_일수",
-    "배당수익률%","자사주매입수익률%","설비투자_TTM",
+    "배당수익률%","자사주매입수익률%",
     "신고가_정량해석","수급_종합해석","사업개요",
 ]
+
+# 신고가_한국: 한국 전용 상세 (FnGuide 컨센서스·KRX 수급 포함)
+KR_DETAIL_HEADERS = [
+    "수집일","티커","기업명","거래소","섹터","산업","미래산업테마",
+    "종가","52주고가대비위치%","변동률%","시가총액",
+    "투자우선점수","등급","데이터충분성%",
+    "PER_TTM","Forward_PER","P/B","EV/EBITDA",
+    "매출성장률_YoY%","EPS성장률_YoY%","예상매출성장률_NextFY%","예상EPS성장률_NextFY%",
+    "영업이익률%","순이익률%","ROE%","ROA%","ROIC%",
+    "부채비율","유동비율","순현금/시총%","FCF_TTM",
+    "외국인_순매수_5일","외국인_순매수_20일","외국인_지분율%","외국인_지분율_변화",
+    "기관_순매수_5일","기관_순매수_20일","기관_보유%",
+    "수급패턴","선행매매점수","수출섹터여부","수출해외점수",
+    "RSI","1개월수익률%","3개월수익률%","YTD수익률%",
+    "목표가평균","목표가상승여력%","목표가최고","목표가최저",
+    "컨센서스_증권사수","최근리포트의견","사업개요","신고가_정량해석","수급_종합해석",
+]
+
+# 하위 호환용 (generate_html 내부에서만 사용하지 않지만 혹시 참조 방지)
+DETAIL_HEADERS = US_DETAIL_HEADERS
 
 # 우선순위_TOP: 점수 중심 (밸류/성장/품질 점수 + 핵심 지표)
 TOP_HEADERS = [
@@ -1976,18 +2026,18 @@ FLOW_HEADERS = [
     "국가","티커","기업명","섹터",
     "외국인_순매수_5일","외국인_순매수_20일","외국인_지분율%","외국인_지분율_변화",
     "기관_순매수_5일","기관_순매수_20일","기관_보유%","내부자_보유%",
-    "수급패턴","수급가속도","저점매집여부","고점청산여부","수급반전일수",
+    "수급패턴","수급가속도","저점매집여부","고점청산여부",
     "투자우선점수","등급","종가","변동률%","52주고가대비위치%",
 ]
 
 # 수출해외_상위: 수출 팩터 고유 컬럼
 EXPORT_HEADERS = [
     "국가","티커","기업명","섹터","산업",
-    "수출해외점수","수출섹터여부","수출섹터보너스","해외확장근거",
+    "수출해외점수","수출섹터여부","수출섹터보너스",
     "매출성장률_YoY%","매출성장률_QoQ%","예상매출성장률_NextFY%",
-    "영업이익률%","ROE%","설비투자_TTM","CAPEX성장여부",
+    "영업이익률%","ROE%","설비투자_TTM",
     "투자우선점수","등급","52주고가대비위치%",
-    "외국인_순매수_5일","기관_순매수_5일","수급패턴","수출_해설",
+    "외국인_순매수_5일","기관_순매수_5일","수급패턴",
 ]
 
 # 거래량_급증: 거래량/모멘텀 고유 컬럼
@@ -2659,11 +2709,11 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     # 신고가_미국
     panels_html.append(_panel_wrap("highs_us", "신고가 미국",
                                    len(enr_us),
-                                   _make_table_html(enr_us, DETAIL_HEADERS)))
+                                   _make_table_html(enr_us, US_DETAIL_HEADERS)))
     # 신고가_한국
     panels_html.append(_panel_wrap("highs_kr", "신고가 한국",
                                    len(enr_kr),
-                                   _make_table_html(enr_kr, DETAIL_HEADERS)))
+                                   _make_table_html(enr_kr, KR_DETAIL_HEADERS)))
 
     # 거래량급증_미국
     def _vol_row(r, country):
