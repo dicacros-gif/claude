@@ -8,7 +8,7 @@ build_deep_highs.py
 # ───────────────────────────────────────────────
 # 섹션 1: 환경설정 & 상수
 # ───────────────────────────────────────────────
-import os, ssl, requests, concurrent.futures, json, math, re, time, warnings
+import os, ssl, requests, concurrent.futures, json, math, re, time, warnings, html as _html
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
@@ -154,17 +154,36 @@ FAMOUS_MANAGERS = [
     ("Gotham Asset Management",         "0001336215"),  # Joel Greenblatt
     ("Sachem Head Capital",             "0001594686"),  # Scott Ferguson
     # ── 추가 유명 운용사 (4차) ──────────────────────
-    ("AQR Capital Management",          "0001307748"),  # Cliff Asness
-    ("Maverick Capital",                "0001102263"),  # Lee Ainslie
-    ("TCI Fund Management",             "0001326706"),  # Christopher Hohn
-    ("Dragoneer Investment Group",      "0001558838"),  # Marc Stad
-    ("Durable Capital Partners",        "0001766948"),  # Henry Ellenbogen
+    ("AQR Capital Management",          "0001307748"),  # Cliff Asness — 퀀트 선구자
+    ("Maverick Capital",                "0001102263"),  # Lee Ainslie — Tiger Cub
+    ("TCI Fund Management",             "0001326706"),  # Christopher Hohn — 행동주의 유럽
+    ("Dragoneer Investment Group",      "0001558838"),  # Marc Stad — 테크 성장
+    ("Durable Capital Partners",        "0001766948"),  # Henry Ellenbogen — T.Rowe 출신
     ("Tiger Eye Capital",               "0001562214"),
-    ("Whale Rock Capital",              "0001479222"),  # Alex Sacerdote
-    ("Alkeon Capital",                  "0001509986"),  # Panayotis Takis Sparaggis
-    ("Steadfast Capital",               "0001056239"),  # Robert Pitts
-    ("Akre Capital Management",         "0001112520"),  # Chuck Akre
-    ("Wedgewood Partners",              "0001097898"),  # David Rolfe
+    ("Whale Rock Capital",              "0001479222"),  # Alex Sacerdote — 테크 성장
+    ("Alkeon Capital",                  "0001509986"),  # Panayotis Sparaggis
+    ("Steadfast Capital",               "0001056239"),  # Robert Pitts — Tiger Cub
+    ("Akre Capital Management",         "0001112520"),  # Chuck Akre — 복리 장인
+    ("Wedgewood Partners",              "0001097898"),  # David Rolfe — 집중 가치
+    # ── 추가 유명 운용사 (5차) ──────────────────────
+    ("GAMCO Investors",                 "0000790301"),  # Mario Gabelli — 가치 투자 거장
+    ("Baron Capital",                   "0000813672"),  # Ron Baron — 성장주 장기투자
+    ("Fisher Asset Management",         "0000799235"),  # Ken Fisher — 세계 3대 운용사
+    ("Fairholme Capital",               "0001112100"),  # Bruce Berkowitz — 집중 가치
+    ("Dodge & Cox",                     "0000029250"),  # 1930년대 창립 가치 운용사
+    ("Polen Capital",                   "0001441612"),  # 집중 성장 (CAGR 집착)
+    ("Artisan Partners",                "0001379785"),  # 다전략 성장 운용사
+    ("Davis Selected Advisers",         "0000275563"),  # Christopher Davis — 가치
+    ("Edgewood Management",             "0001000273"),  # 집중 대형 성장
+    ("Sequoia Fund",                    "0000088525"),  # Buffett 추천 집중 가치
+    ("Ruane Cunniff",                   "0000085613"),  # Sequoia 운용사 (Buffett 파트너)
+    ("First Eagle Investment",          "0000036020"),  # Jean-Marie Eveillard 전통
+    ("GQG Partners",                    "0001706946"),  # Rajiv Jain — 신흥 성장 구루
+    ("Vulcan Value Partners",           "0001457655"),  # C.T. Fitzpatrick — 집중 가치
+    ("Giverny Capital",                 "0001569126"),  # Francois Rochon — 캐나다 가치
+    ("Fundsmith",                       "0001843588"),  # Terry Smith — 영국 버핏
+    ("Lindsell Train",                  "0001565083"),  # Nick Train — 영국 장기 성장
+    ("Rowan Street Capital",            "0001730826"),  # 집중 비공개 성장
 ]
 
 # ── 한국 기업명 사전 ──────────────────────────
@@ -341,17 +360,57 @@ def _fetch_yfinance_one(ticker: str) -> dict:
     try:
         tk_obj = yf.Ticker(ticker, session=_YF_SESSION)
         info = tk_obj.info or {}
+
+        # fast_info 보조 (일부 필드는 fast_info가 더 안정적)
+        try:
+            fi = tk_obj.fast_info
+            fi_mktcap   = getattr(fi, "market_cap", None)
+            fi_shares   = getattr(fi, "shares", None)
+        except Exception:
+            fi_mktcap = fi_shares = None
+
+        # 단기매도 데이터 — shortPercentOfFloat 없으면 sharesShortPreviousMonthDate 비율 계산
+        short_pct = _pct(info.get("shortPercentOfFloat"))
+        if short_pct is None:
+            short_pct = _pct(info.get("shortPercent"))  # alias
+        short_ratio = _safe(info.get("shortRatio")) or _safe(info.get("daysToConverShort"))
+
+        # 기관·내부자 보유율 — 여러 키 시도
+        inst_pct    = (_pct(info.get("heldPercentInstitutions"))
+                       or _pct(info.get("institutionsPercentHeld")))
+        insider_pct = (_pct(info.get("heldPercentInsiders"))
+                       or _pct(info.get("insidersPercentHeld")))
+
+        # 목표주가 — analyst info fallback
+        tgt_mean = (_safe(info.get("targetMeanPrice"))
+                    or _safe(info.get("targetPrice")))
+        tgt_high = _safe(info.get("targetHighPrice"))
+        tgt_low  = _safe(info.get("targetLowPrice"))
+
+        # 배당 수익률 보조
+        div_yld = (_pct(info.get("dividendYield"))
+                   or _pct(info.get("trailingAnnualDividendYield")))
+
+        # 사업 요약 — 다국어 필드 시도
+        biz = (info.get("longBusinessSummary") or
+               info.get("description") or "")[:500]
+        # html 엔티티 정규화
+        biz = _html.unescape(biz)
+
         return {
             "yf_forwardPE":        _safe(info.get("forwardPE")),
             "yf_pegRatio":         _safe(info.get("pegRatio")),
-            "yf_shortRatio":       _safe(info.get("shortRatio")),
-            "yf_shortPct":         _pct(info.get("shortPercentOfFloat")),
-            "yf_instPct":          _pct(info.get("heldPercentInstitutions")),
-            "yf_insiderPct":       _pct(info.get("heldPercentInsiders")),
-            "yf_price_target_mean":_safe(info.get("targetMeanPrice")),
-            "yf_price_target_high":_safe(info.get("targetHighPrice")),
-            "yf_price_target_low": _safe(info.get("targetLowPrice")),
-            "yf_bizSummary":       (info.get("longBusinessSummary") or "")[:400],
+            "yf_shortRatio":       short_ratio,
+            "yf_shortPct":         short_pct,
+            "yf_instPct":          inst_pct,
+            "yf_insiderPct":       insider_pct,
+            "yf_price_target_mean":tgt_mean,
+            "yf_price_target_high":tgt_high,
+            "yf_price_target_low": tgt_low,
+            "yf_dividendYield":    div_yld,
+            "yf_mktcap":           fi_mktcap,
+            "yf_shares":           fi_shares,
+            "yf_bizSummary":       biz,
         }
     except Exception:
         return {}
@@ -1459,7 +1518,8 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
         # 리스크/기타
         "Beta_1Y":            _safe(raw.get("beta_1_year")),
         "Beta_3Y":            _safe(raw.get("beta_3_year")),
-        "배당수익률%":        _safe(raw.get("dividends_yield_current")),
+        "배당수익률%":        (_safe(raw.get("dividends_yield_current"))
+                             or yf.get("yf_dividendYield")),
         "RSI":                _safe(raw.get("RSI")),
         "상대거래량":         _safe(raw.get("relative_volume_10d_calc")),
 
@@ -1471,7 +1531,7 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
         "1년수익률%":   _safe(raw.get("Perf.Y")),
         "YTD수익률%":   _safe(raw.get("Perf.YTD")),
 
-        # 수급 (Naver/FnGuide)
+        # 수급 (Naver/FnGuide — KR 전용; US는 None)
         "외국인_순매수_5일":   flw.get("외국인_순매수_5일"),
         "외국인_순매수_20일":  flw.get("외국인_순매수_20일"),
         "외국인_지분율%":      flw.get("외국인_지분율%"),
@@ -1828,7 +1888,8 @@ _SCORE_COLS  = {
 
 
 def _esc(s: object) -> str:
-    return str(s).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace('"',"&quot;")
+    """HTML 이스케이프 — 이미 이스케이프된 엔티티를 먼저 풀고 재처리해 이중 이스케이프 방지."""
+    return _html.escape(_html.unescape(str(s)), quote=True)
 
 
 def _fmt_val(v: object) -> str:
@@ -2162,10 +2223,31 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
     return base + S, _fmt_val(val)
 
 
+def _has_data(v) -> bool:
+    """셀에 실질 데이터가 있는지 판단."""
+    if v is None:
+        return False
+    if isinstance(v, float) and math.isnan(v):
+        return False
+    if v == "" or v == "-":
+        return False
+    return True
+
+
+def _filter_empty_headers(rows: list[dict], headers: list[str]) -> list[str]:
+    """모든 행에서 값이 없는(None/"") 컬럼을 헤더 목록에서 제거."""
+    if not rows:
+        return headers
+    return [h for h in headers if any(_has_data(r.get(h)) for r in rows)]
+
+
 def _make_table_html(rows: list[dict], headers: list[str],
                      freeze_col: int = 3, title: str = "") -> str:
     if not rows:
         return f'<div class="empty-msg">데이터 없음</div>'
+
+    # 데이터 없는 컬럼 자동 제거
+    headers = _filter_empty_headers(rows, headers)
 
     # 헤더 행
     hdr_cells = []
