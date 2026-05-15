@@ -372,6 +372,17 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
             resp = requests.get(url, timeout=8, verify=False,
                                 headers={"User-Agent": "Mozilla/5.0"})
             soup = BeautifulSoup(resp.text, "lxml")
+
+            # 한국 기업명: <title>삼성전자 : 외국인/기관 : ...</title>
+            kr_name = ""
+            title_el = soup.select_one("title")
+            if title_el:
+                raw_title = title_el.get_text(strip=True)
+                # "삼성전자 : 외국인/기관 : ..." → "삼성전자"
+                part = raw_title.split(":")[0].strip()
+                if part and part not in _INVALID_KR_NAMES and len(part) <= 30:
+                    kr_name = part
+
             rows = soup.select("table.type2 tr")
             frgn_vals, inst_vals = [], []
             for tr in rows[1:22]:
@@ -398,6 +409,7 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
             i5  = sum(inst_vals[:5])   / 1e8
             i20 = sum(inst_vals[:20])  / 1e8
             return {
+                "naver_기업명":       kr_name,
                 "외국인_순매수_5일":  f5,
                 "외국인_순매수_20일": f20,
                 "외국인_지분율%":     frgn_pct,
@@ -1293,8 +1305,10 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
     # 기업명 정제 (한국은 항상 한글명 우선)
     desc = raw.get("description") or raw.get("name") or ""
     if country == "KR":
-        # _KNOWN_KR_NAMES 우선 → TV description → 티커
+        # _KNOWN_KR_NAMES → Naver 한글명 → TV description → 티커
+        naver_nm = flw.get("naver_기업명", "")
         name = (_KNOWN_KR_NAMES.get(bare_code)
+                or (naver_nm if naver_nm and naver_nm not in _INVALID_KR_NAMES else None)
                 or (desc if desc and desc.lower() not in _INVALID_KR_NAMES else None)
                 or bare_code)
     else:
@@ -2853,7 +2867,7 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
                   market_data: list[dict], fg: dict,
                   insider_rows: list[dict], inst_overlap: list[dict],
                   sector_rows: list[dict], earnings_rows: list[dict],
-                  collected_at: str) -> str:
+                  collected_at: str, kr_names: dict | None = None) -> str:
 
     enr_us  = sorted([r for r in enriched if r.get("국가") == "US"],
                      key=lambda x: x.get("투자우선점수", 0) or 0, reverse=True)
@@ -3006,11 +3020,15 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
                                    _make_table_html(enr_kr, KR_DETAIL_HEADERS)))
 
     # 거래량급증_미국
+    _kr_names = kr_names or {}
+
     def _vol_row(r, country):
         code = _bare_kr_code(r.get("_ticker",""))
         nm = r.get("description","")
         if country == "KR":
-            nm = _KNOWN_KR_NAMES.get(code) or nm
+            nm = (_KNOWN_KR_NAMES.get(code)
+                  or _kr_names.get(code, {}).get("naver_기업명", "")
+                  or nm)
         return {
             "국가": country, "티커": r.get("_ticker","").split(":")[-1] if country=="US" else code,
             "기업명": nm, "섹터": r.get("sector",""), "미래산업테마": "",
@@ -3116,6 +3134,9 @@ def main():
     filtered = [r for r in all_raw if _pass_filter(r)]
     us_tickers = [r["_ticker"] for r in filtered if r["_country"] == "US"]
     kr_codes   = [_bare_kr_code(r["_ticker"]) for r in filtered if r["_country"] == "KR"]
+    # 거래량 급증 한국 종목도 이름 조회 대상에 포함
+    vol_kr_codes = [_bare_kr_code(r.get("_ticker","")) for r in vol_kr]
+    kr_codes_all = list(dict.fromkeys(kr_codes + [c for c in vol_kr_codes if c not in kr_codes]))
     print(f"[필터 후] US: {len(us_tickers)}개, KR: {len(kr_codes)}개")
 
     # 3. 병렬 외부 수집
@@ -3129,7 +3150,7 @@ def main():
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as ex:
         fut_yf    = ex.submit(fetch_yfinance_batch, us_tickers)
         fut_fn    = ex.submit(_run_fnguide)
-        fut_naver = ex.submit(fetch_krx_foreign_flow, kr_codes)
+        fut_naver = ex.submit(fetch_krx_foreign_flow, kr_codes_all)
         yf_data   = fut_yf.result()
         fut_fn.result()
         flow_data = fut_naver.result()
@@ -3201,7 +3222,8 @@ def main():
     print("[8] index.html 생성...")
     html = generate_html(enriched, vol_us, vol_kr, sec_rows,
                          market_data, fg, insider_rows, inst_overlap,
-                         sector_rows, earnings_rows, collected_at)
+                         sector_rows, earnings_rows, collected_at,
+                         kr_names=flow_data)
     out  = write_html(html, OUTPUT_HTML)
     print(f"    저장: {out}")
     print(f"[딥다이브] 완료. 총 {len(enriched)}개 종목 | 파일: {out.stat().st_size // 1024}KB")
