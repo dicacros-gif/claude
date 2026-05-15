@@ -153,6 +153,18 @@ FAMOUS_MANAGERS = [
     ("Harris Associates",               "0000778070"),  # Bill Nygren (Oakmark)
     ("Gotham Asset Management",         "0001336215"),  # Joel Greenblatt
     ("Sachem Head Capital",             "0001594686"),  # Scott Ferguson
+    # ── 추가 유명 운용사 (4차) ──────────────────────
+    ("AQR Capital Management",          "0001307748"),  # Cliff Asness
+    ("Maverick Capital",                "0001102263"),  # Lee Ainslie
+    ("TCI Fund Management",             "0001326706"),  # Christopher Hohn
+    ("Dragoneer Investment Group",      "0001558838"),  # Marc Stad
+    ("Durable Capital Partners",        "0001766948"),  # Henry Ellenbogen
+    ("Tiger Eye Capital",               "0001562214"),
+    ("Whale Rock Capital",              "0001479222"),  # Alex Sacerdote
+    ("Alkeon Capital",                  "0001509986"),  # Panayotis Takis Sparaggis
+    ("Steadfast Capital",               "0001056239"),  # Robert Pitts
+    ("Akre Capital Management",         "0001112520"),  # Chuck Akre
+    ("Wedgewood Partners",              "0001097898"),  # David Rolfe
 ]
 
 # ── 한국 기업명 사전 ──────────────────────────
@@ -2604,60 +2616,159 @@ def _make_theme_summary_html(enriched: list[dict]) -> str:
 
 
 def _make_13f_html(sec_rows: list[dict]) -> str:
+    """업체(종목)별 그룹 — 많은 기관이 매수/증가 중인 종목이 상단."""
     if not sec_rows:
         return '<div class="empty-msg">13F 데이터 없음 (SEC EDGAR 미수집)</div>'
-    by_mgr: dict[str, list[dict]] = {}
+
+    # ── 업체별 그룹 집계 ─────────────────────────────
+    from collections import defaultdict
+    company_map: dict[str, list[dict]] = defaultdict(list)
     for r in sec_rows:
-        by_mgr.setdefault(r.get("기관명", "Unknown"), []).append(r)
+        tk = r.get("티커","") or r.get("종목명","")
+        if tk and not re.fullmatch(r"\d{6}", tk):
+            company_map[tk].append(r)
 
     _chg_order = {"신규": 0, "증가": 1, "유지": 2, "감소": 3}
+    _chg_color  = {
+        "신규": ("#fff", "#0069B4"),
+        "증가": ("#fff", "#1B6B1B"),
+        "감소": ("#fff", "#A30000"),
+        "유지": ("#555", "#E0E0E0"),
+    }
 
-    def _mgr_sort_key(item: tuple) -> tuple:
-        mgr, holdings = item
+    # ── 컨센서스 점수로 정렬 ─────────────────────────
+    def _company_score(holdings: list[dict]) -> tuple:
         n_new = sum(1 for h in holdings if h.get("포지션변화") == "신규")
         n_inc = sum(1 for h in holdings if h.get("포지션변화") == "증가")
         n_dec = sum(1 for h in holdings if h.get("포지션변화") == "감소")
-        # 신규/증가가 많을수록, 포트폴리오비중%가 높은 신규/증가 종목이 많을수록 상단
-        buy_score = n_new * 3 + n_inc * 2 - n_dec
-        top_buy_wt = max(
-            (h.get("포트폴리오비중%") or 0)
-            for h in holdings if h.get("포지션변화") in ("신규", "증가")
-        ) if any(h.get("포지션변화") in ("신규", "증가") for h in holdings) else 0
-        return (-buy_score, -top_buy_wt)
+        n_inst = len({h.get("기관명","") for h in holdings})
+        score  = n_new * 3 + n_inc * 2 - n_dec
+        total  = sum(h.get("보유가치_USD", 0) or 0 for h in holdings)
+        return (score, n_inst, total)
+
+    ranked = sorted(
+        company_map.items(),
+        key=lambda kv: _company_score(kv[1]),
+        reverse=True,
+    )
 
     sections = []
-    for mgr, holdings in sorted(by_mgr.items(), key=_mgr_sort_key):
-        total_val = sum(h.get("보유가치_USD", 0) or 0 for h in holdings)
-        n_new = sum(1 for h in holdings if h.get("포지션변화") == "신규")
-        n_inc = sum(1 for h in holdings if h.get("포지션변화") == "증가")
-        n_dec = sum(1 for h in holdings if h.get("포지션변화") == "감소")
-        buy_score = n_new * 3 + n_inc * 2 - n_dec
-        summary = (f"신규 {n_new}건 / 증가 {n_inc}건 / 감소 {n_dec}건"
-                   if n_new + n_inc + n_dec > 0 else "")
-        # 헤더 색상: 매수 활동 강도에 따라 다름
-        hdr_bg = "#1B5E20" if buy_score >= 10 else "#1565C0" if buy_score >= 5 else "#1F4E79"
+    for tk, holdings in ranked:
+        name   = holdings[0].get("종목명","") or tk
+        score, n_inst, total_val = _company_score(holdings)
+        n_new  = sum(1 for h in holdings if h.get("포지션변화") == "신규")
+        n_inc  = sum(1 for h in holdings if h.get("포지션변화") == "증가")
+        n_dec  = sum(1 for h in holdings if h.get("포지션변화") == "감소")
+        n_hold = sum(1 for h in holdings if h.get("포지션변화") == "유지")
+
+        # 헤더 색상 — 점수 기반
+        hdr_bg = ("#1B5E20" if score >= 12 else
+                  "#1565C0" if score >= 6 else
+                  "#1F4E79" if score >= 0 else
+                  "#7B1A1A")
+
+        # 포지션 변화 뱃지
+        badge = lambda label, fg, bg, n: (
+            f'<span style="background:{bg};color:{fg};font-weight:700;'
+            f'border-radius:4px;padding:1px 7px;font-size:0.7rem;">{label} {n}</span>'
+        ) if n > 0 else ""
+
+        badges = (
+            badge("신규", "#fff", "#0069B4", n_new) +
+            badge("증가", "#fff", "#1B6B1B", n_inc) +
+            badge("유지", "#555", "#D0D0D0", n_hold) +
+            badge("감소", "#fff", "#A30000", n_dec)
+        )
+
+        # 컨센서스 점수 색
+        sc_color = ("#D4EDDA" if score >= 12 else
+                    "#BBDEFB" if score >= 6 else
+                    "#FFF9C4" if score >= 0 else
+                    "#FFCDD2")
+        sc_tc    = ("#155724" if score >= 12 else
+                    "#0D47A1" if score >= 6 else
+                    "#856404" if score >= 0 else
+                    "#B71C1C")
+
+        # 기관별 행 정렬: 신규 > 증가 > 유지 > 감소, 그 다음 포트폴리오비중% 높은 순
         sorted_h = sorted(
             holdings,
             key=lambda x: (
-                _chg_order.get(x.get("포지션변화", "유지"), 2),
+                _chg_order.get(x.get("포지션변화","유지"), 2),
                 -(x.get("포트폴리오비중%") or 0),
                 -(x.get("보유가치_USD") or 0),
             ),
         )
-        sections.append(
-            f'<div style="margin-bottom:20px;">'
-            f'<div style="background:{hdr_bg};color:#fff;padding:6px 12px;'
-            f'font-weight:700;border-radius:4px 4px 0 0;display:flex;gap:12px;align-items:center;">'
-            f'<span>{_esc(mgr)}</span>'
-            f'<span style="font-size:0.75rem;opacity:0.85;">총 ${total_val/1e9:.2f}B</span>'
-            + (f'<span style="font-size:0.72rem;background:rgba(255,255,255,0.2);'
-               f'border-radius:4px;padding:2px 8px;">{_esc(summary)}</span>'
-               if summary else '')
-            + '</div>'
-            + _make_table_html(sorted_h, SEC_HEADERS)
-            + '</div>'
+
+        # 기관 행 테이블 (기관명, 포지션변화, 포트폴리오비중%, 주식수_변화율%, 보유가치_USD, 전분기_주식수, 주식수, 보고일)
+        row_html = []
+        for h in sorted_h:
+            chg   = h.get("포지션변화","유지")
+            cfx, cbg = _chg_color.get(chg, ("#555","#E0E0E0"))
+            wt    = h.get("포트폴리오비중%")
+            pct   = h.get("주식수_변화율%")
+            val   = h.get("보유가치_USD") or 0
+            sh    = h.get("주식수") or 0
+            prev  = h.get("전분기_주식수")
+            dt    = h.get("보고일","")
+            mgr   = h.get("기관명","")
+
+            wt_s  = f"{wt:.2f}%" if wt is not None else "-"
+            pct_s = (f"+{pct:.1f}%" if pct and pct > 0 else f"{pct:.1f}%" if pct is not None else "-")
+            val_s = (f"${val/1e9:.2f}B" if val >= 1e9 else f"${val/1e6:.0f}M" if val >= 1e6 else f"${val:,.0f}")
+            sh_s  = f"{int(sh):,}" if sh else "-"
+            prev_s= f"{int(prev):,}" if prev else "-"
+            pct_c = "#1B6B1B" if (pct or 0) > 0 else "#A30000"
+
+            row_html.append(
+                f'<tr style="border-bottom:1px solid #f0f4f8;">'
+                f'<td style="padding:4px 8px;font-weight:700;font-size:0.8rem;white-space:nowrap;">{_esc(mgr)}</td>'
+                f'<td style="padding:4px 8px;text-align:center;">'
+                f'<span style="background:{cbg};color:{cfx};font-weight:700;font-size:0.72rem;'
+                f'border-radius:4px;padding:1px 7px;">{chg}</span></td>'
+                f'<td style="padding:4px 8px;text-align:right;font-size:0.78rem;">{wt_s}</td>'
+                f'<td style="padding:4px 8px;text-align:right;font-size:0.78rem;'
+                f'font-weight:700;color:{pct_c};">{pct_s}</td>'
+                f'<td style="padding:4px 8px;text-align:right;font-size:0.78rem;">{val_s}</td>'
+                f'<td style="padding:4px 8px;text-align:right;font-size:0.78rem;color:#666;">{sh_s}</td>'
+                f'<td style="padding:4px 8px;text-align:right;font-size:0.78rem;color:#999;">{prev_s}</td>'
+                f'<td style="padding:4px 8px;text-align:center;font-size:0.72rem;color:#888;">{_esc(dt)}</td>'
+                f'</tr>'
+            )
+
+        tbl = (
+            f'<table style="width:100%;border-collapse:collapse;background:var(--card);">'
+            f'<thead><tr style="background:#2F4F6F;color:#fff;font-size:0.72rem;">'
+            f'<th style="padding:4px 8px;text-align:left;">기관명</th>'
+            f'<th style="padding:4px 8px;">포지션변화</th>'
+            f'<th style="padding:4px 8px;text-align:right;">포트폴리오비중%</th>'
+            f'<th style="padding:4px 8px;text-align:right;">주식수변화율%</th>'
+            f'<th style="padding:4px 8px;text-align:right;">보유가치</th>'
+            f'<th style="padding:4px 8px;text-align:right;">주식수</th>'
+            f'<th style="padding:4px 8px;text-align:right;">전분기주식수</th>'
+            f'<th style="padding:4px 8px;text-align:center;">보고일</th>'
+            f'</tr></thead>'
+            f'<tbody>{"".join(row_html)}</tbody>'
+            f'</table>'
         )
-    return "".join(sections)
+
+        sections.append(
+            f'<div style="margin-bottom:18px;border:1px solid #CBD5E1;border-radius:6px;overflow:hidden;">'
+            f'<div style="background:{hdr_bg};color:#fff;padding:7px 12px;'
+            f'display:flex;gap:10px;align-items:center;flex-wrap:wrap;">'
+            f'<span style="font-weight:900;font-size:0.92rem;">{_esc(name)}</span>'
+            f'<span style="font-size:0.78rem;opacity:0.9;">[{_esc(tk)}]</span>'
+            f'<span style="background:{sc_color};color:{sc_tc};font-weight:900;'
+            f'border-radius:5px;padding:1px 8px;font-size:0.75rem;">컨센서스 {score:+d}</span>'
+            f'<span style="font-size:0.75rem;opacity:0.85;">{n_inst}개 기관 | '
+            f'총 {"${:.1f}B".format(total_val/1e9) if total_val>=1e9 else "${:.0f}M".format(total_val/1e6)}</span>'
+            f'{badges}'
+            f'</div>'
+            f'{tbl}'
+            f'</div>'
+        )
+
+    return "".join(sections) if sections else '<div class="empty-msg">13F 데이터 없음</div>'
 
 
 _HTML_CSS = '''
