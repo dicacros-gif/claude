@@ -776,6 +776,193 @@ _STATIC_CUSIP_MAP = {
 }
 
 
+# 13F 종목명 → 티커 정적 매핑 (CUSIP 해석 실패 시 회사명 기반 폴백)
+# SEC 13F 회사명은 대문자/축약형 — 부분일치(시작 일치) 우선
+_STATIC_NAME_TO_TICKER = {
+    "APPLE INC":                 "AAPL",
+    "MICROSOFT CORP":            "MSFT",
+    "AMAZON COM":                "AMZN",
+    "AMAZON.COM":                "AMZN",
+    "NVIDIA CORP":               "NVDA",
+    "META PLATFORMS":            "META",
+    "ALPHABET INC":              "GOOG",
+    "ALPHABET INC CL A":         "GOOGL",
+    "ALPHABET INC CL C":         "GOOG",
+    "BERKSHIRE HATHAWAY":        "BRK.B",
+    "TESLA INC":                 "TSLA",
+    "TAIWAN SEMICONDUCTOR":      "TSM",
+    "JPMORGAN CHASE":            "JPM",
+    "JP MORGAN CHASE":           "JPM",
+    "JOHNSON & JOHNSON":         "JNJ",
+    "JOHNSON AND JOHNSON":       "JNJ",
+    "VISA INC":                  "V",
+    "MASTERCARD INC":            "MA",
+    "ELI LILLY":                 "LLY",
+    "LILLY ELI":                 "LLY",
+    "WALMART INC":               "WMT",
+    "PROCTER & GAMBLE":          "PG",
+    "PROCTER AND GAMBLE":        "PG",
+    "UNITEDHEALTH GROUP":        "UNH",
+    "EXXON MOBIL":               "XOM",
+    "CHEVRON CORP":              "CVX",
+    "MERCK & CO":                "MRK",
+    "MERCK AND CO":              "MRK",
+    "PFIZER":                    "PFE",
+    "ABBVIE INC":                "ABBV",
+    "ABBOTT LABORATORIES":       "ABT",
+    "ADVANCED MICRO DEVICES":    "AMD",
+    "BROADCOM INC":              "AVGO",
+    "ORACLE CORP":               "ORCL",
+    "SALESFORCE":                "CRM",
+    "CISCO SYSTEMS":             "CSCO",
+    "INTEL CORP":                "INTC",
+    "TEXAS INSTRUMENTS":         "TXN",
+    "QUALCOMM INC":              "QCOM",
+    "ADOBE INC":                 "ADBE",
+    "NETFLIX INC":               "NFLX",
+    "PAYPAL HOLDINGS":           "PYPL",
+    "DISNEY WALT":               "DIS",
+    "WALT DISNEY":               "DIS",
+    "COCA COLA":                 "KO",
+    "COCA-COLA":                 "KO",
+    "PEPSICO INC":               "PEP",
+    "MCDONALDS CORP":            "MCD",
+    "BANK OF AMERICA":           "BAC",
+    "WELLS FARGO":               "WFC",
+    "GOLDMAN SACHS":             "GS",
+    "MORGAN STANLEY":            "MS",
+    "BLACKROCK INC":             "BLK",
+    "CITIGROUP INC":             "C",
+    "AT&T INC":                  "T",
+    "VERIZON COMMUNICATIONS":    "VZ",
+    "COMCAST CORP":              "CMCSA",
+    "NEXTERA ENERGY":            "NEE",
+    "HOME DEPOT":                "HD",
+    "COSTCO WHOLESALE":          "COST",
+    "TARGET CORP":               "TGT",
+    "STARBUCKS CORP":            "SBUX",
+    "NIKE INC":                  "NKE",
+    "CATERPILLAR INC":           "CAT",
+    "BOEING CO":                 "BA",
+    "LOCKHEED MARTIN":           "LMT",
+    "RAYTHEON":                  "RTX",
+    "DEERE & CO":                "DE",
+    "GENERAL ELECTRIC":          "GE",
+    "GENERAL MOTORS":            "GM",
+    "FORD MOTOR":                "F",
+    "AMERICAN EXPRESS":          "AXP",
+    "ASML HOLDING":              "ASML",
+    "BABA":                      "BABA",
+    "ALIBABA":                   "BABA",
+    "JD.COM":                    "JD",
+    "PINDUODUO":                 "PDD",
+    "PDD HOLDINGS":              "PDD",
+    "RIVIAN AUTOMOTIVE":         "RIVN",
+    "PALANTIR":                  "PLTR",
+    "SNOWFLAKE":                 "SNOW",
+    "COINBASE":                  "COIN",
+    "ROBINHOOD":                 "HOOD",
+    "ARM HOLDINGS":              "ARM",
+    "MICRON TECHNOLOGY":         "MU",
+    "APPLIED MATERIALS":         "AMAT",
+    "LAM RESEARCH":              "LRCX",
+    "KLA CORP":                  "KLAC",
+    "ANALOG DEVICES":            "ADI",
+    "INTUITIVE SURGICAL":        "ISRG",
+    "INTUIT INC":                "INTU",
+    "VERTEX PHARMACEUTICALS":    "VRTX",
+    "REGENERON PHARMACEUTICALS": "REGN",
+    "GILEAD SCIENCES":           "GILD",
+    "BRISTOL MYERS SQUIBB":      "BMY",
+    "BRISTOL-MYERS SQUIBB":      "BMY",
+    "DANAHER CORP":              "DHR",
+    "THERMO FISHER":             "TMO",
+    "AMGEN INC":                 "AMGN",
+    "HSBC HOLDINGS":             "HSBC",
+    "NOVO NORDISK":              "NVO",
+    "AIRBNB INC":                "ABNB",
+    "UBER TECHNOLOGIES":         "UBER",
+    "LYFT INC":                  "LYFT",
+    "DOORDASH INC":              "DASH",
+    "SPOTIFY TECHNOLOGY":        "SPOT",
+    "BLOCK INC":                 "SQ",
+    "MELI":                      "MELI",
+    "MERCADOLIBRE":              "MELI",
+    "SHOPIFY INC":               "SHOP",
+    "AMERICAN TOWER":            "AMT",
+    "PROLOGIS INC":              "PLD",
+    "REALTY INCOME":             "O",
+    "EQUITY RESIDENTIAL":        "EQR",
+    "VICI PROPERTIES":           "VICI",
+    "SCHLUMBERGER":              "SLB",
+    "OCCIDENTAL PETROLEUM":      "OXY",
+    "CONOCOPHILLIPS":            "COP",
+    "MARATHON OIL":              "MRO",
+    "EOG RESOURCES":             "EOG",
+    "BURLINGTON STORES":         "BURL",
+    "ROSS STORES":               "ROST",
+    "LULULEMON ATHLETICA":       "LULU",
+    "TJX COMPANIES":             "TJX",
+    "ESTEE LAUDER":              "EL",
+    "PHILIP MORRIS":             "PM",
+    "ALTRIA GROUP":              "MO",
+    "DUKE ENERGY":               "DUK",
+    "SOUTHERN CO":               "SO",
+    "T-MOBILE US":               "TMUS",
+    "TMOBILE US":                "TMUS",
+    "CHARLES SCHWAB":            "SCHW",
+    "INTERCONTINENTAL EXCHANGE": "ICE",
+    "CME GROUP":                 "CME",
+    "S&P GLOBAL":                "SPGI",
+    "MOODYS CORP":               "MCO",
+    "BOOKING HOLDINGS":          "BKNG",
+    "MARRIOTT INTERNATIONAL":    "MAR",
+    "HILTON WORLDWIDE":          "HLT",
+    "FEDEX CORP":                "FDX",
+    "UNITED PARCEL SERVICE":     "UPS",
+    "UNION PACIFIC":             "UNP",
+    "CSX CORP":                  "CSX",
+    "NORFOLK SOUTHERN":          "NSC",
+    "JOHNSON CONTROLS":          "JCI",
+    "WASTE MANAGEMENT":          "WM",
+    "AUTOMATIC DATA PROCESSING": "ADP",
+    "PAYCHEX INC":               "PAYX",
+    "SERVICENOW INC":            "NOW",
+    "WORKDAY INC":               "WDAY",
+    "ATLASSIAN CORP":            "TEAM",
+    "DATADOG INC":               "DDOG",
+    "CROWDSTRIKE HOLDINGS":      "CRWD",
+    "ZSCALER INC":               "ZS",
+    "OKTA INC":                  "OKTA",
+    "MONGODB INC":               "MDB",
+    "ELASTIC NV":                "ESTC",
+    "TWILIO INC":                "TWLO",
+    "CLOUDFLARE INC":            "NET",
+    "FORTINET INC":              "FTNT",
+    "PALO ALTO NETWORKS":        "PANW",
+    "MICROSTRATEGY":             "MSTR",
+    "ENPHASE ENERGY":            "ENPH",
+    "FIRST SOLAR":               "FSLR",
+    "TESLA MOTORS":              "TSLA",
+}
+
+
+def _name_to_ticker(name: str) -> str:
+    """13F 회사명에서 정상 티커 추정 (prefix 일치)."""
+    if not name:
+        return ""
+    norm = re.sub(r"\s+", " ", name.upper().strip())
+    norm = re.sub(r"[\.\,]", "", norm)
+    # 정확 일치 우선
+    if norm in _STATIC_NAME_TO_TICKER:
+        return _STATIC_NAME_TO_TICKER[norm]
+    # prefix 일치 (긴 키 우선)
+    for key in sorted(_STATIC_NAME_TO_TICKER.keys(), key=len, reverse=True):
+        if norm.startswith(key):
+            return _STATIC_NAME_TO_TICKER[key]
+    return ""
+
+
 def _resolve_cusips(cusips: list[str]) -> dict[str, str]:
     """OpenFIGI API로 CUSIP → 티커 변환 (배치 25개, 캐시 우선).
 
@@ -993,16 +1180,24 @@ def fetch_famous_manager_rows() -> list[dict]:
             print(f"[13F] {mgr_name}: {e}")
     result.sort(key=lambda x: -(x.get("보유가치_USD") or 0))
 
-    # ── CUSIP → 실제 티커 변환 (캐시 + OpenFIGI) ──────────────────────
+    # ── CUSIP → 실제 티커 변환 (캐시 + OpenFIGI + 종목명 폴백) ─────────
     all_cusips = [r.get("CUSIP", "") for r in result]
     cusip_map  = _resolve_cusips(all_cusips)
     for r in result:
         cusip    = r.get("CUSIP", "")
         resolved = cusip_map.get(cusip, "")
+        tk_existing = r.get("티커", "")
+        # CUSIP-like 잘못된 티커는 비어있는 것으로 간주
+        if tk_existing and (re.fullmatch(r"\d{6,9}", tk_existing) or len(tk_existing) > 8):
+            tk_existing = ""
         if resolved:
             r["티커"] = resolved
-        elif not r.get("티커"):
-            r["티커"] = cusip
+        elif tk_existing:
+            r["티커"] = tk_existing
+        else:
+            # 회사명 prefix 기반 폴백
+            guessed = _name_to_ticker(r.get("종목명", ""))
+            r["티커"] = guessed if guessed else cusip
 
     # ── 기관별 포트폴리오 총액 → 포트폴리오비중% ────────────────────────
     from collections import defaultdict as _dd
@@ -1041,15 +1236,13 @@ def fetch_institutional_overlap(all_holdings: list[dict]) -> list[dict]:
     })
     for h in all_holdings:
         tk = h.get("티커", "")
-        # 유효한 티커만 (CUSIP-스타일 8~9자리 숫자, 한국 6자리 숫자 제외)
+        name = h.get("종목명", "")
+        # CUSIP-스타일 잘못된 티커는 회사명 폴백 시도
+        if tk and (re.fullmatch(r"\d{6,9}", tk) or len(tk) > 8):
+            tk = _name_to_ticker(name) or ""
         if not tk:
-            continue
-        if re.fullmatch(r"\d{6,9}", tk):
-            continue
-        if re.fullmatch(r"[0-9]{1,3}[A-Z]{1,3}[0-9]{0,3}", tk):
-            # CUSIP 잔여 패턴 (예: 037833100)
-            continue
-        if len(tk) > 8:  # 정상 티커는 최대 6자
+            tk = _name_to_ticker(name)
+        if not tk:
             continue
         d   = ticker_map[tk]
         mgr = h.get("기관명", "")
@@ -2245,9 +2438,58 @@ _SCORE_COLS  = {
 }
 
 
+class _SafeHTML(str):
+    """이미 안전하게 처리된 HTML 문자열 — _esc에서 escape 건너뛰기."""
+    pass
+
+
 def _esc(s: object) -> str:
-    """HTML 이스케이프 — 이미 이스케이프된 엔티티를 먼저 풀고 재처리해 이중 이스케이프 방지."""
+    """HTML 이스케이프 — 이미 이스케이프된 엔티티를 먼저 풀고 재처리해 이중 이스케이프 방지.
+    _SafeHTML 인스턴스는 escape 없이 그대로 반환.
+    """
+    if isinstance(s, _SafeHTML):
+        return str(s)
     return _html.escape(_html.unescape(str(s)), quote=True)
+
+
+# 핵심 키워드 — 텍스트 셀에서 강조할 단어/패턴
+_EMPH_KEYWORDS = (
+    # 수급·포지션
+    "신규편입","신규","증가","감소","청산","매수","매도","순매수","순매도",
+    "외국인","기관","대량매수","대량매도",
+    # 가치·평가
+    "저평가","고평가","목표가","상승여력","상승","하락","갭상승",
+    # 실적
+    "서프라이즈","컨센서스","어닝","실적호조","실적부진",
+    "매출","영업이익","순이익","EPS","이익률",
+    # 모멘텀
+    "신고가","52주신고가","돌파","반전","추세전환",
+    # 리스크
+    "리스크","경고","주의","공매도","부채","불안",
+    # 펀더멘털
+    "성장","고성장","마진확대","마진축소","현금흐름","FCF",
+)
+_EMPH_PATTERN_TEXT = "|".join(re.escape(k) for k in _EMPH_KEYWORDS)
+# 숫자 강조: +12%, -5%, 32%, 1.5B, $250M 등
+_EMPH_NUMBER_RE = re.compile(
+    r"([+\-]?\d+(?:\.\d+)?[%]?(?:[BMK])?(?:\s*원|\s*달러|\s*조|\s*억)?)"
+)
+_EMPH_KEYWORD_RE = re.compile(f"({_EMPH_PATTERN_TEXT})")
+
+
+def _emphasize_keywords(text: str) -> _SafeHTML:
+    """텍스트에서 핵심 키워드·숫자만 <b>로 강조, 나머지는 가볍게 표시.
+
+    먼저 escape한 뒤 <b>...</b> 삽입 → _SafeHTML로 반환.
+    """
+    if not text:
+        return _SafeHTML("")
+    esc = _html.escape(_html.unescape(str(text)), quote=True)
+    # 숫자/퍼센트 강조
+    esc = _EMPH_NUMBER_RE.sub(r'<b>\1</b>', esc)
+    # 핵심 키워드 강조 (이미 <b> 내부의 텍스트는 영향 없음 — 키워드는 한글이라 충돌 적음)
+    esc = _EMPH_KEYWORD_RE.sub(r'<b style="color:#1A3A2A;">\1</b>', esc)
+    return _SafeHTML(esc)
 
 
 def _truncate_name(name: str, max_len: int = 36) -> str:
@@ -2660,9 +2902,13 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
                 return f"background:{bg};color:{fg};{B}{R}{S}", _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
-    # ── 텍스트 wrap 컬럼 ────────────────────────────
+    # ── 텍스트 wrap 컬럼 — 폰트 작게, 기본 가벼움 + 핵심 키워드만 강조 ─
     if col in _WRAP_COLS:
-        return base + "white-space:normal;word-break:break-all;font-size:9px;max-width:200px;", _fmt_val(val)
+        raw = _fmt_val(val)
+        styled = _emphasize_keywords(raw)
+        return (base + "white-space:normal;word-break:break-word;"
+                "font-size:8px;line-height:1.35;font-weight:400;"
+                "color:var(--t2);max-width:220px;letter-spacing:0;"), styled
 
     # ── 나머지 숫자 오른쪽 정렬 ─────────────────────
     try:
@@ -3152,23 +3398,28 @@ def _make_theme_summary_html(enriched: list[dict]) -> str:
     return cards_html + tbl_html
 
 
-def _make_13f_html(sec_rows: list[dict]) -> str:
-    """업체(종목)별 그룹 — 많은 기관이 매수/증가 중인 종목이 상단."""
+def _make_13f_html(sec_rows: list[dict], score_map: dict[str, dict] | None = None) -> str:
+    """업체(종목)별 그룹 — 많은 기관이 매수/증가 중인 종목이 상단.
+
+    score_map: {ticker: {"투자우선점수": float, "등급": str}} — enriched 종목 조인용.
+    """
     if not sec_rows:
         return '<div class="empty-msg">13F 데이터 없음 (SEC EDGAR 미수집)</div>'
+    score_map = score_map or {}
 
     # ── 업체별 그룹 집계 ─────────────────────────────
     from collections import defaultdict
     company_map: dict[str, list[dict]] = defaultdict(list)
     for r in sec_rows:
-        tk = r.get("티커","") or r.get("종목명","")
+        tk = r.get("티커","")
+        name = r.get("종목명","")
+        # 한국 6자리, CUSIP 8~9자리 숫자, 비정상 길이는 비어있는 것으로 처리
+        if tk and (re.fullmatch(r"\d{6,9}", tk) or len(tk) > 8):
+            tk = _name_to_ticker(name) or ""
         if not tk:
-            continue
-        # 한국 6자리, CUSIP 8~9자리 숫자, 비정상 길이 제외
-        if re.fullmatch(r"\d{6,9}", tk):
-            continue
-        if len(tk) > 8:
-            continue
+            tk = _name_to_ticker(name)
+        if not tk:
+            continue  # 티커도 회사명도 매핑 안되면 스킵
         company_map[tk].append(r)
 
     _chg_order = {"신규": 0, "증가": 1, "유지": 2, "감소": 3}
@@ -3212,6 +3463,32 @@ def _make_13f_html(sec_rows: list[dict]) -> str:
         n_inc  = sum(1 for h in holdings if h.get("포지션변화") == "증가")
         n_dec  = sum(1 for h in holdings if h.get("포지션변화") == "감소")
         n_hold = sum(1 for h in holdings if h.get("포지션변화") == "유지")
+        # enriched 투자점수 조인 (티커 대문자 기준)
+        enr = score_map.get(tk.upper(), {}) or score_map.get(tk, {})
+        inv_score = enr.get("투자우선점수")
+        inv_grade = enr.get("등급", "")
+        # enriched에 없으면 13F 자체 데이터로 간이 점수 산출
+        if inv_score is None:
+            base_pts = 50.0
+            base_pts += n_new * 6      # 신규 기관 가중
+            base_pts += n_inc * 3      # 증가 기관 가중
+            base_pts -= n_dec * 4      # 감소 기관 페널티
+            base_pts += min(15, n_inst * 1.0)  # 다수 기관 보유 (최대 15점)
+            if total_val >= 50e9:  base_pts += 8
+            elif total_val >= 10e9: base_pts += 5
+            elif total_val >= 1e9:  base_pts += 2
+            inv_score = max(0.0, min(100.0, base_pts))
+            inv_grade = ("A" if inv_score >= 80 else "B" if inv_score >= 65
+                         else "C" if inv_score >= 50 else "D" if inv_score >= 35 else "F")
+        sc_bg = ("#155724" if inv_score >= 75 else
+                 "#1E6B00" if inv_score >= 60 else
+                 "#856404" if inv_score >= 45 else
+                 "#7B3300" if inv_score >= 30 else "#7B0000")
+        inv_badge = (
+            f'<span style="background:{sc_bg};color:#fff;font-weight:900;'
+            f'border-radius:5px;padding:1px 8px;font-size:0.75rem;">'
+            f'투자점수 {inv_score:.0f}{(" " + inv_grade) if inv_grade else ""}</span>'
+        )
 
         # 헤더 색상 — 점수 기반
         hdr_bg = ("#1B5E20" if score >= 12 else
@@ -3313,6 +3590,7 @@ def _make_13f_html(sec_rows: list[dict]) -> str:
             f'display:inline-block;transition:transform 0.2s;">▶</span>'
             f'<span style="font-weight:900;font-size:0.92rem;">{_esc(name)}</span>'
             f'<span style="font-size:0.78rem;opacity:0.9;">[{_esc(tk)}]</span>'
+            f'{inv_badge}'
             f'<span style="background:{sc_color};color:{sc_tc};font-weight:900;'
             f'border-radius:5px;padding:1px 8px;font-size:0.75rem;">컨센서스 {score:+d}</span>'
             f'<span style="font-size:0.75rem;opacity:0.85;">{n_inst}개 기관 | '
@@ -3480,7 +3758,7 @@ table.dtbl tr.drow:hover td{
 }
 '''
 
-_HTML_JS = '''
+_HTML_JS = r'''
 (function(){
   // ── 탭 전환 ──
   const tabs=[...document.querySelectorAll('.tab-btn')];
@@ -3524,12 +3802,24 @@ _HTML_JS = '''
   document.querySelectorAll('table.dtbl thead th').forEach(th=>{
     th.title='클릭하여 정렬';
     th.style.cursor='pointer';
+    // 투자우선점수/등급 등 핵심 정렬 컬럼에 ▼ 힌트 추가
+    const txt = th.textContent.trim();
+    if(/투자우선점수|등급|컨센서스점수|선행매매점수|모멘텀점수|장기투자점수/.test(txt)){
+      if(!/[▲▼⇅]/.test(txt)){
+        th.innerHTML = th.innerHTML + ' <span style="opacity:0.55;font-size:0.75em;">⇅</span>';
+      }
+    }
     th.addEventListener('click',()=>{
       const tbody=th.closest('table').querySelector('tbody');
       const idx=[...th.parentNode.children].indexOf(th);
       const asc=th.dataset.asc!=='true';
       th.dataset.asc=String(asc);
-      th.textContent=th.textContent.replace(/[▲▼]/g,'')+(asc?' ▲':' ▼');
+      // 기존 정렬 표식(span 형태 포함)과 ▲▼ 제거 후 새 화살표 적용
+      let html = th.innerHTML
+        .replace(/\s*<span[^>]*>[▲▼⇅]<\/span>\s*$/, '')
+        .replace(/\s*[▲▼]\s*$/, '');
+      th.innerHTML = html + (asc?' <span style="font-weight:900;color:#fff;">▲</span>'
+                                 :' <span style="font-weight:900;color:#fff;">▼</span>');
       [...tbody.querySelectorAll('tr')].sort((a,b)=>{
         const va=a.children[idx]?.textContent.trim()||'';
         const vb=b.children[idx]?.textContent.trim()||'';
@@ -3676,6 +3966,16 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
                      key=lambda x: x.get("투자우선점수", 0) or 0, reverse=True)
     enr_all = sorted(enriched, key=lambda x: x.get("투자우선점수", 0) or 0, reverse=True)
 
+    # 13F·overlap 탭 조인용 — 티커 → {투자우선점수, 등급}
+    _enriched_score_map: dict[str, dict] = {}
+    for r in enriched:
+        tk = (r.get("티커") or "").upper()
+        if tk:
+            _enriched_score_map[tk] = {
+                "투자우선점수": r.get("투자우선점수"),
+                "등급":         r.get("등급", ""),
+            }
+
     by_priority = enr_all[:120]
     by_lead     = sorted(enriched,
                          key=lambda x: (x.get("선행매매점수",0) or 0,
@@ -3752,8 +4052,35 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
 </section>''')
 
     # 기관중복보유
+    # 오버랩 행에 투자점수 결합 — enriched 매칭 우선, 아니면 13F 자체 점수
+    _inst_overlap_enriched = []
+    for r in inst_overlap:
+        tk = (r.get("티커") or "").upper()
+        enr = _enriched_score_map.get(tk, {})
+        nr = dict(r)
+        sc = enr.get("투자우선점수")
+        gd = enr.get("등급", "")
+        if sc is None:
+            n_new = r.get("신규기관수", 0) or 0
+            n_inc = r.get("증가기관수", 0) or 0
+            n_dec = r.get("감소기관수", 0) or 0
+            n_inst = r.get("기관수", 0) or 0
+            total = r.get("총보유가치_USD", 0) or 0
+            sc = 50.0 + n_new*6 + n_inc*3 - n_dec*4 + min(15, n_inst*1.0)
+            if total >= 50e9:  sc += 8
+            elif total >= 10e9: sc += 5
+            elif total >= 1e9:  sc += 2
+            sc = max(0.0, min(100.0, sc))
+            gd = ("A" if sc >= 80 else "B" if sc >= 65
+                  else "C" if sc >= 50 else "D" if sc >= 35 else "F")
+        nr["투자우선점수"] = round(sc, 1)
+        nr["등급"]         = gd
+        _inst_overlap_enriched.append(nr)
+    # 투자점수 기본 정렬 (사용자가 헤더 클릭으로 변경 가능)
+    _inst_overlap_enriched.sort(key=lambda x: x.get("투자우선점수", 0) or 0, reverse=True)
+
     INST_OVERLAP_HEADERS = [
-        "컨센서스점수","티커","종목명",
+        "투자우선점수","등급","컨센서스점수","티커","종목명",
         "기관수","신규기관수","증가기관수","감소기관수",
         "신규기관","증가기관","기관목록",
         "총보유가치_USD","보고일",
@@ -3761,15 +4088,15 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     panels_html.append(f'''
 <section class="panel" id="panel-inst_overlap">
   <div class="panel-head"><h2>기관 중복 보유 종목 (다수 기관 동시 포지션)</h2>
-    <span class="panel-count">{len(inst_overlap)}종목</span>
+    <span class="panel-count">{len(_inst_overlap_enriched)}종목</span>
   </div>
   <div class="search-bar">
     <input class="tbl-search" data-tbl="tbl-inst_overlap"
            placeholder="🔍 검색 (티커/기관명)..." style="width:240px;">
-    <span style="font-size:0.75rem;color:#666;margin-left:8px;">💡 컨센서스점수 = 신규×3 + 증가×2 - 감소 | 전분기 대비 포지션 변화 기반</span>
+    <span style="font-size:0.75rem;color:#666;margin-left:8px;">💡 컬럼 헤더 클릭 = 정렬 · 투자우선점수/컨센서스점수 정렬 추천</span>
   </div>
   <div class="panel-body" id="tbl-inst_overlap">
-    {_make_table_html(inst_overlap, INST_OVERLAP_HEADERS) if inst_overlap
+    {_make_table_html(_inst_overlap_enriched, INST_OVERLAP_HEADERS) if _inst_overlap_enriched
      else '<div class="empty-msg">13F 데이터 수집 후 표시 (SEC EDGAR 분기 공시)</div>'}
   </div>
 </section>''')
@@ -3789,10 +4116,10 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
                    font-size:0.75rem;font-weight:700;cursor:pointer;font-family:inherit;">
       ▶ 전체 펼치기
     </button>
-    <span style="font-size:0.7rem;color:#666;">💡 종목 카드 클릭으로 개별 펼치기/접기</span>
+    <span style="font-size:0.7rem;color:#666;">💡 종목 카드 클릭으로 개별 펼치기/접기 · 투자점수는 자체 정량 평가 결과</span>
   </div>
   <div class="panel-body" id="tbl-sec_detail">
-    {_make_13f_html(sec_rows)}
+    {_make_13f_html(sec_rows, _enriched_score_map)}
   </div>
 </section>''')
 
