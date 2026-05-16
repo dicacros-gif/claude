@@ -1226,53 +1226,67 @@ def _load_csv_cache(path: Path) -> list[dict]:
 def fetch_insider_buys() -> list[dict]:
     """openinsider.com 최근 내부자 매수 (14일 이내, $100K+).
 
-    수집 성공 시 캐시 갱신, 실패 시 기존 캐시 반환.
+    오늘 수집 데이터를 기존 캐시와 머지 — (신고일, 티커, 임원명) 키 dedupe.
+    수집 실패 시에도 캐시에 누적된 모든 과거 데이터 반환.
     """
-    if not _HAS_BS4:
-        return _load_csv_cache(INSIDER_BUYS_CSV)
-    url = ("http://openinsider.com/screener?"
-           "s=&o=&pl=10&ph=&ll=&lh=&fd=14&fdr=&td=0&tdr=&xp=1&vl=100"
-           "&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0"
-           "&sortcol=0&cnt=40&page=1")
-    try:
-        r = requests.get(url, timeout=15, verify=False,
-                         headers={"User-Agent":
-                                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                                  "AppleWebKit/537.36"})
-        if r.status_code != 200:
-            print(f"[내부자] HTTP {r.status_code} — 캐시 폴백")
-            return _load_csv_cache(INSIDER_BUYS_CSV)
-        soup = BeautifulSoup(r.text, "lxml")
-        tbl  = soup.select_one("table.tinytable")
-        if not tbl:
-            return _load_csv_cache(INSIDER_BUYS_CSV)
-        hdrs = [th.get_text(strip=True) for th in tbl.select("thead th")]
-        rows = []
-        for tr in tbl.select("tbody tr")[:60]:
-            tds = [td.get_text(strip=True) for td in tr.select("td")]
-            if len(tds) < 8:
-                continue
-            d = dict(zip(hdrs, tds))
-            rows.append({
-                "신고일":   d.get("Filing\xa0Date") or d.get("Filing Date") or "",
-                "거래일":   d.get("Trade\xa0Date")  or d.get("Trade Date")  or "",
-                "티커":     d.get("Ticker", ""),
-                "회사명":   d.get("Company\xa0Name") or d.get("Company Name") or "",
-                "임원명":   d.get("Insider\xa0Name") or d.get("Insider Name") or "",
-                "직책":     d.get("Title", ""),
-                "거래유형": d.get("Trade\xa0Type")   or d.get("Trade Type")   or "",
-                "가격":     d.get("Price", ""),
-                "수량":     d.get("Qty", ""),
-                "거래금액": d.get("Value", ""),
-                "보유주식": d.get("Owned", ""),
-            })
-        if rows:
-            _save_csv_cache(INSIDER_BUYS_CSV, rows)
-            return rows
-        return _load_csv_cache(INSIDER_BUYS_CSV)
-    except Exception as e:
-        print(f"[내부자] 예외: {e} — 캐시 폴백")
-        return _load_csv_cache(INSIDER_BUYS_CSV)
+    existing = _load_csv_cache(INSIDER_BUYS_CSV)
+    today_rows: list[dict] = []
+    fetch_ok = False
+
+    if _HAS_BS4:
+        url = ("http://openinsider.com/screener?"
+               "s=&o=&pl=10&ph=&ll=&lh=&fd=14&fdr=&td=0&tdr=&xp=1&vl=100"
+               "&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0"
+               "&sortcol=0&cnt=100&page=1")
+        try:
+            r = requests.get(url, timeout=15, verify=False,
+                             headers={"User-Agent":
+                                      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                                      "AppleWebKit/537.36"})
+            if r.status_code == 200:
+                soup = BeautifulSoup(r.text, "lxml")
+                tbl  = soup.select_one("table.tinytable")
+                if tbl:
+                    hdrs = [th.get_text(strip=True) for th in tbl.select("thead th")]
+                    for tr in tbl.select("tbody tr")[:100]:
+                        tds = [td.get_text(strip=True) for td in tr.select("td")]
+                        if len(tds) < 8:
+                            continue
+                        d = dict(zip(hdrs, tds))
+                        today_rows.append({
+                            "신고일":   d.get("Filing\xa0Date") or d.get("Filing Date") or "",
+                            "거래일":   d.get("Trade\xa0Date")  or d.get("Trade Date")  or "",
+                            "티커":     d.get("Ticker", ""),
+                            "회사명":   d.get("Company\xa0Name") or d.get("Company Name") or "",
+                            "임원명":   d.get("Insider\xa0Name") or d.get("Insider Name") or "",
+                            "직책":     d.get("Title", ""),
+                            "거래유형": d.get("Trade\xa0Type")   or d.get("Trade Type")   or "",
+                            "가격":     d.get("Price", ""),
+                            "수량":     d.get("Qty", ""),
+                            "거래금액": d.get("Value", ""),
+                            "보유주식": d.get("Owned", ""),
+                        })
+                    fetch_ok = bool(today_rows)
+            else:
+                print(f"[내부자] HTTP {r.status_code} — 캐시 사용")
+        except Exception as e:
+            print(f"[내부자] 예외: {e} — 캐시 사용")
+
+    # 머지: 기존 + 오늘 → (신고일, 티커, 임원명, 거래유형) 키로 dedupe (오늘 우선)
+    def _k(r): return f"{r.get('신고일','')}|{r.get('티커','')}|{r.get('임원명','')}|{r.get('거래유형','')}"
+    merged_map: dict[str, dict] = {_k(r): r for r in existing}
+    for r in today_rows:
+        merged_map[_k(r)] = r
+    merged = list(merged_map.values())
+    # 신고일 내림차순 정렬
+    merged.sort(key=lambda r: r.get("신고일",""), reverse=True)
+
+    if fetch_ok:
+        _save_csv_cache(INSIDER_BUYS_CSV, merged[:500])  # 최대 500건 누적
+        print(f"[내부자] 수집 {len(today_rows)}건 / 누적 {len(merged)}건")
+    else:
+        print(f"[내부자] 캐시 사용 — {len(existing)}건")
+    return merged[:100]  # 표시는 최근 100건
 
 
 def fetch_sector_performance() -> list[dict]:
@@ -2080,28 +2094,38 @@ def load_first_seen(csv_path: Path) -> dict[str, str]:
     return first
 
 
-def load_persistent_universe(csv_path: Path, lookback_days: int = 14) -> list[dict]:
-    """기존 추적 종목 유니버스 로드 — 최근 N일 내 한 번이라도 수집된 종목 반환.
+def load_persistent_universe(csv_path: Path, lookback_days: int | None = None,
+                              max_tickers: int = 1000) -> list[dict]:
+    """기존 추적 종목 유니버스 로드 — 한 번이라도 수집된 모든 종목 반환.
 
-    각 종목당 최신 행(가장 최근 수집일) 1개씩 반환. _ticker, _country, 기업명 등 기본 필드 포함.
-    오늘 TV 신고가에 없어도 기존 종목은 데이터 업데이트 대상으로 유지.
+    각 종목당 최신 행(가장 최근 수집일) 1개씩 반환.
+    lookback_days=None이면 영구 누적 (모든 과거 종목 유지).
+    max_tickers로 상한 캡 (TV API 부담 고려, 최신 수집일 우선).
     """
     rows = _read_csv_as_list(csv_path)
     if not rows:
         return []
-    cutoff = (datetime.now() - timedelta(days=lookback_days)).strftime("%Y-%m-%d")
+    cutoff = None
+    if lookback_days is not None:
+        cutoff = (datetime.now() - timedelta(days=lookback_days)).strftime("%Y-%m-%d")
     latest: dict[str, dict] = {}
     for r in rows:
         tk = r.get("_ticker", "")
         dt = r.get("수집일", "")
         if not tk or not dt:
             continue
-        if dt < cutoff:
+        if cutoff and dt < cutoff:
             continue
         if tk not in latest or dt > latest[tk].get("수집일", ""):
             latest[tk] = r
+    # 최신 수집일 내림차순 정렬 후 상위 max_tickers개만
+    sorted_items = sorted(
+        latest.items(),
+        key=lambda kv: kv[1].get("수집일", ""),
+        reverse=True,
+    )[:max_tickers]
     out = []
-    for tk, r in latest.items():
+    for tk, r in sorted_items:
         country = r.get("국가", "")
         if country not in ("US", "KR"):
             country = "KR" if tk.startswith(("KRX:", "KOSDAQ:")) else "US"
@@ -3517,7 +3541,7 @@ def _make_market_panel_html(market_data: list[dict], fg: dict,
     market_tbl = _make_table_html(market_data, MARKET_HEADERS) if market_data else \
                  '<div class="empty-msg">시장 데이터 수집 실패</div>'
     insider_tbl = _make_table_html(insider_rows, INSIDER_HEADERS) if insider_rows else \
-                  '<div class="empty-msg">내부자 거래 수집 실패 (openinsider.com)</div>'
+                  '<div class="empty-msg">내부자 거래 데이터 없음 (캐시 비어있음)</div>'
 
     return f'''
 <div style="display:grid;grid-template-columns:220px 1fr;gap:1rem;padding:1rem;">
@@ -3529,7 +3553,8 @@ def _make_market_panel_html(market_data: list[dict], fg: dict,
 </div>
 <div style="padding:0 1rem 1rem;">
   <div style="font-weight:800;font-size:0.85rem;margin-bottom:0.5rem;">
-    🏢 최근 내부자 매수 (14일, $100K+, openinsider.com)
+    🏢 최근 내부자 매수 ($100K+, 누적, openinsider.com)
+    <span style="font-weight:400;font-size:0.7rem;color:#666;">— {len(insider_rows)}건 누적 표시</span>
   </div>
   {insider_tbl}
 </div>'''
@@ -3884,9 +3909,11 @@ def main():
     vol_kr = fetch_tradingview_volume_surge("korea")
     print(f"    US: {len(vol_us)}개, KR: {len(vol_kr)}개")
 
-    # 2a. Persistent universe — 최근 14일 추적 종목 중 오늘 신고가에 없는 것
-    print("[2a] persistent universe 로드...")
-    persistent_seed = load_persistent_universe(ENRICHED_HIGH_CSV, lookback_days=14)
+    # 2a. Persistent universe — 모든 과거 추적 종목 영구 누적 (최대 1000개)
+    print("[2a] persistent universe 로드 (영구 누적)...")
+    persistent_seed = load_persistent_universe(ENRICHED_HIGH_CSV,
+                                                lookback_days=None,
+                                                max_tickers=1000)
     today_tickers = {r["_ticker"] for r in all_raw}
     missing_tk = [p["_ticker"] for p in persistent_seed
                   if p["_ticker"] not in today_tickers]
