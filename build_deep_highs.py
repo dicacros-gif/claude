@@ -2328,6 +2328,44 @@ def _date_short(v: object) -> str:
     return s
 
 
+def _grad_bg(fv: float, full_scale: float = 50.0,
+              polarity: str = "signed") -> tuple[str, str]:
+    """양수→녹색, 음수→빨간색 연속 그라데이션 배경.
+
+    polarity:
+      "signed"     — fv 음/양에 따라 빨강/녹색 (성장률·수익률 등)
+      "positive"   — fv 클수록 진한 녹색 (이익률·점수 등, 음수는 빨강)
+      "negative"   — fv 클수록 진한 빨강 (부채·공매도·리스크)
+    full_scale     — 진한 색이 되는 |fv| 임계값
+    """
+    if fv is None or (isinstance(fv, float) and math.isnan(fv)):
+        return "", "#111"
+    intensity = min(1.0, abs(fv) / max(full_scale, 0.0001))
+    # 0.05 ~ 0.35 alpha 범위 (셀 텍스트 가독성 유지)
+    alpha = 0.05 + intensity * 0.30
+    if polarity == "negative":
+        # 클수록 진한 빨강
+        bg = f"rgba(220, 30, 30, {alpha:.2f})"
+        fg = "#7B0000" if intensity > 0.4 else "#AA0000" if intensity > 0.15 else "#444"
+    elif polarity == "positive":
+        if fv < 0:
+            bg = f"rgba(220, 30, 30, {alpha:.2f})"
+            fg = "#7B0000" if intensity > 0.4 else "#AA0000" if intensity > 0.15 else "#CC0000"
+        else:
+            bg = f"rgba(20, 140, 50, {alpha:.2f})"
+            fg = "#0E4D1A" if intensity > 0.4 else "#155724" if intensity > 0.15 else "#1E6B00"
+    else:  # signed
+        if fv > 0:
+            bg = f"rgba(20, 140, 50, {alpha:.2f})"
+            fg = "#0E4D1A" if intensity > 0.4 else "#155724" if intensity > 0.15 else "#1E6B00"
+        elif fv < 0:
+            bg = f"rgba(220, 30, 30, {alpha:.2f})"
+            fg = "#7B0000" if intensity > 0.4 else "#AA0000" if intensity > 0.15 else "#CC0000"
+        else:
+            return "", "#888"
+    return bg, fg
+
+
 def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
     # CSS 변수 → 다크모드 자동 전환 (no !important conflict)
     base = "background:var(--cell-odd);" if odd else "background:var(--cell-even);"
@@ -2416,35 +2454,34 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
     if col == "미래산업테마":
         return base + B + S + "color:var(--ac);", _fmt_val(val)
 
-    # ── 수급 flow 컬럼 — bg 포함 ────────────────────
+    # ── 수급 flow 컬럼 — 연속 그라데이션 (대형 종목은 수십~수백 억) ──
     if col in _FLOW_COLS:
         fv = _fv()
         if fv is not None:
-            if fv > 0:
-                return f"background:#EBF5FF;{B}color:#003399;{R}{S}", _fmt_val(val)
-            if fv < 0:
-                return f"background:#FFF0F0;{B}color:#CC0000;{R}{S}", _fmt_val(val)
+            # 외국인_지분율%는 0~100 스케일, 순매수는 억원 단위
+            scale = 30 if "지분율" in col else 200
+            bg, fg = _grad_bg(fv, full_scale=scale, polarity="signed")
+            if bg:
+                return f"background:{bg};color:{fg};{B}{R}{S}", _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
-    # ── 성장률 컬럼 — bg 포함 ────────────────────────
+    # ── 성장률 컬럼 — 연속 그라데이션 ──────────────
     if col in _GROWTH_COLS:
         fv = _fv()
         if fv is not None:
-            if fv >= 30:  return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
-            if fv >= 10:  return f"background:#EAF7EA;{B}color:#1E6B00;{R}{S}", _fmt_val(val)
-            if fv >= 0:   return base + "color:#2E7D32;" + R + S, _fmt_val(val)
-            if fv >= -10: return base + B + "color:#CC0000;" + R + S, _fmt_val(val)
-            return f"background:#FFF0F0;{B}color:#AA0000;{R}{S}", _fmt_val(val)
+            bg, fg = _grad_bg(fv, full_scale=50, polarity="signed")
+            if bg:
+                return f"background:{bg};color:{fg};{B}{R}{S}", _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
-    # ── 변동률% ──────────────────────────────────────
+    # ── 변동률% — 연속 그라데이션 ────────────────────
     if col == "변동률%":
         fv = _fv()
         if fv is not None:
-            if fv >= 5:   return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
-            if fv > 0:    return base + B + "color:#1E6B00;" + R + S, _fmt_val(val)
-            if fv <= -5:  return f"background:#FFF0F0;{B}color:#AA0000;{R}{S}", _fmt_val(val)
-            return base + B + "color:#CC0000;" + R + S, _fmt_val(val)
+            bg, fg = _grad_bg(fv, full_scale=15, polarity="signed")
+            disp = f"+{_fmt_val(val)}" if fv > 0 else _fmt_val(val)
+            if bg:
+                return f"background:{bg};color:{fg};{B}{R}{S}", disp
         return base + R + S, _fmt_val(val)
 
     # ── 52주 고가 대비 위치% ─────────────────────────
@@ -2464,39 +2501,41 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
             if fv <= 30: return f"background:#E0F5E0;{B}color:#1E6B00;{R}{S}", _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
-    # ── 공매도비율% ──────────────────────────────────
+    # ── 공매도비율% — 클수록 진한 빨강 (risk) ─────────
     if col == "공매도비율%":
         fv = _fv()
         if fv is not None:
-            if fv >= 20: return f"background:#FFD0D0;{B}color:#7B0000;{R}{S}", _fmt_val(val)
-            if fv >= 10: return f"background:#FFE8CC;{B}color:#7B3300;{R}{S}", _fmt_val(val)
+            bg, fg = _grad_bg(fv, full_scale=25, polarity="negative")
+            if bg:
+                return f"background:{bg};color:{fg};{B}{R}{S}", _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
-    # ── 목표가상승여력% ──────────────────────────────
+    # ── 목표가상승여력% — 그라데이션 ─────────────────
     if col == "목표가상승여력%":
         fv = _fv()
         if fv is not None:
-            if fv >= 30: return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
-            if fv >= 10: return base + B + "color:#1E6B00;" + R + S, _fmt_val(val)
-            if fv < 0:   return f"background:#FFF0F0;{B}color:#AA0000;{R}{S}", _fmt_val(val)
+            bg, fg = _grad_bg(fv, full_scale=40, polarity="signed")
+            if bg:
+                return f"background:{bg};color:{fg};{B}{R}{S}", _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
-    # ── 주식수_변화율% (13F 분기 변화) ──────────────
+    # ── 주식수_변화율% (13F 분기 변화) — 그라데이션 ─
     if col == "주식수_변화율%":
         fv = _fv()
         if fv is not None:
-            if fv >= 100: return f"background:#D4EDDA;{B}color:#0069B4;{R}{S}", f"+{_fmt_val(val)}%"
-            if fv > 0:    return base + B + "color:#1B6B1B;" + R + S, f"+{_fmt_val(val)}%"
-            if fv < 0:    return base + B + "color:#A30000;" + R + S, f"{_fmt_val(val)}%"
+            bg, fg = _grad_bg(fv, full_scale=80, polarity="signed")
+            disp = f"+{_fmt_val(val)}%" if fv > 0 else f"{_fmt_val(val)}%"
+            if bg:
+                return f"background:{bg};color:{fg};{B}{R}{S}", disp
         return base + R + S, _fmt_val(val)
 
-    # ── EPS/매출 서프라이즈 ──────────────────────────
+    # ── EPS/매출 서프라이즈 — 그라데이션 ─────────────
     if col in ("EPS_서프라이즈%", "매출_서프라이즈%"):
         fv = _fv()
         if fv is not None:
-            if fv > 5:  return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
-            if fv > 0:  return base + B + "color:#1E6B00;" + R + S, _fmt_val(val)
-            return base + B + "color:#CC0000;" + R + S, _fmt_val(val)
+            bg, fg = _grad_bg(fv, full_scale=20, polarity="signed")
+            if bg:
+                return f"background:{bg};color:{fg};{B}{R}{S}", _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
     # ── 상대거래량 ───────────────────────────────────
@@ -2507,24 +2546,27 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
             if fv >= 2: return base + B + "color:#1565C0;" + R + S, _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
-    # ── 수익률% ──────────────────────────────────────
+    # ── 수익률% — 연속 그라데이션 ────────────────────
     if col in {"1주수익률%","1개월수익률%","3개월수익률%",
                "6개월수익률%","1년수익률%","YTD수익률%"}:
         fv = _fv()
         if fv is not None:
-            if fv >= 20: return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
-            if fv > 0:   return base + "color:#1E6B00;" + R + S, _fmt_val(val)
-            return base + "color:#CC0000;" + R + S, _fmt_val(val)
+            scale = {"1주수익률%":10, "1개월수익률%":20, "3개월수익률%":30,
+                     "6개월수익률%":50, "1년수익률%":80, "YTD수익률%":40}.get(col, 30)
+            bg, fg = _grad_bg(fv, full_scale=scale, polarity="signed")
+            if bg:
+                return f"background:{bg};color:{fg};{B}{R}{S}", _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
-    # ── 품질 지표 (수익성) ───────────────────────────
+    # ── 품질 지표 (수익성) — 그라데이션 ──────────────
     if col in {"영업이익률%","ROE%","ROA%","ROIC%",
                "FCF마진%","FCF수익률%","매출총이익률%","순이익률%"}:
         fv = _fv()
         if fv is not None:
-            if fv >= 25: return f"background:#D4EDDA;{B}color:#155724;{R}{S}", _fmt_val(val)
-            if fv >= 10: return base + "color:#1E6B00;" + R + S, _fmt_val(val)
-            if fv < 0:   return base + "color:#CC0000;" + R + S, _fmt_val(val)
+            scale = 40 if col == "매출총이익률%" else 30
+            bg, fg = _grad_bg(fv, full_scale=scale, polarity="positive")
+            if bg:
+                return f"background:{bg};color:{fg};{B}{R}{S}", _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
     # ── PER / Forward_PER ────────────────────────────
@@ -2541,13 +2583,14 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
             return f"background:#E8F5E9;{B}color:#1E6B00;{C}{S}", "Y"
         return base + C + S, _fmt_val(val)
 
-    # ── 전일비% (시장지표) ───────────────────────────
+    # ── 전일비% (시장지표) — 그라데이션 ──────────────
     if col == "전일비%":
         fv = _fv()
         if fv is not None:
             disp = f"+{_fmt_val(val)}" if fv > 0 else _fmt_val(val)
-            if fv > 0: return base + B + "color:#1E6B00;" + R + S, disp
-            if fv < 0: return base + B + "color:#CC0000;" + R + S, disp
+            bg, fg = _grad_bg(fv, full_scale=5, polarity="signed")
+            if bg:
+                return f"background:{bg};color:{fg};{B}{R}{S}", disp
         return base + R + S, _fmt_val(val)
 
     # ── 포지션변화 (13F 분기 비교) ──────────────────
@@ -2592,12 +2635,29 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
             return f"background:#FFF0F0;{B}color:#AA0000;{C}{S}", "Y"
         return base + C + S, _fmt_val(val)
 
-    # ── 부채비율 ─────────────────────────────────────
+    # ── 부채비율 — 클수록 진한 빨강 (risk) ───────────
     if col == "부채비율":
         fv = _fv()
         if fv is not None:
-            if fv >= 200: return f"background:#FFF0F0;{B}color:#AA0000;{R}{S}", _fmt_val(val)
-            if fv <= 50:  return f"background:#E8F5E9;color:#1E6B00;{R}{S}", _fmt_val(val)
+            if fv > 100:
+                bg, fg = _grad_bg(fv - 100, full_scale=200, polarity="negative")
+                if bg:
+                    return f"background:{bg};color:{fg};{B}{R}{S}", _fmt_val(val)
+            else:
+                # 부채 적을수록 약한 녹색
+                bg, fg = _grad_bg(max(0, 100 - fv), full_scale=80, polarity="positive")
+                if bg:
+                    return f"background:{bg};color:{fg};{R}{S}", _fmt_val(val)
+        return base + R + S, _fmt_val(val)
+
+    # ── 전일비% (시장지표)는 아래 별도 처리 ─────────
+    # ── 1d/1w/1m 백분율 (내부자거래·섹터) ─────────────
+    if col in ("1d","1w","1m","6m","1개월수익%","1개월수익률%"):
+        fv = _fv()
+        if fv is not None:
+            bg, fg = _grad_bg(fv, full_scale=20, polarity="signed")
+            if bg:
+                return f"background:{bg};color:{fg};{B}{R}{S}", _fmt_val(val)
         return base + R + S, _fmt_val(val)
 
     # ── 텍스트 wrap 컬럼 ────────────────────────────
@@ -3245,9 +3305,12 @@ def _make_13f_html(sec_rows: list[dict]) -> str:
         )
 
         return (
-            f'<div style="margin-bottom:18px;border:1px solid #CBD5E1;border-radius:6px;overflow:hidden;">'
-            f'<div style="background:{hdr_bg};color:#fff;padding:7px 12px;'
-            f'display:flex;gap:10px;align-items:center;flex-wrap:wrap;">'
+            f'<div class="sec13f-card" data-collapsed="true" '
+            f'style="margin-bottom:10px;border:1px solid #CBD5E1;border-radius:6px;overflow:hidden;">'
+            f'<div class="sec13f-head" style="background:{hdr_bg};color:#fff;padding:7px 12px;'
+            f'display:flex;gap:10px;align-items:center;flex-wrap:wrap;cursor:pointer;user-select:none;">'
+            f'<span class="sec13f-chev" style="font-size:0.85rem;width:14px;'
+            f'display:inline-block;transition:transform 0.2s;">▶</span>'
             f'<span style="font-weight:900;font-size:0.92rem;">{_esc(name)}</span>'
             f'<span style="font-size:0.78rem;opacity:0.9;">[{_esc(tk)}]</span>'
             f'<span style="background:{sc_color};color:{sc_tc};font-weight:900;'
@@ -3256,7 +3319,7 @@ def _make_13f_html(sec_rows: list[dict]) -> str:
             f'총 {"${:.1f}B".format(total_val/1e9) if total_val>=1e9 else "${:.0f}M".format(total_val/1e6)}</span>'
             f'{badges}'
             f'</div>'
-            f'{tbl}'
+            f'<div class="sec13f-body" style="display:none;">{tbl}</div>'
             f'</div>'
         )
 
@@ -3476,6 +3539,46 @@ _HTML_JS = '''
       }).forEach(r=>tbody.appendChild(r));
     });
   });
+
+  // ── 13F 카드 접기/펼치기 ──
+  document.querySelectorAll('.sec13f-head').forEach(h=>{
+    h.addEventListener('click', (e)=>{
+      const card = h.closest('.sec13f-card');
+      const body = card.querySelector('.sec13f-body');
+      const chev = h.querySelector('.sec13f-chev');
+      const collapsed = card.dataset.collapsed === 'true';
+      if(collapsed){
+        body.style.display = '';
+        card.dataset.collapsed = 'false';
+        if(chev){ chev.style.transform = 'rotate(90deg)'; }
+      } else {
+        body.style.display = 'none';
+        card.dataset.collapsed = 'true';
+        if(chev){ chev.style.transform = 'rotate(0deg)'; }
+      }
+    });
+  });
+  // 전체 펼치기/접기 버튼
+  document.querySelectorAll('.sec13f-toggle-all').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const open = btn.dataset.state !== 'open';
+      btn.dataset.state = open ? 'open' : 'closed';
+      btn.textContent = open ? '🔽 전체 접기' : '▶ 전체 펼치기';
+      document.querySelectorAll('.sec13f-card').forEach(card=>{
+        const body = card.querySelector('.sec13f-body');
+        const chev = card.querySelector('.sec13f-chev');
+        if(open){
+          body.style.display = '';
+          card.dataset.collapsed = 'false';
+          if(chev){ chev.style.transform = 'rotate(90deg)'; }
+        } else {
+          body.style.display = 'none';
+          card.dataset.collapsed = 'true';
+          if(chev){ chev.style.transform = 'rotate(0deg)'; }
+        }
+      });
+    });
+  });
 })();
 '''
 
@@ -3677,9 +3780,16 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
   <div class="panel-head"><h2>유명기관 13F 보유 상세</h2>
     <span class="panel-count">{len(sec_rows)}건</span>
   </div>
-  <div class="search-bar">
+  <div class="search-bar" style="display:flex;gap:8px;align-items:center;">
     <input class="tbl-search" data-tbl="tbl-sec_detail"
            placeholder="🔍 검색 (기관명/종목명)..." style="width:240px;">
+    <button class="sec13f-toggle-all" data-state="closed"
+            style="padding:4px 10px;border:1px solid var(--bd);
+                   background:var(--card);color:var(--t1);border-radius:6px;
+                   font-size:0.75rem;font-weight:700;cursor:pointer;font-family:inherit;">
+      ▶ 전체 펼치기
+    </button>
+    <span style="font-size:0.7rem;color:#666;">💡 종목 카드 클릭으로 개별 펼치기/접기</span>
   </div>
   <div class="panel-body" id="tbl-sec_detail">
     {_make_13f_html(sec_rows)}
