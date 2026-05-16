@@ -421,34 +421,43 @@ def _fetch_yfinance_one(ticker: str) -> dict:
         # html 엔티티 정규화
         biz = _html.unescape(biz)
 
-        # 최근 뉴스 (1-2일 내) — yfinance Ticker.news
+        # 최근 뉴스 (1-2일 내) — yfinance Ticker.news (제목 + URL)
         recent_news = ""
+        news_list: list[dict] = []
         try:
             news_items = tk_obj.news or []
             from datetime import datetime as _dt2
             now_ts = _dt2.now().timestamp()
             two_days_ago = now_ts - (2 * 86400)
-            fresh = []
+            fresh_text = []
             for n in news_items[:10]:
-                # yfinance 신구 포맷 모두 지원
-                title = (n.get("title")
-                         or n.get("content", {}).get("title", ""))
+                cnt = n.get("content", {})
+                title = (n.get("title") or cnt.get("title", ""))
+                # URL: 여러 yfinance 포맷 지원
+                url = (n.get("link") or n.get("url")
+                       or cnt.get("canonicalUrl", {}).get("url", "")
+                       or cnt.get("url", "")
+                       or "")
                 pub_ts = (n.get("providerPublishTime")
-                          or n.get("content", {}).get("pubDate", 0))
+                          or cnt.get("pubDate", 0))
+                src = (n.get("publisher") or cnt.get("provider", {}).get("displayName", ""))
                 if isinstance(pub_ts, str):
                     try:
                         pub_ts = _dt2.fromisoformat(
-                            pub_ts.replace("Z","+00:00")
+                            pub_ts.replace("Z", "+00:00")
                         ).timestamp()
                     except Exception:
                         pub_ts = 0
                 if title and pub_ts >= two_days_ago:
                     days_ago = max(0, int((now_ts - pub_ts) / 86400))
-                    age = "오늘" if days_ago == 0 else f"{days_ago}일전"
-                    fresh.append(f"[{age}] {_html.unescape(title)[:100]}")
-                if len(fresh) >= 3:
+                    age_s = "오늘" if days_ago == 0 else f"{days_ago}일전"
+                    clean_title = _html.unescape(title)[:100]
+                    fresh_text.append(f"[{age_s}] {clean_title}")
+                    news_list.append({"title": clean_title, "url": url,
+                                      "source": src or "", "age": age_s})
+                if len(fresh_text) >= 3:
                     break
-            recent_news = " | ".join(fresh)
+            recent_news = " | ".join(fresh_text)
         except Exception:
             pass
 
@@ -525,6 +534,7 @@ def _fetch_yfinance_one(ticker: str) -> dict:
             "yf_shares":           fi_shares,
             "yf_bizSummary":       biz,
             "yf_recentNews":       recent_news,
+            "yf_뉴스목록":         news_list,
             "yf_recChanges":       rec_changes,
             "yf_epsHistory":       eps_history,
             "yf_recMean":          rec_mean,
@@ -556,8 +566,10 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
     if not _HAS_BS4:
         return result
 
-    def _fetch_naver_news(code: str) -> str:
-        """Naver Finance 종목 뉴스 — 최근 2일 이내 헤드라인 최대 3건."""
+    def _fetch_naver_news(code: str) -> tuple[str, list]:
+        """Naver Finance 종목 뉴스 — 최근 2일 이내 헤드라인 최대 3건.
+        Returns: (plain_text, [{title, url, source, age}])
+        """
         try:
             url = f"https://finance.naver.com/item/news_news.naver?code={code}&page=1&sm=title_entity_id.basic&clusterId="
             r = requests.get(url, timeout=6, verify=False,
@@ -567,7 +579,7 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
             rows = soup.select("table.type5 tr")
             from datetime import datetime as _dt4
             cutoff = _dt4.now() - timedelta(days=2)
-            items = []
+            items_text, items_data = [], []
             for tr in rows:
                 title_el = tr.select_one("td.title a")
                 date_el  = tr.select_one("td.date")
@@ -582,15 +594,20 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
                 if dt < cutoff:
                     continue
                 title = title_el.get_text(strip=True)
+                href  = title_el.get("href", "")
+                if href and not href.startswith("http"):
+                    href = "https://finance.naver.com" + href
                 src   = src_el.get_text(strip=True) if src_el else ""
                 age   = (_dt4.now() - dt).days
                 age_s = "오늘" if age == 0 else f"{age}일전"
-                items.append(f"[{age_s}/{src}] {title[:80]}")
-                if len(items) >= 3:
+                items_text.append(f"[{age_s}/{src}] {title[:80]}")
+                items_data.append({"title": title[:80], "url": href,
+                                   "source": src, "age": age_s})
+                if len(items_text) >= 3:
                     break
-            return " | ".join(items)
+            return " | ".join(items_text), items_data
         except Exception:
-            return ""
+            return "", []
 
     def _fetch_one(code: str) -> dict:
         url = f"https://finance.naver.com/item/frgn.naver?code={code}"
@@ -634,7 +651,7 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
             f20 = sum(frgn_vals[:20])  / 1e8
             i5  = sum(inst_vals[:5])   / 1e8
             i20 = sum(inst_vals[:20])  / 1e8
-            news = _fetch_naver_news(code)
+            news_text, news_data = _fetch_naver_news(code)
             return {
                 "naver_기업명":       kr_name,
                 "외국인_순매수_5일":  f5,
@@ -643,7 +660,8 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
                 "외국인_지분율_변화": None,
                 "기관_순매수_5일":    i5,
                 "기관_순매수_20일":   i20,
-                "naver_최근뉴스":     news,
+                "naver_최근뉴스":     news_text,
+                "naver_뉴스목록":     news_data,
             }
         except Exception:
             return {}
@@ -705,6 +723,59 @@ def fetch_fnguide_info(code: str) -> dict:
     return out
 
 
+def fetch_naver_research(code: str) -> dict:
+    """Naver Finance Research — 종목 최신 리포트 1건 (제목·증권사·날짜·URL)."""
+    if not _HAS_BS4:
+        return {}
+    try:
+        url = (f"https://finance.naver.com/research/company_list.naver"
+               f"?searchVal={code}&page=1")
+        r = requests.get(url, timeout=7, verify=False,
+                         headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+        r.encoding = "euc-kr"
+        soup = BeautifulSoup(r.text, "lxml")
+        rows = soup.select("table.type_1 tr")
+        for tr in rows:
+            tds = tr.select("td")
+            if len(tds) < 3:
+                continue
+            # 리포트 링크가 있는 td 찾기 (company_read.naver href)
+            report_a = None
+            for td in tds:
+                a = td.find("a", href=True)
+                if a and ("company_read" in a.get("href", "") or
+                          "nid=" in a.get("href", "")):
+                    report_a = a
+                    break
+            if not report_a:
+                continue
+            title = report_a.get_text(strip=True)
+            if not title or len(title) < 4:
+                continue
+            href = report_a["href"]
+            if not href.startswith("http"):
+                href = "https://finance.naver.com" + href
+            # 발간일 (YY.MM.DD 패턴) / 증권사 추출
+            date_s, firm_s = "", ""
+            for td in tds:
+                t = td.get_text(strip=True)
+                if re.match(r"\d{2,4}\.\d{2}\.\d{2}", t) and not date_s:
+                    date_s = t
+                elif (("증권" in t or "투자" in t or "리서치" in t or
+                       "자산" in t or "금융" in t) and
+                      len(t) <= 20 and not firm_s):
+                    firm_s = t
+            return {
+                "naver_리포트제목": title,
+                "naver_리포트URL":   href,
+                "naver_리포트증권사": firm_s,
+                "naver_리포트일":    date_s,
+            }
+    except Exception:
+        pass
+    return {}
+
+
 def enrich_korean_rows_with_fnguide(rows: list):
     kr_rows = [r for r in rows if r.get("_country") == "KR"]
     if not kr_rows:
@@ -715,6 +786,10 @@ def enrich_korean_rows_with_fnguide(rows: list):
             return
         info = fetch_fnguide_info(code)
         row.update(info)
+        # Naver Research 리포트 링크 (FnGuide 외 별도 수집)
+        naver_rep = fetch_naver_research(code)
+        if naver_rep:
+            row.update(naver_rep)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as ex:
         list(ex.map(_enrich, kr_rows))
@@ -2092,12 +2167,10 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
         "매출_서프라이즈%":   rev_sur,
         "자사주매입수익률%":  _safe(raw.get("buyback_yield")),
 
-        # 리포트 (FnGuide)
+        # 리포트 (FnGuide + Naver Research)
         "컨센서스_증권사수":  raw.get("컨센서스_증권사수"),
-        "최근리포트일":       raw.get("최근리포트일"),
-        "최근리포트증권사":   raw.get("최근리포트증권사"),
+        "최근리포트일":       raw.get("naver_리포트일") or raw.get("최근리포트일"),
         "최근리포트의견":     raw.get("최근리포트의견"),
-        "최근리포트제목":     raw.get("최근리포트제목"),
 
         # 수출
         "수출섹터여부":   "",
@@ -2169,6 +2242,60 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
     out["리스크_확인사항"]         = _make_risk_text(out)
     out["장기투자_체크리스트"]     = _make_longterm_text(out)
     out["수급_종합해석"]           = _make_flow_text(out)
+
+    # ── 클릭 가능한 리포트·뉴스 링크 (SafeHTML) ────────────────
+    _link_style = ("color:#1565C0;text-decoration:underline;font-size:8px;"
+                   "font-weight:700;line-height:1.5;")
+
+    # KR 리포트 링크 (Naver Research 우선, FnGuide 텍스트 폴백)
+    _naver_url   = raw.get("naver_리포트URL", "")
+    _naver_title = raw.get("naver_리포트제목", "") or raw.get("최근리포트제목", "")
+    _naver_firm  = raw.get("naver_리포트증권사", "") or raw.get("최근리포트증권사", "")
+    _fg_title    = raw.get("최근리포트제목", "")
+    _fg_firm     = raw.get("최근리포트증권사", "")
+    if _naver_url and (_naver_title or _fg_title):
+        _rep_title = _naver_title or _fg_title
+        _rep_firm  = _naver_firm or _fg_firm
+        _eu = _html.escape(_naver_url, quote=True)
+        _et = _html.escape(str(_rep_title)[:100])
+        _ef = _html.escape(str(_rep_firm))
+        out["최근리포트제목"] = _SafeHTML(
+            f'<a href="{_eu}" target="_blank" rel="noreferrer" style="{_link_style}">'
+            f'{_et}</a>'
+        )
+        out["최근리포트증권사"] = _SafeHTML(
+            f'<a href="{_eu}" target="_blank" rel="noreferrer" style="{_link_style}">'
+            f'{_ef}</a>'
+        ) if _ef else out["최근리포트제목"]
+    else:
+        out["최근리포트제목"]   = _fg_title or ""
+        out["최근리포트증권사"] = _fg_firm  or ""
+
+    # 뉴스 링크 HTML (KR: Naver, US: yfinance)
+    _news_items = (flw.get("naver_뉴스목록") if country == "KR"
+                   else yf.get("yf_뉴스목록")) or []
+    if _news_items:
+        _parts = []
+        for _n in _news_items[:3]:
+            _nt = _html.escape(str(_n.get("title", ""))[:90])
+            _nu = str(_n.get("url", ""))
+            _na = _html.escape(str(_n.get("age", "")))
+            _ns = _html.escape(str(_n.get("source", "")))
+            _label = f"[{_na}/{_ns}]" if _ns else f"[{_na}]"
+            if _nu:
+                _eu2 = _html.escape(_nu, quote=True)
+                _parts.append(
+                    f'<a href="{_eu2}" target="_blank" rel="noreferrer" '
+                    f'style="{_link_style}display:block;margin-bottom:2px;">'
+                    f'{_html.escape(_label)} {_nt}</a>'
+                )
+            else:
+                _parts.append(
+                    f'<span style="font-size:8px;color:#555;display:block;">'
+                    f'{_html.escape(_label)} {_nt}</span>'
+                )
+        out["최근뉴스"] = _SafeHTML("".join(_parts))
+    # (뉴스 데이터 없으면 기존 plain text 유지)
 
     return out
 
@@ -2670,6 +2797,11 @@ def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
     C = "text-align:center;"
     S = "font-size:9px;"
     B = "font-weight:700;"
+
+    # ── _SafeHTML: 이미 렌더된 HTML — escape 없이 그대로 표시 ──
+    if isinstance(val, _SafeHTML):
+        return (base + "white-space:normal;word-break:break-word;"
+                "font-size:8px;line-height:1.5;max-width:260px;vertical-align:top;"), val
 
     # ── 수집일 / 날짜 컬럼 M/D 형식 ────────────────
     if col in ("수집일", "최초수집일", "보고일", "다음실적일"):
