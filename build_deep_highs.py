@@ -461,38 +461,44 @@ def _fetch_yfinance_one(ticker: str) -> dict:
         except Exception:
             pass
 
-        # 애널리스트 평가 변경 (upgrades/downgrades 30일 이내)
+        # 애널리스트 평가 변경 (upgrades/downgrades 60일 이내) + 90일 순추천 카운트
         rec_changes = ""
+        n_up_90 = 0
+        n_down_90 = 0
         try:
             up_dn = tk_obj.upgrades_downgrades
             if up_dn is not None and not up_dn.empty:
                 from datetime import datetime as _dt3
-                cutoff = _dt3.now().timestamp() - (60 * 86400)
-                # DataFrame index = GradeDate (Timestamp)
-                rows_sorted = up_dn.head(8)  # 최신 8건
+                cutoff_60 = _dt3.now().timestamp() - (60 * 86400)
+                cutoff_90 = _dt3.now().timestamp() - (90 * 86400)
+                rows_sorted = up_dn.head(30)
                 items = []
                 for idx, row in rows_sorted.iterrows():
                     try:
                         ts = idx.timestamp() if hasattr(idx, "timestamp") else 0
                     except Exception:
                         ts = 0
-                    if ts < cutoff:
+                    action = str(row.get("Action", "") or "").lower()
+                    if ts >= cutoff_90:
+                        if "up" in action or action == "init":
+                            n_up_90 += 1
+                        elif "down" in action:
+                            n_down_90 += 1
+                    if ts < cutoff_60:
                         continue
                     firm = str(row.get("Firm", "") or "")[:18]
-                    action = str(row.get("Action", "") or "")
                     to_g = str(row.get("ToGrade", "") or "")
                     from_g = str(row.get("FromGrade", "") or "")
                     date_str = idx.strftime("%m/%d") if hasattr(idx, "strftime") else ""
-                    if to_g:
+                    if to_g and len(items) < 4:
                         if from_g and from_g != to_g:
                             items.append(f"[{date_str}] {firm}: {from_g}→{to_g}")
                         else:
                             items.append(f"[{date_str}] {firm}: {to_g}")
-                    if len(items) >= 4:
-                        break
                 rec_changes = " | ".join(items)
         except Exception:
             pass
+        net_rec_90 = n_up_90 - n_down_90
 
         # 최근 이익 발표 서프라이즈 (Earnings history)
         eps_history = ""
@@ -540,6 +546,9 @@ def _fetch_yfinance_one(ticker: str) -> dict:
             "yf_recMean":          rec_mean,
             "yf_recKey":           rec_key,
             "yf_recNumAnalysts":   rec_num_analysts,
+            "yf_recNetUp90":       net_rec_90,
+            "yf_recUp90":          n_up_90,
+            "yf_recDown90":        n_down_90,
         }
     except Exception:
         return {}
@@ -565,6 +574,44 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
     result = {}
     if not _HAS_BS4:
         return result
+
+    def _fetch_naver_disclosures(code: str) -> tuple[str, list]:
+        """Naver Finance 종목 공시 — 최근 14일 이내 최대 5건."""
+        try:
+            url = f"https://finance.naver.com/item/news_notice.naver?code={code}&page=1"
+            r = requests.get(url, timeout=6, verify=False,
+                             headers={"User-Agent": "Mozilla/5.0"})
+            r.encoding = "euc-kr"
+            soup = BeautifulSoup(r.text, "lxml")
+            rows = soup.select("table.type5 tr")
+            from datetime import datetime as _dt5
+            cutoff = _dt5.now() - timedelta(days=14)
+            items_text, items_data = [], []
+            for tr in rows:
+                title_el = tr.select_one("td.title a")
+                date_el  = tr.select_one("td.date")
+                if not (title_el and date_el):
+                    continue
+                date_s = date_el.get_text(strip=True).split()[0]
+                try:
+                    dt = _dt5.strptime(date_s, "%Y.%m.%d")
+                except Exception:
+                    continue
+                if dt < cutoff:
+                    continue
+                title = title_el.get_text(strip=True)
+                href  = title_el.get("href", "")
+                if href and not href.startswith("http"):
+                    href = "https://finance.naver.com" + href
+                age = (_dt5.now() - dt).days
+                age_s = "오늘" if age == 0 else f"{age}일전"
+                items_text.append(f"[{age_s}] {title[:80]}")
+                items_data.append({"title": title[:80], "url": href, "age": age_s})
+                if len(items_text) >= 5:
+                    break
+            return " | ".join(items_text), items_data
+        except Exception:
+            return "", []
 
     def _fetch_naver_news(code: str) -> tuple[str, list]:
         """Naver Finance 종목 뉴스 — 최근 2일 이내 헤드라인 최대 3건.
@@ -652,6 +699,7 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
             i5  = sum(inst_vals[:5])   / 1e8
             i20 = sum(inst_vals[:20])  / 1e8
             news_text, news_data = _fetch_naver_news(code)
+            disc_text, disc_data = _fetch_naver_disclosures(code)
             return {
                 "naver_기업명":       kr_name,
                 "외국인_순매수_5일":  f5,
@@ -662,6 +710,8 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
                 "기관_순매수_20일":   i20,
                 "naver_최근뉴스":     news_text,
                 "naver_뉴스목록":     news_data,
+                "naver_최근공시":     disc_text,
+                "naver_공시목록":     disc_data,
             }
         except Exception:
             return {}
@@ -2077,6 +2127,7 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
         "변동률%":          _safe(raw.get("change")),
         "시가총액":         mktcap,
         "52주고가대비위치%": round(pos52, 1),
+        "52주저가대비%":    round((close - lo52) / lo52 * 100, 1) if (lo52 and close) else None,
 
         # 밸류
         "PER_TTM":          _safe(raw.get("price_earnings_ttm")),
@@ -2195,6 +2246,9 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
         "추천도_평균":        yf.get("yf_recMean"),
         "추천도_라벨":        yf.get("yf_recKey") or "",
         "애널리스트_수":      yf.get("yf_recNumAnalysts"),
+        "분석가_순추천변경_90일": yf.get("yf_recNetUp90"),
+        "분석가_업그레이드_90일": yf.get("yf_recUp90"),
+        "분석가_다운그레이드_90일": yf.get("yf_recDown90"),
 
         # 최초수집일·추적일수·신고가여부
         "최초수집일": first_seen.get(ticker, _NOW.strftime("%Y-%m-%d")),
@@ -2270,6 +2324,33 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
     else:
         out["최근리포트제목"]   = _fg_title or ""
         out["최근리포트증권사"] = _fg_firm  or ""
+
+    # 공시 링크 HTML (KR Naver만)
+    if country == "KR":
+        _disc_items = flw.get("naver_공시목록") or []
+        if _disc_items:
+            _dparts = []
+            for _d in _disc_items[:5]:
+                _dt = _html.escape(str(_d.get("title", ""))[:90])
+                _du = str(_d.get("url", ""))
+                _da = _html.escape(str(_d.get("age", "")))
+                if _du:
+                    _deu = _html.escape(_du, quote=True)
+                    _dparts.append(
+                        f'<a href="{_deu}" target="_blank" rel="noreferrer" '
+                        f'style="{_link_style}display:block;margin-bottom:2px;">'
+                        f'[{_da}] {_dt}</a>'
+                    )
+                else:
+                    _dparts.append(
+                        f'<span style="font-size:8px;color:#555;display:block;">'
+                        f'[{_da}] {_dt}</span>'
+                    )
+            out["최근공시"] = _SafeHTML("".join(_dparts))
+        else:
+            out["최근공시"] = flw.get("naver_최근공시", "") or ""
+    else:
+        out["최근공시"] = ""
 
     # 뉴스 링크 HTML (KR: Naver, US: yfinance)
     _news_items = (flw.get("naver_뉴스목록") if country == "KR"
@@ -2551,6 +2632,7 @@ _COL_CATEGORY: dict[str, str] = {
     # 가격
     "종가": "base", "당일고가": "base", "52주고가": "base", "52주저가": "base",
     "변동률%": "base", "시가총액": "base", "52주고가대비위치%": "base",
+    "52주저가대비%": "base",
     # 수급
     "외국인_순매수_5일": "flow", "외국인_순매수_20일": "flow",
     "외국인_지분율%": "flow", "외국인_지분율_변화": "flow",
@@ -2583,6 +2665,10 @@ _COL_CATEGORY: dict[str, str] = {
     # FnGuide 컨센서스 (한국)
     "컨센서스_증권사수": "score", "최근리포트의견": "flow",
     "최근리포트증권사": "base", "최근리포트일": "base", "최근리포트제목": "base",
+    "최근공시": "base",
+    # 애널리스트 카운트
+    "분석가_순추천변경_90일": "score", "분석가_업그레이드_90일": "score",
+    "분석가_다운그레이드_90일": "risk",
     # 품질 추가
     "FCF_TTM": "quality", "순현금": "quality", "순현금/시총%": "quality",
     "FCF수익률%": "quality",
@@ -2610,7 +2696,7 @@ _GROWTH_COLS = {
 }
 _WRAP_COLS   = {"수급_종합해석","신고가_정량해석","미래_컨센서스_긍정요인",
                 "리스크_확인사항","장기투자_체크리스트","사업개요","미래산업근거","해외확장근거",
-                "수출_해설","최근리포트제목","최근뉴스",
+                "수출_해설","최근리포트제목","최근리포트증권사","최근뉴스","최근공시",
                 "애널리스트_평가변경","EPS_히스토리",
                 "신규기관","증가기관","기관목록"}
 _SCORE_COLS  = {
@@ -3199,7 +3285,7 @@ def _make_table_html(rows: list[dict], headers: list[str],
 # 신고가_미국: 미국 전용 상세 — 수집된 모든 미국 정량 데이터
 US_DETAIL_HEADERS = [
     "티커","기업명","거래소","섹터","산업","미래산업테마",
-    "종가","52주고가대비위치%","변동률%","시가총액","데이터충분성%",
+    "종가","52주고가대비위치%","52주저가대비%","변동률%","시가총액","데이터충분성%",
     "투자우선점수","등급",
     # 밸류에이션 전체
     "PER_TTM","Forward_PER","PEG_TTM","P/S","P/B","EV/EBITDA",
@@ -3225,7 +3311,9 @@ US_DETAIL_HEADERS = [
     # 배당·자사주
     "배당수익률%","자사주매입수익률%",
     # 애널리스트 평가 (yfinance upgrades/downgrades)
-    "추천도_평균","추천도_라벨","애널리스트_수","애널리스트_평가변경","EPS_히스토리",
+    "추천도_평균","추천도_라벨","애널리스트_수","애널리스트_평가변경",
+    "분석가_순추천변경_90일","분석가_업그레이드_90일","분석가_다운그레이드_90일",
+    "EPS_히스토리",
     # 텍스트 분석 (수집·생성 데이터 전부)
     "신고가_정량해석","미래_컨센서스_긍정요인","리스크_확인사항","수급_종합해석","최근뉴스","사업개요",
     # 맨 오른쪽
@@ -3235,7 +3323,7 @@ US_DETAIL_HEADERS = [
 # 신고가_한국: 한국 전용 상세 — FnGuide·Naver 고유 데이터 포함
 KR_DETAIL_HEADERS = [
     "티커","기업명","거래소","섹터","산업","미래산업테마",
-    "종가","52주고가대비위치%","변동률%","시가총액","데이터충분성%",
+    "종가","52주고가대비위치%","52주저가대비%","변동률%","시가총액","데이터충분성%",
     "투자우선점수","등급",
     # 밸류에이션
     "PER_TTM","Forward_PER","P/B","EV/EBITDA",
@@ -3257,9 +3345,11 @@ KR_DETAIL_HEADERS = [
     "컨센서스_증권사수","최근리포트의견","최근리포트증권사","최근리포트일","최근리포트제목",
     "목표가평균","목표가최고","목표가최저","목표가상승여력%",
     # 애널리스트 평가 (해외 ADR/공통)
-    "추천도_평균","추천도_라벨","애널리스트_수","애널리스트_평가변경","EPS_히스토리",
+    "추천도_평균","추천도_라벨","애널리스트_수","애널리스트_평가변경",
+    "분석가_순추천변경_90일","분석가_업그레이드_90일","분석가_다운그레이드_90일",
+    "EPS_히스토리",
     # 텍스트 분석
-    "신고가_정량해석","미래_컨센서스_긍정요인","리스크_확인사항","수급_종합해석","최근뉴스","사업개요",
+    "신고가_정량해석","미래_컨센서스_긍정요인","리스크_확인사항","수급_종합해석","최근뉴스","최근공시","사업개요",
     # 맨 오른쪽
     "최초수집일","수집일",
 ]
@@ -4243,20 +4333,23 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
             }
 
     by_priority = enr_all[:120]
+    # 선행매매: 투자우선점수가 1순위, 선행매매점수가 2순위 (전체 일관성 유지)
     by_lead     = sorted(enriched,
-                         key=lambda x: (x.get("선행매매점수",0) or 0,
-                                        x.get("투자우선점수",0) or 0),
+                         key=lambda x: (x.get("투자우선점수",0) or 0,
+                                        x.get("선행매매점수",0) or 0),
                          reverse=True)
     by_export   = sorted([r for r in enriched if r.get("수출섹터여부") == "Y"],
                          key=lambda x: x.get("투자우선점수",0) or 0, reverse=True)
     if len(by_export) < 10:
         by_export = sorted(enriched,
-                           key=lambda x: x.get("수출해외점수",0) or 0, reverse=True)
+                           key=lambda x: x.get("투자우선점수",0) or 0, reverse=True)
     by_lt       = enr_all[:150]
-    by_flow     = (sorted(enr_kr, key=lambda x: x.get("투자우선점수",0) or 0, reverse=True)
-                   + sorted(enr_us, key=lambda x: x.get("투자우선점수",0) or 0, reverse=True))[:200]
+    by_flow     = sorted(enriched,
+                         key=lambda x: x.get("투자우선점수",0) or 0,
+                         reverse=True)[:200]
     by_tracking = sorted(enriched,
-                         key=lambda x: (x.get("수집일",""), x.get("_ticker","")))
+                         key=lambda x: x.get("투자우선점수",0) or 0,
+                         reverse=True)
 
     # "일별_트래킹" 탭 옆에 업데이트 시각 표시
     _m  = str(_NOW.month)
@@ -4523,8 +4616,14 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
         (r.get("_ticker","").split(":")[-1] if country=="US" else _bare_kr_code(r.get("_ticker","")))
         in (_high_tickers | _high_raw)
     )
-    vol_us_e = [_vol_row(r, "US") for r in volume_us if not _is_dup(r, "US")]
-    vol_kr_e = [_vol_row(r, "KR") for r in volume_kr if not _is_dup(r, "KR")]
+    vol_us_e = sorted(
+        [_vol_row(r, "US") for r in volume_us if not _is_dup(r, "US")],
+        key=lambda x: x.get("투자우선점수", 0) or 0, reverse=True,
+    )
+    vol_kr_e = sorted(
+        [_vol_row(r, "KR") for r in volume_kr if not _is_dup(r, "KR")],
+        key=lambda x: x.get("투자우선점수", 0) or 0, reverse=True,
+    )
     # 미국: TV 펀더멘털 헤더 / 한국: Naver 수급 플로우 헤더
     panels_html.append(_panel_wrap("vol_us", "거래량급증 미국",
                                    len(vol_us_e),
