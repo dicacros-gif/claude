@@ -1302,6 +1302,61 @@ def save_13f_history(rows: list[dict], csv_path: Path):
     _write_csv(csv_path, merged)
 
 
+def _coerce_13f_row(row: dict) -> dict:
+    """CSV로 읽어온 13F 행의 숫자 컬럼을 float으로 변환."""
+    num_cols = ["보유가치_USD", "주식수", "전분기_주식수",
+                "주식수_변화율%", "포트폴리오비중%"]
+    out = dict(row)
+    for col in num_cols:
+        v = out.get(col)
+        if v is not None and str(v).strip() not in ("", "None"):
+            try:
+                out[col] = float(str(v).replace(",", ""))
+            except (ValueError, TypeError):
+                out[col] = None
+        else:
+            out[col] = None
+    return out
+
+
+def load_13f_history_for_display(csv_path: Path,
+                                  fresh_rows: list[dict]) -> list[dict]:
+    """누적 13F 히스토리 로드 — (기관명, 티커) 기준 최신 엔트리만 유지.
+
+    fresh_rows(오늘 수집분)로 먼저 채우고, CSV에서 나머지 이력 보완.
+    _최초발견일 필드를 붙여 반환.
+    """
+    all_hist = _read_csv_as_list(csv_path)
+
+    # 최초발견일 계산
+    first_seen: dict[tuple, str] = {}
+    for r in all_hist:
+        k = (r.get("기관명", ""), r.get("티커", ""))
+        d = r.get("_수집일", "")
+        if k not in first_seen or d < first_seen[k]:
+            first_seen[k] = d
+
+    # (기관명, 티커) → 최신 엔트리 (수집일 기준)
+    key_map: dict[tuple, dict] = {}
+    for r in all_hist:
+        k = (r.get("기관명", ""), r.get("티커", ""))
+        cur = key_map.get(k)
+        if cur is None or r.get("_수집일", "") >= cur.get("_수집일", ""):
+            key_map[k] = r
+
+    # 오늘 신규 수집분으로 덮어쓰기
+    for r in fresh_rows:
+        k = (r.get("기관명", ""), r.get("티커", ""))
+        key_map[k] = r
+
+    result = []
+    for k, r in key_map.items():
+        nr = _coerce_13f_row(r)
+        nr["_최초발견일"] = first_seen.get(k, r.get("_수집일", ""))
+        result.append(nr)
+    return result
+
+
 # ───────────────────────────────────────────────
 # 섹션 3b: 시장지표 / 내부자거래 수집
 # ───────────────────────────────────────────────
@@ -2959,6 +3014,12 @@ def _make_table_html(rows: list[dict], headers: list[str],
             f'position:sticky;top:0;z-index:2;letter-spacing:0.2px;">{_esc(h)}</th>'
         )
 
+    _GRADE_BADGE_MAP = {
+        "A": ("#D4EDDA","#155724"), "B": ("#C3E6CB","#1E6B00"),
+        "C": ("#FFF3CD","#856404"), "D": ("#FFE0C0","#7B3300"),
+        "F": ("#FFD0D0","#7B0000"),
+    }
+
     # 데이터 행
     body_rows = []
     for i, row in enumerate(rows):
@@ -2967,7 +3028,29 @@ def _make_table_html(rows: list[dict], headers: list[str],
         for h in headers:
             val = row.get(h, "")
             style, disp = _cell_style(h, val, odd)
-            cells.append(f'<td style="{style}padding:4px 6px;border-bottom:1px solid #E2E8F0;border-right:1px solid #E2E8F0;">{_esc(disp)}</td>')
+            if h == "기업명":
+                sc  = row.get("투자우선점수")
+                grd = str(row.get("등급", "") or "").strip()
+                try:
+                    sc_s = f"{float(sc):.0f}" if sc not in (None, "", "None") else ""
+                except (ValueError, TypeError):
+                    sc_s = ""
+                _gbg, _gfg = _GRADE_BADGE_MAP.get(grd, ("#EEE","#555"))
+                _score_badge = (
+                    f'<span style="background:#1F3864;color:#fff;font-size:7px;font-weight:900;'
+                    f'padding:1px 5px;border-radius:3px;margin-left:5px;vertical-align:middle;'
+                    f'white-space:nowrap;">{sc_s}</span>'
+                ) if sc_s else ""
+                _grade_badge = (
+                    f'<span style="background:{_gbg};color:{_gfg};font-size:7px;font-weight:900;'
+                    f'padding:1px 4px;border-radius:3px;margin-left:2px;vertical-align:middle;">{grd}</span>'
+                ) if grd else ""
+                cells.append(
+                    f'<td style="{style}padding:4px 6px;border-bottom:1px solid #E2E8F0;border-right:1px solid #E2E8F0;">'
+                    f'{_esc(disp)}{_score_badge}{_grade_badge}</td>'
+                )
+            else:
+                cells.append(f'<td style="{style}padding:4px 6px;border-bottom:1px solid #E2E8F0;border-right:1px solid #E2E8F0;">{_esc(disp)}</td>')
         body_rows.append(f'<tr class="drow">{"".join(cells)}</tr>')
 
     return f'''
@@ -2983,7 +3066,7 @@ def _make_table_html(rows: list[dict], headers: list[str],
 
 # 신고가_미국: 미국 전용 상세 — 수집된 모든 미국 정량 데이터
 US_DETAIL_HEADERS = [
-    "수집일","티커","기업명","거래소","섹터","산업","미래산업테마",
+    "티커","기업명","거래소","섹터","산업","미래산업테마",
     "종가","52주고가대비위치%","변동률%","시가총액","데이터충분성%",
     "투자우선점수","등급",
     # 밸류에이션 전체
@@ -3013,11 +3096,13 @@ US_DETAIL_HEADERS = [
     "추천도_평균","추천도_라벨","애널리스트_수","애널리스트_평가변경","EPS_히스토리",
     # 텍스트 분석 (수집·생성 데이터 전부)
     "신고가_정량해석","미래_컨센서스_긍정요인","리스크_확인사항","수급_종합해석","최근뉴스","사업개요",
+    # 맨 오른쪽
+    "최초수집일","수집일",
 ]
 
 # 신고가_한국: 한국 전용 상세 — FnGuide·Naver 고유 데이터 포함
 KR_DETAIL_HEADERS = [
-    "수집일","티커","기업명","거래소","섹터","산업","미래산업테마",
+    "티커","기업명","거래소","섹터","산업","미래산업테마",
     "종가","52주고가대비위치%","변동률%","시가총액","데이터충분성%",
     "투자우선점수","등급",
     # 밸류에이션
@@ -3043,13 +3128,15 @@ KR_DETAIL_HEADERS = [
     "추천도_평균","추천도_라벨","애널리스트_수","애널리스트_평가변경","EPS_히스토리",
     # 텍스트 분석
     "신고가_정량해석","미래_컨센서스_긍정요인","리스크_확인사항","수급_종합해석","최근뉴스","사업개요",
+    # 맨 오른쪽
+    "최초수집일","수집일",
 ]
 
 DETAIL_HEADERS = US_DETAIL_HEADERS  # 하위 호환
 
 # 우선순위_TOP: 13차원 점수 스코어카드 — 다른 탭에 없는 점수 컬럼 집중
 TOP_HEADERS = [
-    "국가","티커","기업명","섹터","미래산업테마",
+    "티커","기업명","섹터","미래산업테마",
     "투자우선점수","등급",
     # 13차원 점수 전부 (이 탭에만)
     "밸류점수","성장점수","품질점수","현금흐름점수",
@@ -3066,19 +3153,20 @@ TOP_HEADERS = [
 
 # 선행매매_시그널: 수급 패턴·타이밍 신호 — 패턴 분류 + 반전 신호 집중
 LEAD_HEADERS = [
-    "국가","티커","기업명",
+    "티커","기업명",
     "수급패턴","수급가속도","저점매집여부","고점청산여부",
     "선행매매점수","외국인수급점수","기관수급점수",
     "외국인_순매수_5일","외국인_순매수_20일","기관_순매수_5일","기관_순매수_20일",
     "외국인_지분율%","외국인_지분율_변화","기관_보유%","내부자_보유%",
     "공매도비율%","공매도_일수",
-    "종가","변동률%","최초수집일",
+    "종가","변동률%",
     "수급_종합해석",
+    "최초수집일",
 ]
 
 # 외국인_수급: 플로우 규모 + 소유 구조 + 공매도 — 수급량 중심 탭
 FLOW_HEADERS = [
-    "국가","티커","기업명","섹터",
+    "티커","기업명","섹터",
     "외국인_순매수_5일","외국인_순매수_20일","외국인_지분율%","외국인_지분율_변화",
     "기관_순매수_5일","기관_순매수_20일","기관_보유%","내부자_보유%",
     "수급패턴","수급가속도","저점매집여부","고점청산여부",
@@ -3088,7 +3176,7 @@ FLOW_HEADERS = [
 
 # 수출해외_상위: 수출·글로벌 확장 고유 지표 — 수급 컬럼 없음
 EXPORT_HEADERS = [
-    "국가","티커","기업명","섹터","산업",
+    "티커","기업명","섹터","산업",
     "수출해외점수","수출섹터여부","수출섹터보너스","수출_해설",
     "매출성장률_QoQ%","매출성장률_YoY%","예상매출성장률_NextFY%",
     "순이익성장률_YoY%","EPS성장률_YoY%",
@@ -3125,7 +3213,7 @@ VOLUME_HEADERS = US_VOLUME_HEADERS
 
 # 장기투자_후보: 품질·해자·현금흐름 — 수급 플로우 없음, 소유구조·배당 집중
 LONG_TERM_HEADERS = [
-    "국가","티커","기업명","섹터","미래산업테마",
+    "티커","기업명","섹터","미래산업테마",
     "투자우선점수","등급","장기투자점수",
     # FCF·수익성·해자
     "FCF_TTM","FCF마진%","FCF수익률%","ROIC%","ROE%","ROA%",
@@ -3138,10 +3226,10 @@ LONG_TERM_HEADERS = [
     "배당수익률%","자사주매입수익률%","내부자_보유%",
     # 리스크
     "Beta_1Y","Beta_3Y",
-    # 컨텍스트
-    "최초수집일",
     # 텍스트
     "장기투자_체크리스트","미래_컨센서스_긍정요인",
+    # 맨 오른쪽
+    "최초수집일",
 ]
 
 # 테마_요약: 테마 집계
@@ -3161,10 +3249,11 @@ SEC_HEADERS = [
 
 # 일별_트래킹
 TRACKING_HEADERS = [
-    "수집일","국가","티커","기업명","등급","투자우선점수",
+    "티커","기업명","등급","투자우선점수",
     "종가","변동률%","52주고가대비위치%","상대거래량",
     "외국인_순매수_5일","기관_순매수_5일","수급패턴","선행매매점수",
-    "Forward_PER","예상매출성장률_NextFY%","미래산업테마","최초수집일",
+    "Forward_PER","예상매출성장률_NextFY%","미래산업테마",
+    "최초수집일","수집일",
 ]
 
 # 시장지표
@@ -3399,7 +3488,7 @@ def _make_theme_summary_html(enriched: list[dict]) -> str:
 
 
 def _make_13f_html(sec_rows: list[dict], score_map: dict[str, dict] | None = None) -> str:
-    """업체(종목)별 그룹 — 많은 기관이 매수/증가 중인 종목이 상단.
+    """종목별 그룹 — 3개 섹션으로 분리: 신규 진입 / 포지션 증가 / 감소·청산.
 
     score_map: {ticker: {"투자우선점수": float, "등급": str}} — enriched 종목 조인용.
     """
@@ -3413,13 +3502,12 @@ def _make_13f_html(sec_rows: list[dict], score_map: dict[str, dict] | None = Non
     for r in sec_rows:
         tk = r.get("티커","")
         name = r.get("종목명","")
-        # 한국 6자리, CUSIP 8~9자리 숫자, 비정상 길이는 비어있는 것으로 처리
         if tk and (re.fullmatch(r"\d{6,9}", tk) or len(tk) > 8):
             tk = _name_to_ticker(name) or ""
         if not tk:
             tk = _name_to_ticker(name)
         if not tk:
-            continue  # 티커도 회사명도 매핑 안되면 스킵
+            continue
         company_map[tk].append(r)
 
     _chg_order = {"신규": 0, "증가": 1, "유지": 2, "감소": 3}
@@ -3430,50 +3518,66 @@ def _make_13f_html(sec_rows: list[dict], score_map: dict[str, dict] | None = Non
         "유지": ("#555", "#E0E0E0"),
     }
 
-    # ── 컨센서스 점수로 정렬 ─────────────────────────
     def _company_score(holdings: list[dict]) -> tuple:
         n_new = sum(1 for h in holdings if h.get("포지션변화") == "신규")
         n_inc = sum(1 for h in holdings if h.get("포지션변화") == "증가")
         n_dec = sum(1 for h in holdings if h.get("포지션변화") == "감소")
         n_inst = len({h.get("기관명","") for h in holdings})
         score  = n_new * 3 + n_inc * 2 - n_dec
-        total  = sum(h.get("보유가치_USD", 0) or 0 for h in holdings)
+        total  = sum((h.get("보유가치_USD") or 0) for h in holdings)
         return (score, n_inst, total)
 
-    ranked = sorted(
+    # ── 3개 버킷으로 분류 ────────────────────────────
+    new_companies:  list[tuple] = []  # 신규 진입 (at least one 신규)
+    inc_companies:  list[tuple] = []  # 포지션 증가 (증가 있고 신규 없음)
+    dec_companies:  list[tuple] = []  # 감소/청산 (score < 0)
+
+    all_ranked = sorted(
         company_map.items(),
         key=lambda kv: _company_score(kv[1]),
         reverse=True,
     )
-
-    # 상단: 신규/증가/유지 위주 (score>=0) — 매수·홀딩 컨센서스 종목
-    # 하단: 감소·청산만 있는 종목 (score<0) — 매도 컨센서스
-    positive_companies, negative_companies = [], []
-    for tk, holdings in ranked:
+    for tk, holdings in all_ranked:
+        n_new = sum(1 for h in holdings if h.get("포지션변화") == "신규")
+        n_inc = sum(1 for h in holdings if h.get("포지션변화") == "증가")
         score, _, _ = _company_score(holdings)
-        if score >= 0:
-            positive_companies.append((tk, holdings))
-        else:
-            negative_companies.append((tk, holdings))
+        if n_new > 0:
+            new_companies.append((tk, holdings))
+        elif n_inc > 0:
+            inc_companies.append((tk, holdings))
+        elif score < 0:
+            dec_companies.append((tk, holdings))
 
-    def _render_one(tk, holdings):
+    def _render_one(tk, holdings, section_color="#1F4E79"):
         name   = _truncate_name(holdings[0].get("종목명","") or tk, 40)
         score, n_inst, total_val = _company_score(holdings)
         n_new  = sum(1 for h in holdings if h.get("포지션변화") == "신규")
         n_inc  = sum(1 for h in holdings if h.get("포지션변화") == "증가")
         n_dec  = sum(1 for h in holdings if h.get("포지션변화") == "감소")
         n_hold = sum(1 for h in holdings if h.get("포지션변화") == "유지")
-        # enriched 투자점수 조인 (티커 대문자 기준)
+
+        # 최초발견일 / 최근수집일
+        dates = sorted(set(
+            h.get("_최초발견일","") or h.get("_수집일","") for h in holdings
+            if h.get("_최초발견일","") or h.get("_수집일","")
+        ))
+        latest_collected = sorted(
+            h.get("_수집일","") for h in holdings if h.get("_수집일","")
+        )
+        first_date = dates[0] if dates else ""
+        last_date  = latest_collected[-1] if latest_collected else ""
+        date_hint  = ""
+        if first_date:
+            date_hint = (f'<span style="font-size:0.68rem;opacity:0.75;">최초:{first_date}'
+                         + (f' · 최근:{last_date}' if last_date and last_date != first_date else "")
+                         + '</span>')
+
+        # enriched 투자점수 조인
         enr = score_map.get(tk.upper(), {}) or score_map.get(tk, {})
         inv_score = enr.get("투자우선점수")
         inv_grade = enr.get("등급", "")
-        # enriched에 없으면 13F 자체 데이터로 간이 점수 산출
         if inv_score is None:
-            base_pts = 50.0
-            base_pts += n_new * 6      # 신규 기관 가중
-            base_pts += n_inc * 3      # 증가 기관 가중
-            base_pts -= n_dec * 4      # 감소 기관 페널티
-            base_pts += min(15, n_inst * 1.0)  # 다수 기관 보유 (최대 15점)
+            base_pts = 50.0 + n_new*6 + n_inc*3 - n_dec*4 + min(15, n_inst*1.0)
             if total_val >= 50e9:  base_pts += 8
             elif total_val >= 10e9: base_pts += 5
             elif total_val >= 1e9:  base_pts += 2
@@ -3490,13 +3594,16 @@ def _make_13f_html(sec_rows: list[dict], score_map: dict[str, dict] | None = Non
             f'투자점수 {inv_score:.0f}{(" " + inv_grade) if inv_grade else ""}</span>'
         )
 
-        # 헤더 색상 — 점수 기반
-        hdr_bg = ("#1B5E20" if score >= 12 else
-                  "#1565C0" if score >= 6 else
-                  "#1F4E79" if score >= 0 else
-                  "#7B1A1A")
+        # 컨센서스 점수 색
+        sc_color = ("#D4EDDA" if score >= 12 else
+                    "#BBDEFB" if score >= 6 else
+                    "#FFF9C4" if score >= 0 else
+                    "#FFCDD2")
+        sc_tc    = ("#155724" if score >= 12 else
+                    "#0D47A1" if score >= 6 else
+                    "#856404" if score >= 0 else
+                    "#B71C1C")
 
-        # 포지션 변화 뱃지
         badge = lambda label, fg, bg, n: (
             f'<span style="background:{bg};color:{fg};font-weight:700;'
             f'border-radius:4px;padding:1px 7px;font-size:0.7rem;">{label} {n}</span>'
@@ -3509,17 +3616,6 @@ def _make_13f_html(sec_rows: list[dict], score_map: dict[str, dict] | None = Non
             badge("감소", "#fff", "#A30000", n_dec)
         )
 
-        # 컨센서스 점수 색
-        sc_color = ("#D4EDDA" if score >= 12 else
-                    "#BBDEFB" if score >= 6 else
-                    "#FFF9C4" if score >= 0 else
-                    "#FFCDD2")
-        sc_tc    = ("#155724" if score >= 12 else
-                    "#0D47A1" if score >= 6 else
-                    "#856404" if score >= 0 else
-                    "#B71C1C")
-
-        # 기관별 행 정렬: 신규 > 증가 > 유지 > 감소, 그 다음 포트폴리오비중% 높은 순
         sorted_h = sorted(
             holdings,
             key=lambda x: (
@@ -3529,7 +3625,6 @@ def _make_13f_html(sec_rows: list[dict], score_map: dict[str, dict] | None = Non
             ),
         )
 
-        # 기관 행 테이블 (기관명, 포지션변화, 포트폴리오비중%, 주식수_변화율%, 보유가치_USD, 전분기_주식수, 주식수, 보고일)
         row_html = []
         for h in sorted_h:
             chg   = h.get("포지션변화","유지")
@@ -3540,14 +3635,35 @@ def _make_13f_html(sec_rows: list[dict], score_map: dict[str, dict] | None = Non
             sh    = h.get("주식수") or 0
             prev  = h.get("전분기_주식수")
             dt    = h.get("보고일","")
+            collected = h.get("_수집일","")
             mgr   = h.get("기관명","")
 
-            wt_s  = f"{wt:.2f}%" if wt is not None else "-"
-            pct_s = (f"+{pct:.1f}%" if pct and pct > 0 else f"{pct:.1f}%" if pct is not None else "-")
-            val_s = (f"${val/1e9:.2f}B" if val >= 1e9 else f"${val/1e6:.0f}M" if val >= 1e6 else f"${val:,.0f}")
-            sh_s  = f"{int(sh):,}" if sh else "-"
-            prev_s= f"{int(prev):,}" if prev else "-"
-            pct_c = "#1B6B1B" if (pct or 0) > 0 else "#A30000"
+            try:
+                wt_s = f"{float(wt):.2f}%" if wt is not None else "-"
+            except (ValueError, TypeError):
+                wt_s = "-"
+            try:
+                pct_f = float(pct) if pct is not None else None
+                pct_s = (f"+{pct_f:.1f}%" if pct_f and pct_f > 0
+                         else f"{pct_f:.1f}%" if pct_f is not None else "-")
+                pct_c = "#1B6B1B" if (pct_f or 0) > 0 else "#A30000"
+            except (ValueError, TypeError):
+                pct_s, pct_c = "-", "#666"
+            try:
+                val_f = float(val)
+                val_s = (f"${val_f/1e9:.2f}B" if val_f >= 1e9
+                         else f"${val_f/1e6:.0f}M" if val_f >= 1e6
+                         else f"${val_f:,.0f}")
+            except (ValueError, TypeError):
+                val_s = "-"
+            try:
+                sh_s = f"{int(float(sh)):,}" if sh else "-"
+            except (ValueError, TypeError):
+                sh_s = "-"
+            try:
+                prev_s = f"{int(float(prev)):,}" if prev else "-"
+            except (ValueError, TypeError):
+                prev_s = "-"
 
             row_html.append(
                 f'<tr style="border-bottom:1px solid #f0f4f8;">'
@@ -3562,6 +3678,7 @@ def _make_13f_html(sec_rows: list[dict], score_map: dict[str, dict] | None = Non
                 f'<td style="padding:4px 8px;text-align:right;font-size:0.78rem;color:#666;">{sh_s}</td>'
                 f'<td style="padding:4px 8px;text-align:right;font-size:0.78rem;color:#999;">{prev_s}</td>'
                 f'<td style="padding:4px 8px;text-align:center;font-size:0.72rem;color:#888;">{_esc(dt)}</td>'
+                f'<td style="padding:4px 8px;text-align:center;font-size:0.68rem;color:#aaa;">{_esc(collected)}</td>'
                 f'</tr>'
             )
 
@@ -3576,15 +3693,22 @@ def _make_13f_html(sec_rows: list[dict], score_map: dict[str, dict] | None = Non
             f'<th style="padding:4px 8px;text-align:right;">주식수</th>'
             f'<th style="padding:4px 8px;text-align:right;">전분기주식수</th>'
             f'<th style="padding:4px 8px;text-align:center;">13F신고일</th>'
+            f'<th style="padding:4px 8px;text-align:center;">수집일</th>'
             f'</tr></thead>'
             f'<tbody>{"".join(row_html)}</tbody>'
             f'</table>'
         )
 
+        try:
+            total_str = ("${:.1f}B".format(total_val/1e9) if total_val >= 1e9
+                         else "${:.0f}M".format(total_val/1e6))
+        except (ValueError, TypeError):
+            total_str = "-"
+
         return (
             f'<div class="sec13f-card" data-collapsed="true" '
             f'style="margin-bottom:10px;border:1px solid #CBD5E1;border-radius:6px;overflow:hidden;">'
-            f'<div class="sec13f-head" style="background:{hdr_bg};color:#fff;padding:7px 12px;'
+            f'<div class="sec13f-head" style="background:{section_color};color:#fff;padding:7px 12px;'
             f'display:flex;gap:10px;align-items:center;flex-wrap:wrap;cursor:pointer;user-select:none;">'
             f'<span class="sec13f-chev" style="font-size:0.85rem;width:14px;'
             f'display:inline-block;transition:transform 0.2s;">▶</span>'
@@ -3593,36 +3717,54 @@ def _make_13f_html(sec_rows: list[dict], score_map: dict[str, dict] | None = Non
             f'{inv_badge}'
             f'<span style="background:{sc_color};color:{sc_tc};font-weight:900;'
             f'border-radius:5px;padding:1px 8px;font-size:0.75rem;">컨센서스 {score:+d}</span>'
-            f'<span style="font-size:0.75rem;opacity:0.85;">{n_inst}개 기관 | '
-            f'총 {"${:.1f}B".format(total_val/1e9) if total_val>=1e9 else "${:.0f}M".format(total_val/1e6)}</span>'
+            f'<span style="font-size:0.75rem;opacity:0.85;">{n_inst}개 기관 | 총 {total_str}</span>'
             f'{badges}'
+            f'{date_hint}'
             f'</div>'
             f'<div class="sec13f-body" style="display:none;">{tbl}</div>'
             f'</div>'
         )
 
     out = []
-    if positive_companies:
-        out.append(
-            '<div style="margin:0 0 12px 0;padding:8px 12px;background:#E8F5E9;'
-            'border-left:4px solid #1B5E20;border-radius:4px;">'
-            '<span style="font-weight:900;color:#1B5E20;font-size:0.95rem;">'
-            f'🟢 매수·홀딩 컨센서스 ({len(positive_companies)}개)</span> '
-            '<span style="color:#555;font-size:0.78rem;">'
-            '신규/증가 기관 우세 — 컨센서스 점수 ≥ 0</span></div>'
-        )
-        out.extend(_render_one(tk, h) for tk, h in positive_companies)
 
-    if negative_companies:
+    # ── 섹션 1: 신규 진입 ────────────────────────────
+    if new_companies:
         out.append(
-            '<div style="margin:20px 0 12px 0;padding:8px 12px;background:#FFEBEE;'
-            'border-left:4px solid #B71C1C;border-radius:4px;">'
-            '<span style="font-weight:900;color:#B71C1C;font-size:0.95rem;">'
-            f'🔴 매도·청산 컨센서스 ({len(negative_companies)}개)</span> '
-            '<span style="color:#555;font-size:0.78rem;">'
-            '감소·청산 기관 우세 — 컨센서스 점수 &lt; 0</span></div>'
+            '<div style="margin:0 0 12px 0;padding:10px 14px;background:#E3F2FD;'
+            'border-left:4px solid #0069B4;border-radius:4px;">'
+            '<span style="font-weight:900;color:#0069B4;font-size:0.97rem;">'
+            f'🔵 신규 진입 ({len(new_companies)}개)</span>'
+            '<span style="color:#444;font-size:0.78rem;margin-left:10px;">'
+            '해당 분기 처음 매입한 기관 포함 — 전분기 대비 신규 포지션 개설</span></div>'
         )
-        out.extend(_render_one(tk, h) for tk, h in negative_companies)
+        for tk, h in new_companies:
+            out.append(_render_one(tk, h, section_color="#1565C0"))
+
+    # ── 섹션 2: 포지션 증가 ──────────────────────────
+    if inc_companies:
+        out.append(
+            '<div style="margin:20px 0 12px 0;padding:10px 14px;background:#E8F5E9;'
+            'border-left:4px solid #1B6B1B;border-radius:4px;">'
+            '<span style="font-weight:900;color:#1B6B1B;font-size:0.97rem;">'
+            f'🟢 포지션 증가 ({len(inc_companies)}개)</span>'
+            '<span style="color:#444;font-size:0.78rem;margin-left:10px;">'
+            '전분기 대비 보유 주식수 증가 (신규 기관 없음) — 기존 포지션 확대</span></div>'
+        )
+        for tk, h in inc_companies:
+            out.append(_render_one(tk, h, section_color="#1B5E20"))
+
+    # ── 섹션 3: 감소·청산 ────────────────────────────
+    if dec_companies:
+        out.append(
+            '<div style="margin:20px 0 12px 0;padding:10px 14px;background:#FFEBEE;'
+            'border-left:4px solid #B71C1C;border-radius:4px;">'
+            '<span style="font-weight:900;color:#B71C1C;font-size:0.97rem;">'
+            f'🔴 감소·청산 ({len(dec_companies)}개)</span>'
+            '<span style="color:#444;font-size:0.78rem;margin-left:10px;">'
+            '감소·청산 기관 우세 — 포지션 축소 또는 전량 청산 진행 중</span></div>'
+        )
+        for tk, h in dec_companies:
+            out.append(_render_one(tk, h, section_color="#7B1A1A"))
 
     return "".join(out) if out else '<div class="empty-msg">13F 데이터 없음</div>'
 
@@ -3688,12 +3830,7 @@ main{padding:0.8rem 1rem;max-width:100%;}
   font-size:0.82rem;font-weight:800;}
 .dash-card table{width:100%;}
 .dash-card td{border-bottom:1px solid var(--bd);font-size:0.8rem;color:var(--t1);}
-/* table panel */
-.panel-head{padding:0.7rem 1rem;border-bottom:1px solid var(--bd);
-  background:var(--card2);display:flex;align-items:center;gap:0.5rem;
-  border-radius:12px 12px 0 0;}
-.panel-head h2{font-size:0.9rem;font-weight:900;color:var(--t1);}
-.panel-count{font-size:0.7rem;color:var(--t3);margin-left:auto;}
+.panel-count{font-size:0.7rem;color:var(--t3);}
 .panel-body{background:var(--card);border:1px solid var(--bd);
   border-radius:0 0 12px 12px;overflow:hidden;box-shadow:var(--shadow);}
 .tbl-wrap{overflow-x:auto;max-height:76vh;overflow-y:auto;
@@ -3897,13 +4034,10 @@ _TAB_CONFIG = [
 def _panel_wrap(tab_id: str, title: str, count: int, content: str) -> str:
     return f'''
 <section class="panel" id="panel-{tab_id}">
-  <div class="panel-head">
-    <h2>{_esc(title)}</h2>
-    <span class="panel-count">{count}개 종목</span>
-  </div>
   <div class="search-bar">
     <input class="tbl-search" data-tbl="tbl-{tab_id}"
            placeholder="🔍 검색 (기업명/티커/섹터)..." style="width:240px;">
+    <span class="panel-count" style="font-size:0.75rem;color:#888;margin-left:8px;">{count}개 종목</span>
   </div>
   <div class="panel-body" id="tbl-{tab_id}">{content}</div>
 </section>'''
@@ -4016,7 +4150,6 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     # 대시보드
     panels_html.append(f'''
 <section class="panel" id="panel-dashboard">
-  <div class="panel-head"><h2>대시보드</h2></div>
   <div class="panel-body" style="padding:1rem;">
     {_make_dashboard_html(enriched, collected_at)}
   </div>
@@ -4045,7 +4178,6 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     # 테마_요약
     panels_html.append(f'''
 <section class="panel" id="panel-theme_summary">
-  <div class="panel-head"><h2>테마 요약</h2></div>
   <div class="panel-body" style="padding:1rem;">
     {_make_theme_summary_html(enriched)}
   </div>
@@ -4087,9 +4219,6 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     ]
     panels_html.append(f'''
 <section class="panel" id="panel-inst_overlap">
-  <div class="panel-head"><h2>기관 중복 보유 종목 (다수 기관 동시 포지션)</h2>
-    <span class="panel-count">{len(_inst_overlap_enriched)}종목</span>
-  </div>
   <div class="search-bar">
     <input class="tbl-search" data-tbl="tbl-inst_overlap"
            placeholder="🔍 검색 (티커/기관명)..." style="width:240px;">
@@ -4104,9 +4233,6 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     # 유명기관_13F
     panels_html.append(f'''
 <section class="panel" id="panel-sec_detail">
-  <div class="panel-head"><h2>유명기관 13F 보유 상세</h2>
-    <span class="panel-count">{len(sec_rows)}건</span>
-  </div>
   <div class="search-bar" style="display:flex;gap:8px;align-items:center;">
     <input class="tbl-search" data-tbl="tbl-sec_detail"
            placeholder="🔍 검색 (기관명/종목명)..." style="width:240px;">
@@ -4126,7 +4252,6 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     # 시장지표
     panels_html.append(f'''
 <section class="panel" id="panel-market">
-  <div class="panel-head"><h2>시장지표 &amp; 내부자거래</h2></div>
   <div class="panel-body">
     {_make_market_panel_html(market_data, fg, insider_rows)}
   </div>
@@ -4136,9 +4261,6 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     EARNINGS_HEADERS = ["실적일","티커","회사명","섹터","예상EPS","Forward_PER","매출_YoY%"]
     panels_html.append(f'''
 <section class="panel" id="panel-earnings_cal">
-  <div class="panel-head"><h2>실적 캘린더 (향후 2주)</h2>
-    <span class="panel-count">{len(earnings_rows)}건</span>
-  </div>
   <div class="panel-body">
     {_make_table_html(earnings_rows, EARNINGS_HEADERS) if earnings_rows
      else '<div class="empty-msg">향후 2주 실적 발표 예정 없음 (또는 수집 실패)</div>'}
@@ -4149,9 +4271,6 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     SECTOR_HEADERS = ["섹터","심볼","현재가","전일비%","1개월수익%","52주위치%"]
     panels_html.append(f'''
 <section class="panel" id="panel-sector_perf">
-  <div class="panel-head"><h2>미국 섹터 ETF 성과</h2>
-    <span class="panel-count">{len(sector_rows)}개 섹터</span>
-  </div>
   <div class="panel-body">
     {_make_table_html(sector_rows, SECTOR_HEADERS) if sector_rows
      else '<div class="empty-msg">섹터 데이터 수집 실패</div>'}
@@ -4464,15 +4583,23 @@ def main():
     print(f"    13F:{len(sec_rows)} 시장:{len(market_data)} F&G:{fg.get('score','?')} "
           f"내부자:{len(insider_rows)} 섹터:{len(sector_rows)} 실적:{len(earnings_rows)}")
 
-    # 13F 중복 보유 분석 + 히스토리 저장
-    inst_overlap = fetch_institutional_overlap(sec_rows)
+    # 13F 히스토리 저장 + 누적 이력 로드
     if sec_rows:
         save_13f_history(sec_rows, DATA_DIR / "13f_history.csv")
-    print(f"    기관중복보유: {len(inst_overlap)}종목")
+
+    # 표시용: 누적 히스토리 전체 로드 (오늘 수집분 + 과거 이력)
+    sec_rows_display = load_13f_history_for_display(
+        DATA_DIR / "13f_history.csv", sec_rows
+    )
+    if not sec_rows_display:
+        sec_rows_display = sec_rows
+
+    inst_overlap = fetch_institutional_overlap(sec_rows_display)
+    print(f"    기관중복보유: {len(inst_overlap)}종목 | 13F누적: {len(sec_rows_display)}건")
 
     # 8. HTML 생성
     print("[8] index.html 생성...")
-    html = generate_html(enriched, vol_us, vol_kr, sec_rows,
+    html = generate_html(enriched, vol_us, vol_kr, sec_rows_display,
                          market_data, fg, insider_rows, inst_overlap,
                          sector_rows, earnings_rows, collected_at,
                          kr_names=flow_data)
