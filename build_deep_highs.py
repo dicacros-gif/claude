@@ -452,6 +452,64 @@ def _fetch_yfinance_one(ticker: str) -> dict:
         except Exception:
             pass
 
+        # 애널리스트 평가 변경 (upgrades/downgrades 30일 이내)
+        rec_changes = ""
+        try:
+            up_dn = tk_obj.upgrades_downgrades
+            if up_dn is not None and not up_dn.empty:
+                from datetime import datetime as _dt3
+                cutoff = _dt3.now().timestamp() - (60 * 86400)
+                # DataFrame index = GradeDate (Timestamp)
+                rows_sorted = up_dn.head(8)  # 최신 8건
+                items = []
+                for idx, row in rows_sorted.iterrows():
+                    try:
+                        ts = idx.timestamp() if hasattr(idx, "timestamp") else 0
+                    except Exception:
+                        ts = 0
+                    if ts < cutoff:
+                        continue
+                    firm = str(row.get("Firm", "") or "")[:18]
+                    action = str(row.get("Action", "") or "")
+                    to_g = str(row.get("ToGrade", "") or "")
+                    from_g = str(row.get("FromGrade", "") or "")
+                    date_str = idx.strftime("%m/%d") if hasattr(idx, "strftime") else ""
+                    if to_g:
+                        if from_g and from_g != to_g:
+                            items.append(f"[{date_str}] {firm}: {from_g}→{to_g}")
+                        else:
+                            items.append(f"[{date_str}] {firm}: {to_g}")
+                    if len(items) >= 4:
+                        break
+                rec_changes = " | ".join(items)
+        except Exception:
+            pass
+
+        # 최근 이익 발표 서프라이즈 (Earnings history)
+        eps_history = ""
+        try:
+            eh = tk_obj.earnings_history
+            if eh is not None and not eh.empty:
+                items = []
+                for idx, row in eh.tail(4).iterrows():
+                    est  = row.get("epsEstimate")
+                    act  = row.get("epsActual")
+                    sur  = row.get("surprisePercent")
+                    if act is not None and est is not None:
+                        try:
+                            sur_s = f"+{sur*100:.1f}%" if sur > 0 else f"{sur*100:.1f}%"
+                        except Exception:
+                            sur_s = ""
+                        items.append(f"{idx.strftime('%y/%m')} EPS {act:.2f}(예상{est:.2f},{sur_s})")
+                eps_history = " | ".join(items[-3:])
+        except Exception:
+            pass
+
+        # 애널리스트 컨센서스 추천도 (1=Strong Buy ~ 5=Strong Sell)
+        rec_mean = _safe(info.get("recommendationMean"))
+        rec_key  = info.get("recommendationKey", "")
+        rec_num_analysts = _safe(info.get("numberOfAnalystOpinions"))
+
         return {
             "yf_forwardPE":        _safe(info.get("forwardPE")),
             "yf_pegRatio":         _safe(info.get("pegRatio")),
@@ -467,6 +525,11 @@ def _fetch_yfinance_one(ticker: str) -> dict:
             "yf_shares":           fi_shares,
             "yf_bizSummary":       biz,
             "yf_recentNews":       recent_news,
+            "yf_recChanges":       rec_changes,
+            "yf_epsHistory":       eps_history,
+            "yf_recMean":          rec_mean,
+            "yf_recKey":           rec_key,
+            "yf_recNumAnalysts":   rec_num_analysts,
         }
     except Exception:
         return {}
@@ -492,6 +555,42 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
     result = {}
     if not _HAS_BS4:
         return result
+
+    def _fetch_naver_news(code: str) -> str:
+        """Naver Finance 종목 뉴스 — 최근 2일 이내 헤드라인 최대 3건."""
+        try:
+            url = f"https://finance.naver.com/item/news_news.naver?code={code}&page=1&sm=title_entity_id.basic&clusterId="
+            r = requests.get(url, timeout=6, verify=False,
+                             headers={"User-Agent": "Mozilla/5.0"})
+            r.encoding = "euc-kr"
+            soup = BeautifulSoup(r.text, "lxml")
+            rows = soup.select("table.type5 tr")
+            from datetime import datetime as _dt4
+            cutoff = _dt4.now() - timedelta(days=2)
+            items = []
+            for tr in rows:
+                title_el = tr.select_one("td.title a")
+                date_el  = tr.select_one("td.date")
+                src_el   = tr.select_one("td.info")
+                if not (title_el and date_el):
+                    continue
+                date_s = date_el.get_text(strip=True).split()[0]
+                try:
+                    dt = _dt4.strptime(date_s, "%Y.%m.%d")
+                except Exception:
+                    continue
+                if dt < cutoff:
+                    continue
+                title = title_el.get_text(strip=True)
+                src   = src_el.get_text(strip=True) if src_el else ""
+                age   = (_dt4.now() - dt).days
+                age_s = "오늘" if age == 0 else f"{age}일전"
+                items.append(f"[{age_s}/{src}] {title[:80]}")
+                if len(items) >= 3:
+                    break
+            return " | ".join(items)
+        except Exception:
+            return ""
 
     def _fetch_one(code: str) -> dict:
         url = f"https://finance.naver.com/item/frgn.naver?code={code}"
@@ -535,6 +634,7 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
             f20 = sum(frgn_vals[:20])  / 1e8
             i5  = sum(inst_vals[:5])   / 1e8
             i20 = sum(inst_vals[:20])  / 1e8
+            news = _fetch_naver_news(code)
             return {
                 "naver_기업명":       kr_name,
                 "외국인_순매수_5일":  f5,
@@ -543,6 +643,7 @@ def fetch_krx_foreign_flow(kr_codes: list) -> dict:
                 "외국인_지분율_변화": None,
                 "기관_순매수_5일":    i5,
                 "기관_순매수_20일":   i20,
+                "naver_최근뉴스":     news,
             }
         except Exception:
             return {}
@@ -914,6 +1015,15 @@ def fetch_famous_manager_rows() -> list[dict]:
         r["포트폴리오비중%"] = round(val / total * 100, 2) if total > 0 else None
 
     save_13f_history(result, DATA_DIR / "13f_history.csv")
+    if not result:
+        # SEC 응답 실패 — 최근 캐시 폴백 (가장 최근 _수집일)
+        cached = _read_csv_as_list(DATA_DIR / "13f_history.csv")
+        if cached:
+            latest_date = max((c.get("_수집일","") for c in cached), default="")
+            if latest_date:
+                fallback = [c for c in cached if c.get("_수집일","") == latest_date]
+                print(f"[13F] 수집 실패 — 캐시 폴백 ({latest_date}, {len(fallback)}건)")
+                return fallback
     return result
 
 
@@ -1004,7 +1114,8 @@ def save_13f_history(rows: list[dict], csv_path: Path):
 # ───────────────────────────────────────────────
 
 def fetch_fear_greed() -> dict:
-    """CNN Fear & Greed Index — curl_cffi 로 봇 감지 우회"""
+    """CNN Fear & Greed Index — curl_cffi 로 봇 감지 우회. 실패시 캐시 폴백."""
+    import json as _json2
     try:
         if _YF_SESSION is not None:
             r = _YF_SESSION.get(
@@ -1016,21 +1127,32 @@ def fetch_fear_greed() -> dict:
                 timeout=8, verify=False,
                 headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
         d = r.json().get("fear_and_greed", {})
-        return {
+        out = {
             "score":    round(float(d.get("score", 0)), 1),
             "rating":   d.get("rating", ""),
             "prev_1w":  round(float(d.get("previous_1_week", 0) or 0), 1),
             "prev_1m":  round(float(d.get("previous_1_month", 0) or 0), 1),
             "prev_1y":  round(float(d.get("previous_1_year", 0) or 0), 1),
         }
+        try:
+            FEAR_GREED_JSON.write_text(_json2.dumps(out, ensure_ascii=False),
+                                       encoding="utf-8")
+        except Exception:
+            pass
+        return out
     except Exception:
+        try:
+            if FEAR_GREED_JSON.exists():
+                return _json2.loads(FEAR_GREED_JSON.read_text(encoding="utf-8"))
+        except Exception:
+            pass
         return {"score": None, "rating": "N/A"}
 
 
 def fetch_yahoo_market() -> list[dict]:
-    """yfinance fast_info 로 주요 시장 지표 수집"""
+    """yfinance fast_info 로 주요 시장 지표 수집. 실패시 캐시 폴백."""
     if not _HAS_YF:
-        return []
+        return _load_csv_cache(MARKET_INDEX_CSV)
     symbols = [
         ("^VIX",     "VIX 공포지수"),
         ("^GSPC",    "S&P500"),
@@ -1069,52 +1191,94 @@ def fetch_yahoo_market() -> list[dict]:
             })
         except Exception:
             continue
-    return out
+    if out:
+        _save_csv_cache(MARKET_INDEX_CSV, out)
+        return out
+    return _load_csv_cache(MARKET_INDEX_CSV)
+
+
+INSIDER_BUYS_CSV    = DATA_DIR / "insider_buys_cache.csv"
+ANALYST_RATINGS_CSV = DATA_DIR / "analyst_ratings_cache.csv"
+MARKET_INDEX_CSV    = DATA_DIR / "market_index_cache.csv"
+SECTOR_PERF_CSV     = DATA_DIR / "sector_perf_cache.csv"
+EARNINGS_CAL_CSV    = DATA_DIR / "earnings_cal_cache.csv"
+FEAR_GREED_JSON     = DATA_DIR / "fear_greed_cache.json"
+
+
+def _save_csv_cache(path: Path, rows: list[dict]):
+    """범용 CSV 캐시 저장 — 빈 rows는 무시 (기존 캐시 유지)."""
+    if not rows:
+        return
+    try:
+        _write_csv(path, rows)
+    except Exception as e:
+        print(f"[캐시저장] {path.name}: {e}")
+
+
+def _load_csv_cache(path: Path) -> list[dict]:
+    """범용 CSV 캐시 로드."""
+    try:
+        return _read_csv_as_list(path)
+    except Exception:
+        return []
 
 
 def fetch_insider_buys() -> list[dict]:
-    """openinsider.com 최근 내부자 매수 (14일 이내, $100K+)"""
+    """openinsider.com 최근 내부자 매수 (14일 이내, $100K+).
+
+    수집 성공 시 캐시 갱신, 실패 시 기존 캐시 반환.
+    """
     if not _HAS_BS4:
-        return []
+        return _load_csv_cache(INSIDER_BUYS_CSV)
     url = ("http://openinsider.com/screener?"
            "s=&o=&pl=10&ph=&ll=&lh=&fd=14&fdr=&td=0&tdr=&xp=1&vl=100"
            "&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0"
            "&sortcol=0&cnt=40&page=1")
     try:
-        r = requests.get(url, timeout=10, verify=False,
-                         headers={"User-Agent": "Mozilla/5.0"})
+        r = requests.get(url, timeout=15, verify=False,
+                         headers={"User-Agent":
+                                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                                  "AppleWebKit/537.36"})
+        if r.status_code != 200:
+            print(f"[내부자] HTTP {r.status_code} — 캐시 폴백")
+            return _load_csv_cache(INSIDER_BUYS_CSV)
         soup = BeautifulSoup(r.text, "lxml")
         tbl  = soup.select_one("table.tinytable")
         if not tbl:
-            return []
+            return _load_csv_cache(INSIDER_BUYS_CSV)
         hdrs = [th.get_text(strip=True) for th in tbl.select("thead th")]
         rows = []
-        for tr in tbl.select("tbody tr")[:40]:
+        for tr in tbl.select("tbody tr")[:60]:
             tds = [td.get_text(strip=True) for td in tr.select("td")]
             if len(tds) < 8:
                 continue
             d = dict(zip(hdrs, tds))
             rows.append({
-                "신고일":   d.get("Filing\xa0Date", d.get("X", "")),
+                "신고일":   d.get("Filing\xa0Date") or d.get("Filing Date") or "",
+                "거래일":   d.get("Trade\xa0Date")  or d.get("Trade Date")  or "",
                 "티커":     d.get("Ticker", ""),
-                "회사명":   d.get("Company Name", ""),
-                "임원명":   d.get("Insider Name", ""),
+                "회사명":   d.get("Company\xa0Name") or d.get("Company Name") or "",
+                "임원명":   d.get("Insider\xa0Name") or d.get("Insider Name") or "",
                 "직책":     d.get("Title", ""),
-                "거래유형": d.get("Trade Type", ""),
+                "거래유형": d.get("Trade\xa0Type")   or d.get("Trade Type")   or "",
                 "가격":     d.get("Price", ""),
                 "수량":     d.get("Qty", ""),
                 "거래금액": d.get("Value", ""),
                 "보유주식": d.get("Owned", ""),
             })
-        return rows
-    except Exception:
-        return []
+        if rows:
+            _save_csv_cache(INSIDER_BUYS_CSV, rows)
+            return rows
+        return _load_csv_cache(INSIDER_BUYS_CSV)
+    except Exception as e:
+        print(f"[내부자] 예외: {e} — 캐시 폴백")
+        return _load_csv_cache(INSIDER_BUYS_CSV)
 
 
 def fetch_sector_performance() -> list[dict]:
-    """미국 섹터 ETF 성과 (XLK, XLF, XLE 등)"""
+    """미국 섹터 ETF 성과 (XLK, XLF, XLE 등). 실패시 캐시 폴백."""
     if not _HAS_YF:
-        return []
+        return _load_csv_cache(SECTOR_PERF_CSV)
     sectors = [
         ("XLK", "기술"),  ("XLF", "금융"),  ("XLE", "에너지"),
         ("XLV", "헬스케어"),("XLI", "산업"), ("XLY", "소비재"),
@@ -1148,13 +1312,16 @@ def fetch_sector_performance() -> list[dict]:
             })
         except Exception:
             continue
-    return out
+    if out:
+        _save_csv_cache(SECTOR_PERF_CSV, out)
+        return out
+    return _load_csv_cache(SECTOR_PERF_CSV)
 
 
 def fetch_earnings_calendar() -> list[dict]:
-    """향후 2주 실적 발표 예정 종목 (TradingView 52주 신고가 목록 기반)"""
+    """향후 2주 실적 발표 예정 종목 (TradingView 52주 신고가 목록 기반). 실패시 캐시 폴백."""
     if not _HAS_YF:
-        return []
+        return _load_csv_cache(EARNINGS_CAL_CSV)
     # 52주 신고가 목록에서 티커 추출해 실적일 확인
     # TV 결과가 없을 때는 주요 대형주 고정 목록 사용
     watch = ["AAPL","MSFT","NVDA","GOOGL","AMZN","META","TSLA",
@@ -1186,7 +1353,10 @@ def fetch_earnings_calendar() -> list[dict]:
         except Exception:
             continue
     rows.sort(key=lambda x: x.get("실적일",""))
-    return rows
+    if rows:
+        _save_csv_cache(EARNINGS_CAL_CSV, rows)
+        return rows
+    return _load_csv_cache(EARNINGS_CAL_CSV)
 
 
 # ───────────────────────────────────────────────
@@ -1679,8 +1849,17 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
         # 사업개요
         "사업개요": yf.get("yf_bizSummary") or raw.get("fnguide_사업개요") or "",
 
-        # 최근뉴스 (1-2일 내)
-        "최근뉴스": yf.get("yf_recentNews") or "",
+        # 최근뉴스 (1-2일 내) — KR은 Naver, US는 yfinance
+        "최근뉴스":         (flw.get("naver_최근뉴스") if country == "KR"
+                              else yf.get("yf_recentNews")) or "",
+        # 애널리스트 평가 변경 (최근 60일)
+        "애널리스트_평가변경": yf.get("yf_recChanges") or "",
+        # EPS 히스토리 (최근 4분기)
+        "EPS_히스토리":      yf.get("yf_epsHistory") or "",
+        # 애널리스트 컨센서스 추천도
+        "추천도_평균":        yf.get("yf_recMean"),
+        "추천도_라벨":        yf.get("yf_recKey") or "",
+        "애널리스트_수":      yf.get("yf_recNumAnalysts"),
 
         # 최초수집일·추적일수·신고가여부
         "최초수집일": first_seen.get(ticker, _NOW.strftime("%Y-%m-%d")),
@@ -2033,6 +2212,7 @@ _GROWTH_COLS = {
 _WRAP_COLS   = {"수급_종합해석","신고가_정량해석","미래_컨센서스_긍정요인",
                 "리스크_확인사항","장기투자_체크리스트","사업개요","미래산업근거","해외확장근거",
                 "수출_해설","최근리포트제목","최근뉴스",
+                "애널리스트_평가변경","EPS_히스토리",
                 "신규기관","증가기관","기관목록"}
 _SCORE_COLS  = {
     "투자우선점수","밸류점수","성장점수","품질점수","현금흐름점수",
@@ -2499,6 +2679,8 @@ US_DETAIL_HEADERS = [
     "EPS_서프라이즈%","매출_서프라이즈%","공매도비율%","공매도_일수",
     # 배당·자사주
     "배당수익률%","자사주매입수익률%",
+    # 애널리스트 평가 (yfinance upgrades/downgrades)
+    "추천도_평균","추천도_라벨","애널리스트_수","애널리스트_평가변경","EPS_히스토리",
     # 텍스트 분석 (수집·생성 데이터 전부)
     "신고가_정량해석","미래_컨센서스_긍정요인","리스크_확인사항","수급_종합해석","최근뉴스","사업개요",
 ]
@@ -2527,6 +2709,8 @@ KR_DETAIL_HEADERS = [
     # FnGuide 컨센서스 (한국 전용)
     "컨센서스_증권사수","최근리포트의견","최근리포트증권사","최근리포트일","최근리포트제목",
     "목표가평균","목표가최고","목표가최저","목표가상승여력%",
+    # 애널리스트 평가 (해외 ADR/공통)
+    "추천도_평균","추천도_라벨","애널리스트_수","애널리스트_평가변경","EPS_히스토리",
     # 텍스트 분석
     "신고가_정량해석","미래_컨센서스_긍정요인","리스크_확인사항","수급_종합해석","최근뉴스","사업개요",
 ]
