@@ -2,8 +2,11 @@ name: Daily Stock Analysis
 
 on:
   schedule:
-    # 22:00 UTC = 07:00 KST (다음날)
-    - cron: '0 22 * * *'
+    # 미국장 종료 후 데이터 안정화 기다림
+    # 00:00 UTC = 09:00 KST (다음날)
+    # EDT(3~11월): 미국장 16:00 ET = 20:00 UTC → 4시간 버퍼
+    # EST(11~3월): 미국장 16:00 ET = 21:00 UTC → 3시간 버퍼
+    - cron: '0 0 * * *'
   workflow_dispatch:   # 수동 실행 허용
 
 permissions:

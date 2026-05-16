@@ -322,6 +322,30 @@ def _tv_scan(market: str, filters: list, sort_by: str = "market_cap_basic",
         return []
 
 
+def fetch_tradingview_by_tickers(tickers: list[str]) -> list[dict]:
+    """특정 티커 리스트로 TradingView 데이터를 조회.
+
+    persistent universe (어제 추적했지만 오늘 신고가 아닌 종목)의 시세·펀더멘털을
+    최신화하기 위해 사용. 미국/한국 자동 라우팅.
+    """
+    if not tickers:
+        return []
+    us_tk = [t for t in tickers if not (t.startswith("KRX:") or t.startswith("KOSDAQ:"))]
+    kr_tk = [t for t in tickers if t.startswith("KRX:") or t.startswith("KOSDAQ:")]
+    out: list[dict] = []
+    for market, tks in (("america", us_tk), ("korea", kr_tk)):
+        if not tks:
+            continue
+        # 200개 단위로 분할
+        for i in range(0, len(tks), 200):
+            chunk = tks[i:i+200]
+            filters = [{"left": "name", "operation": "in_range",
+                        "right": [t.split(":")[-1] for t in chunk]}]
+            rows = _tv_scan(market, filters, range_end=len(chunk))
+            out.extend(rows)
+    return out
+
+
 def fetch_tradingview_highs(market: str) -> list[dict]:
     """52주 신고가 = 현재가가 52주 최고가와 같은 종목"""
     filters = [
@@ -397,6 +421,37 @@ def _fetch_yfinance_one(ticker: str) -> dict:
         # html 엔티티 정규화
         biz = _html.unescape(biz)
 
+        # 최근 뉴스 (1-2일 내) — yfinance Ticker.news
+        recent_news = ""
+        try:
+            news_items = tk_obj.news or []
+            from datetime import datetime as _dt2
+            now_ts = _dt2.now().timestamp()
+            two_days_ago = now_ts - (2 * 86400)
+            fresh = []
+            for n in news_items[:10]:
+                # yfinance 신구 포맷 모두 지원
+                title = (n.get("title")
+                         or n.get("content", {}).get("title", ""))
+                pub_ts = (n.get("providerPublishTime")
+                          or n.get("content", {}).get("pubDate", 0))
+                if isinstance(pub_ts, str):
+                    try:
+                        pub_ts = _dt2.fromisoformat(
+                            pub_ts.replace("Z","+00:00")
+                        ).timestamp()
+                    except Exception:
+                        pub_ts = 0
+                if title and pub_ts >= two_days_ago:
+                    days_ago = max(0, int((now_ts - pub_ts) / 86400))
+                    age = "오늘" if days_ago == 0 else f"{days_ago}일전"
+                    fresh.append(f"[{age}] {_html.unescape(title)[:100]}")
+                if len(fresh) >= 3:
+                    break
+            recent_news = " | ".join(fresh)
+        except Exception:
+            pass
+
         return {
             "yf_forwardPE":        _safe(info.get("forwardPE")),
             "yf_pegRatio":         _safe(info.get("pegRatio")),
@@ -411,6 +466,7 @@ def _fetch_yfinance_one(ticker: str) -> dict:
             "yf_mktcap":           fi_mktcap,
             "yf_shares":           fi_shares,
             "yf_bizSummary":       biz,
+            "yf_recentNews":       recent_news,
         }
     except Exception:
         return {}
@@ -581,15 +637,58 @@ def _save_cusip_cache(cache: dict[str, str]) -> None:
         pass
 
 
+# 13F 빈출 CUSIP 정적 매핑 — OpenFIGI 미응답 시 폴백
+# 미국 시가총액 상위 종목 + 유명 펀드 빈출 보유 종목 기준
+_STATIC_CUSIP_MAP = {
+    "037833100":"AAPL","594918104":"MSFT","023135106":"AMZN",
+    "67066G104":"NVDA","02079K305":"GOOG","02079K107":"GOOGL",
+    "30303M102":"META","88160R101":"TSLA","11135F101":"BRK.B",
+    "084670702":"BRK.B","084670108":"BRK.A","91324P102":"UNH",
+    "92826C839":"V","57636Q104":"MA","478160104":"JNJ",
+    "742718109":"PG","742718208":"PG","00287Y109":"ABBV",
+    "46625H100":"JPM","17275R102":"CSCO","166764100":"CVX",
+    "30231G102":"XOM","532457108":"LLY","79466L302":"CRM",
+    "874039100":"TXN","458140100":"INTC","68389X105":"ORCL",
+    "00206R102":"T","58933Y105":"MRK","716941104":"PFE",
+    "037411105":"AMD","20825C104":"COP","20030N101":"CMCSA",
+    "00130H105":"NEE","007903107":"AMR","254687106":"DIS",
+    "92343V104":"VZ","580135101":"MCD","191216100":"KO",
+    "717081103":"PEP","87612E106":"TGT","931142103":"WMT",
+    "742718IP1":"PG","02079K10":"GOOGL","49271V100":"KEYS",
+    "G0750C108":"BABA","00287Y10":"ABBV","78462F103":"SPY",
+    "92826C83":"V","81141R100":"SCHW","911312106":"UPS",
+    "92556H206":"VICI","L8681T102":"TSM","N07059210":"ASML",
+    "G06242104":"BLK","370334104":"GS","060505104":"BAC",
+    "949746101":"WFC","00724F101":"ADBE","68389X10":"ORCL",
+    "G2519Y108":"COIN","68902V107":"OXY","127190304":"CAH",
+    "025537101":"AAL","254709108":"DIS","375558103":"GLD",
+    "29786A106":"ETSY","30161N101":"AAL","375558206":"GLD",
+    "G2554F113":"SPOT","458140208":"INTC","741503403":"PSA",
+    "595112103":"MID","002824100":"ABT","254709309":"DIS",
+    "20825C10":"COP","00724F10":"ADBE","56035L104":"ROST",
+    "70450Y103":"PYPL","82968B103":"SIRI","16934Q205":"CHK",
+    "747525103":"QCOM","747525203":"QCOM","68233D106":"OMC",
+    "00206R10":"T","742718IP":"PG","30303M10":"META",
+    "74739P101":"PRU","91912E105":"VLO","532457104":"LLY",
+    "53807F108":"LBRDA","260543103":"DRI","743315103":"PG",
+    "G7945E105":"RYAAY","11135F10":"BRK.B","11135F40":"BRK.B",
+}
+
+
 def _resolve_cusips(cusips: list[str]) -> dict[str, str]:
     """OpenFIGI API로 CUSIP → 티커 변환 (배치 25개, 캐시 우선).
 
     무료 티어: 25개/요청, ~5 req/min → 2초 딜레이.
     최초 실행 시 최대 200개 조회; 이후 캐시로 즉시 처리.
+    실패 시 _STATIC_CUSIP_MAP 폴백.
     """
     cache = _load_cusip_cache()
+    # 정적 매핑 선반영
+    for c, tk in _STATIC_CUSIP_MAP.items():
+        if c not in cache or not cache.get(c):
+            cache[c] = tk
     unknown = list(dict.fromkeys(
-        c for c in cusips if c and c not in cache
+        c for c in cusips if c and not cache.get(c)
     ))[:200]
 
     if unknown:
@@ -832,7 +931,15 @@ def fetch_institutional_overlap(all_holdings: list[dict]) -> list[dict]:
     })
     for h in all_holdings:
         tk = h.get("티커", "")
-        if not tk or re.fullmatch(r"\d{6}", tk):
+        # 유효한 티커만 (CUSIP-스타일 8~9자리 숫자, 한국 6자리 숫자 제외)
+        if not tk:
+            continue
+        if re.fullmatch(r"\d{6,9}", tk):
+            continue
+        if re.fullmatch(r"[0-9]{1,3}[A-Z]{1,3}[0-9]{0,3}", tk):
+            # CUSIP 잔여 패턴 (예: 037833100)
+            continue
+        if len(tk) > 8:  # 정상 티커는 최대 6자
             continue
         d   = ticker_map[tk]
         mgr = h.get("기관명", "")
@@ -1359,16 +1466,18 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
     country = raw.get("_country", "")
     bare_code = _bare_kr_code(ticker)
 
-    # 가격/시총 필터
+    # 가격/시총 필터 (persistent 행은 면제)
     close  = _safe(raw.get("close"), 0.0) or 0.0
     mktcap = _safe(raw.get("market_cap_basic"), 0.0) or 0.0
+    is_persistent = bool(raw.get("_persistent"))
 
-    if country == "US":
-        if close < MIN_PRICE_USD or mktcap < MIN_MKTCAP_USD:
-            return None
-    else:
-        if close < MIN_PRICE_KRW or mktcap < MIN_MKTCAP_KRW:
-            return None
+    if not is_persistent:
+        if country == "US":
+            if close < MIN_PRICE_USD or mktcap < MIN_MKTCAP_USD:
+                return None
+        else:
+            if close < MIN_PRICE_KRW or mktcap < MIN_MKTCAP_KRW:
+                return None
 
     yf  = yf_data.get(ticker, {})
     flw = flow_data.get(bare_code, {})
@@ -1384,6 +1493,7 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
                 or bare_code)
     else:
         name = desc or ticker
+    name = _truncate_name(name, 36)
 
     # 52주 위치
     hi52 = _safe(raw.get("price_52_week_high"), close) or close
@@ -1569,8 +1679,17 @@ def enrich_row(raw: dict, yf_data: dict, flow_data: dict,
         # 사업개요
         "사업개요": yf.get("yf_bizSummary") or raw.get("fnguide_사업개요") or "",
 
-        # 최초수집일
+        # 최근뉴스 (1-2일 내)
+        "최근뉴스": yf.get("yf_recentNews") or "",
+
+        # 최초수집일·추적일수·신고가여부
         "최초수집일": first_seen.get(ticker, _NOW.strftime("%Y-%m-%d")),
+        "신고가여부": "Y" if (
+            close > 0 and hi52 > 0 and abs(close - hi52) / hi52 < 0.005
+        ) else "N",
+        "추적상태": "신규" if is_persistent and ticker not in first_seen
+                      else "추적중" if is_persistent
+                      else "오늘신고가",
     }
 
     # 수출 점수 계산
@@ -1782,6 +1901,41 @@ def load_first_seen(csv_path: Path) -> dict[str, str]:
     return first
 
 
+def load_persistent_universe(csv_path: Path, lookback_days: int = 14) -> list[dict]:
+    """기존 추적 종목 유니버스 로드 — 최근 N일 내 한 번이라도 수집된 종목 반환.
+
+    각 종목당 최신 행(가장 최근 수집일) 1개씩 반환. _ticker, _country, 기업명 등 기본 필드 포함.
+    오늘 TV 신고가에 없어도 기존 종목은 데이터 업데이트 대상으로 유지.
+    """
+    rows = _read_csv_as_list(csv_path)
+    if not rows:
+        return []
+    cutoff = (datetime.now() - timedelta(days=lookback_days)).strftime("%Y-%m-%d")
+    latest: dict[str, dict] = {}
+    for r in rows:
+        tk = r.get("_ticker", "")
+        dt = r.get("수집일", "")
+        if not tk or not dt:
+            continue
+        if dt < cutoff:
+            continue
+        if tk not in latest or dt > latest[tk].get("수집일", ""):
+            latest[tk] = r
+    out = []
+    for tk, r in latest.items():
+        country = r.get("국가", "")
+        if country not in ("US", "KR"):
+            country = "KR" if tk.startswith(("KRX:", "KOSDAQ:")) else "US"
+        out.append({
+            "_ticker": tk,
+            "_country": country,
+            "description": r.get("기업명", ""),
+            "_persistent": True,
+            "_first_seen": r.get("최초수집일") or r.get("수집일", ""),
+        })
+    return out
+
+
 # ───────────────────────────────────────────────
 # 섹션 7: HTML 생성
 # ───────────────────────────────────────────────
@@ -1878,7 +2032,7 @@ _GROWTH_COLS = {
 }
 _WRAP_COLS   = {"수급_종합해석","신고가_정량해석","미래_컨센서스_긍정요인",
                 "리스크_확인사항","장기투자_체크리스트","사업개요","미래산업근거","해외확장근거",
-                "수출_해설","최근리포트제목",
+                "수출_해설","최근리포트제목","최근뉴스",
                 "신규기관","증가기관","기관목록"}
 _SCORE_COLS  = {
     "투자우선점수","밸류점수","성장점수","품질점수","현금흐름점수",
@@ -1890,6 +2044,39 @@ _SCORE_COLS  = {
 def _esc(s: object) -> str:
     """HTML 이스케이프 — 이미 이스케이프된 엔티티를 먼저 풀고 재처리해 이중 이스케이프 방지."""
     return _html.escape(_html.unescape(str(s)), quote=True)
+
+
+def _truncate_name(name: str, max_len: int = 36) -> str:
+    """긴 기업명 정제 — 후미 부가설명 제거, 길면 말줄임.
+
+    예: 'NextEra Energy, Inc. Corporate Unit Const of 1 Deb...' →
+         'NextEra Energy, Inc.'
+    """
+    if not name or not isinstance(name, str):
+        return name or ""
+    s = _html.unescape(name).strip()
+    # 후미 부가설명을 잘라낼 키워드 (수식어/사채/우선주 등)
+    _CUT = (" Corporate Unit", " Corp Unit", " Const of",
+            " Composed of", " Cons of", " Deb 1", " Debenture",
+            " Preferred Stock", " Pref Stk", " Series ",
+            " Notes due", " Warrant", " Right ", " - Class ")
+    for kw in _CUT:
+        idx = s.find(kw)
+        if idx > 0:
+            s = s[:idx].rstrip(" ,;")
+            break
+    # 마지막 ", Inc." 직후로 컷
+    for marker in (", Inc.", ", Ltd.", ", LLC", " Inc.", " Ltd.", " Corp."):
+        idx = s.find(marker)
+        if 0 < idx < max_len:
+            cut_at = idx + len(marker)
+            if cut_at + 5 < len(s):
+                s = s[:cut_at]
+                break
+    if len(s) <= max_len:
+        return s
+    cut = s[:max_len].rsplit(" ", 1)[0]
+    return (cut or s[:max_len]).rstrip(" ,;") + "…"
 
 
 def _fmt_val(v: object) -> str:
@@ -2313,7 +2500,7 @@ US_DETAIL_HEADERS = [
     # 배당·자사주
     "배당수익률%","자사주매입수익률%",
     # 텍스트 분석 (수집·생성 데이터 전부)
-    "신고가_정량해석","미래_컨센서스_긍정요인","리스크_확인사항","수급_종합해석","사업개요",
+    "신고가_정량해석","미래_컨센서스_긍정요인","리스크_확인사항","수급_종합해석","최근뉴스","사업개요",
 ]
 
 # 신고가_한국: 한국 전용 상세 — FnGuide·Naver 고유 데이터 포함
@@ -2341,7 +2528,7 @@ KR_DETAIL_HEADERS = [
     "컨센서스_증권사수","최근리포트의견","최근리포트증권사","최근리포트일","최근리포트제목",
     "목표가평균","목표가최고","목표가최저","목표가상승여력%",
     # 텍스트 분석
-    "신고가_정량해석","미래_컨센서스_긍정요인","리스크_확인사항","수급_종합해석","사업개요",
+    "신고가_정량해석","미래_컨센서스_긍정요인","리스크_확인사항","수급_종합해석","최근뉴스","사업개요",
 ]
 
 DETAIL_HEADERS = US_DETAIL_HEADERS  # 하위 호환
@@ -2707,8 +2894,14 @@ def _make_13f_html(sec_rows: list[dict]) -> str:
     company_map: dict[str, list[dict]] = defaultdict(list)
     for r in sec_rows:
         tk = r.get("티커","") or r.get("종목명","")
-        if tk and not re.fullmatch(r"\d{6}", tk):
-            company_map[tk].append(r)
+        if not tk:
+            continue
+        # 한국 6자리, CUSIP 8~9자리 숫자, 비정상 길이 제외
+        if re.fullmatch(r"\d{6,9}", tk):
+            continue
+        if len(tk) > 8:
+            continue
+        company_map[tk].append(r)
 
     _chg_order = {"신규": 0, "증가": 1, "유지": 2, "감소": 3}
     _chg_color  = {
@@ -2734,9 +2927,18 @@ def _make_13f_html(sec_rows: list[dict]) -> str:
         reverse=True,
     )
 
-    sections = []
+    # 상단: 신규/증가/유지 위주 (score>=0) — 매수·홀딩 컨센서스 종목
+    # 하단: 감소·청산만 있는 종목 (score<0) — 매도 컨센서스
+    positive_companies, negative_companies = [], []
     for tk, holdings in ranked:
-        name   = holdings[0].get("종목명","") or tk
+        score, _, _ = _company_score(holdings)
+        if score >= 0:
+            positive_companies.append((tk, holdings))
+        else:
+            negative_companies.append((tk, holdings))
+
+    def _render_one(tk, holdings):
+        name   = _truncate_name(holdings[0].get("종목명","") or tk, 40)
         score, n_inst, total_val = _company_score(holdings)
         n_new  = sum(1 for h in holdings if h.get("포지션변화") == "신규")
         n_inc  = sum(1 for h in holdings if h.get("포지션변화") == "증가")
@@ -2828,13 +3030,13 @@ def _make_13f_html(sec_rows: list[dict]) -> str:
             f'<th style="padding:4px 8px;text-align:right;">보유가치</th>'
             f'<th style="padding:4px 8px;text-align:right;">주식수</th>'
             f'<th style="padding:4px 8px;text-align:right;">전분기주식수</th>'
-            f'<th style="padding:4px 8px;text-align:center;">보고일</th>'
+            f'<th style="padding:4px 8px;text-align:center;">13F신고일</th>'
             f'</tr></thead>'
             f'<tbody>{"".join(row_html)}</tbody>'
             f'</table>'
         )
 
-        sections.append(
+        return (
             f'<div style="margin-bottom:18px;border:1px solid #CBD5E1;border-radius:6px;overflow:hidden;">'
             f'<div style="background:{hdr_bg};color:#fff;padding:7px 12px;'
             f'display:flex;gap:10px;align-items:center;flex-wrap:wrap;">'
@@ -2850,7 +3052,30 @@ def _make_13f_html(sec_rows: list[dict]) -> str:
             f'</div>'
         )
 
-    return "".join(sections) if sections else '<div class="empty-msg">13F 데이터 없음</div>'
+    out = []
+    if positive_companies:
+        out.append(
+            '<div style="margin:0 0 12px 0;padding:8px 12px;background:#E8F5E9;'
+            'border-left:4px solid #1B5E20;border-radius:4px;">'
+            '<span style="font-weight:900;color:#1B5E20;font-size:0.95rem;">'
+            f'🟢 매수·홀딩 컨센서스 ({len(positive_companies)}개)</span> '
+            '<span style="color:#555;font-size:0.78rem;">'
+            '신규/증가 기관 우세 — 컨센서스 점수 ≥ 0</span></div>'
+        )
+        out.extend(_render_one(tk, h) for tk, h in positive_companies)
+
+    if negative_companies:
+        out.append(
+            '<div style="margin:20px 0 12px 0;padding:8px 12px;background:#FFEBEE;'
+            'border-left:4px solid #B71C1C;border-radius:4px;">'
+            '<span style="font-weight:900;color:#B71C1C;font-size:0.95rem;">'
+            f'🔴 매도·청산 컨센서스 ({len(negative_companies)}개)</span> '
+            '<span style="color:#555;font-size:0.78rem;">'
+            '감소·청산 기관 우세 — 컨센서스 점수 &lt; 0</span></div>'
+        )
+        out.extend(_render_one(tk, h) for tk, h in negative_companies)
+
+    return "".join(out) if out else '<div class="empty-msg">13F 데이터 없음</div>'
 
 
 _HTML_CSS = '''
@@ -3348,6 +3573,7 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
             nm = (_KNOWN_KR_NAMES.get(code)
                   or flow.get("naver_기업명", "")
                   or nm)
+        nm = _truncate_name(nm, 36)
 
         # 52주 위치 계산 (TV 원시 데이터에서)
         hi52  = r.get("price_52_week_high") or 0
@@ -3474,8 +3700,35 @@ def main():
     vol_kr = fetch_tradingview_volume_surge("korea")
     print(f"    US: {len(vol_us)}개, KR: {len(vol_kr)}개")
 
+    # 2a. Persistent universe — 최근 14일 추적 종목 중 오늘 신고가에 없는 것
+    print("[2a] persistent universe 로드...")
+    persistent_seed = load_persistent_universe(ENRICHED_HIGH_CSV, lookback_days=14)
+    today_tickers = {r["_ticker"] for r in all_raw}
+    missing_tk = [p["_ticker"] for p in persistent_seed
+                  if p["_ticker"] not in today_tickers]
+    if missing_tk:
+        # TV에서 최신 시세·펀더멘털 재조회
+        refreshed = fetch_tradingview_by_tickers(missing_tk)
+        refresh_map = {r["_ticker"]: r for r in refreshed}
+        for p in persistent_seed:
+            tk = p["_ticker"]
+            if tk in today_tickers:
+                continue
+            tv_r = refresh_map.get(tk)
+            if not tv_r:
+                continue
+            tv_r["_country"] = p["_country"]
+            tv_r["_persistent"] = True
+            tv_r["_first_seen"] = p.get("_first_seen", "")
+            all_raw.append(tv_r)
+        print(f"    추가 추적: {len(missing_tk)}개 시도, "
+              f"갱신 성공 {sum(1 for t in missing_tk if t in refresh_map)}개")
+
     # 2. 가격/시총 1차 필터
     def _pass_filter(r: dict) -> bool:
+        # persistent 행은 가격필터 면제 (시총 떨어져도 추적 유지)
+        if r.get("_persistent"):
+            return True
         close  = _safe(r.get("close"), 0.0) or 0.0
         mktcap = _safe(r.get("market_cap_basic"), 0.0) or 0.0
         if r["_country"] == "US":
