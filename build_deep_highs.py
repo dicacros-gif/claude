@@ -2491,17 +2491,27 @@ def _write_csv(path: Path, rows: list[dict]):
 
 
 def update_daily_history(rows: list[dict], csv_path: Path):
+    """신고가 히스토리 누적 — 기존 행 절대 삭제하지 않음.
+
+    (수집일, _ticker) 복합키로 dedupe. 같은 키만 오늘 데이터로 덮어쓰고,
+    과거 날짜의 모든 행은 100% 보존.
+    """
     today = _NOW.strftime("%Y-%m-%d")
     existing = _read_csv_as_list(csv_path)
+    existing_count = len(existing)
     idx: dict[str, dict] = {}
     for r in existing:
         key = f"{r.get('수집일', '')}|{r.get('_ticker', '')}"
-        idx[key] = r
+        if r.get("_ticker"):
+            idx[key] = r
 
     for r in rows:
-        key = f"{today}|{r.get('_ticker', '')}"
+        tk = r.get("_ticker", "")
+        if not tk:
+            continue
+        key = f"{today}|{tk}"
         # 기업명 오염 정리
-        bare = _bare_kr_code(r.get("_ticker", ""))
+        bare = _bare_kr_code(tk)
         nm = str(r.get("기업명", ""))
         if nm.lower() in _INVALID_KR_NAMES and bare in _KNOWN_KR_NAMES:
             r["기업명"] = _KNOWN_KR_NAMES[bare]
@@ -2509,6 +2519,12 @@ def update_daily_history(rows: list[dict], csv_path: Path):
 
     merged = sorted(idx.values(),
                     key=lambda x: (x.get("수집일", ""), x.get("_ticker", "")))
+
+    # 안전 가드: 누적 데이터가 줄어드는 경우는 절대 발생하지 않아야 함
+    if len(merged) < existing_count:
+        print(f"[WARN] update_daily_history: 행 감소 감지 ({existing_count} → "
+              f"{len(merged)}). 쓰기 중단하고 기존 파일 보존.")
+        return
     _write_csv(csv_path, merged)
 
 
@@ -4696,11 +4712,12 @@ def main():
     vol_kr = fetch_tradingview_volume_surge("korea")
     print(f"    US: {len(vol_us)}개, KR: {len(vol_kr)}개")
 
-    # 2a. Persistent universe — 모든 과거 추적 종목 영구 누적 (최대 1000개)
-    print("[2a] persistent universe 로드 (영구 누적)...")
+    # 2a. Persistent universe — 모든 과거 추적 종목 영구 누적 (캡 없음)
+    print("[2a] persistent universe 로드 (영구 누적, 무제한)...")
     persistent_seed = load_persistent_universe(ENRICHED_HIGH_CSV,
                                                 lookback_days=None,
-                                                max_tickers=1000)
+                                                max_tickers=10000)
+    print(f"    과거 누적 추적 종목: {len(persistent_seed)}개")
     today_tickers = {r["_ticker"] for r in all_raw}
     missing_tk = [p["_ticker"] for p in persistent_seed
                   if p["_ticker"] not in today_tickers]
@@ -4771,9 +4788,39 @@ def main():
             enriched.append(row)
     print(f"    처리 완료: {len(enriched)}개")
 
-    # 6. CSV 히스토리 저장
-    print("[6] CSV 히스토리 저장...")
+    # 5a. 누적 보존 — TV 응답 실패한 과거 추적 종목을 히스토리에서 복원
+    # 과거에 한 번이라도 신고가에 잡혔던 종목은 절대 사라지지 않음
+    today_str = _NOW.strftime("%Y-%m-%d")
+    enriched_tickers = {r.get("_ticker", "") for r in enriched if r.get("_ticker")}
+    seed_lookup = {p.get("_ticker", ""): p for p in persistent_seed}
+    restored = 0
+    for ptk, p_raw in seed_lookup.items():
+        if ptk in enriched_tickers:
+            continue
+        # persistent_seed의 raw는 TV 형식 (close, exchange 등) — 과거 enriched CSV에서 변환
+        # 히스토리 CSV에서 가장 최근 enriched 행을 가져와 오늘 행으로 보존
+        # → 정량 데이터는 stale하지만 종목 자체는 추적 유지
+        hist_rows = _read_csv_as_list(ENRICHED_HIGH_CSV)
+        latest = None
+        for h in hist_rows:
+            if h.get("_ticker") == ptk:
+                if latest is None or (h.get("수집일", "") > latest.get("수집일", "")):
+                    latest = h
+        if latest:
+            preserved = dict(latest)
+            preserved["수집일"] = today_str
+            preserved["_persistent_stale"] = "Y"  # stale 표시
+            enriched.append(preserved)
+            restored += 1
+    if restored > 0:
+        print(f"    누적 보존 (TV 응답 실패 종목 히스토리 복원): {restored}개")
+
+    # 6. CSV 히스토리 저장 — 누적 (기존 행 절대 삭제 안함)
+    print("[6] CSV 히스토리 저장 (누적)...")
+    _before = len(_read_csv_as_list(ENRICHED_HIGH_CSV))
     update_daily_history(enriched, ENRICHED_HIGH_CSV)
+    _after = len(_read_csv_as_list(ENRICHED_HIGH_CSV))
+    print(f"    누적 행수: {_before} → {_after} (누적 +{_after - _before})")
     flow_recs = build_flow_history_records(enriched)
     save_flow_history(flow_recs, FLOW_HISTORY_CSV)
 
