@@ -4883,6 +4883,19 @@ def main():
                          kr_names=flow_data)
     out  = write_html(html, OUTPUT_HTML)
     print(f"    저장: {out}")
+
+    # 9. 실행 heartbeat 기록 — 매일 실행 확인용
+    try:
+        hb_path = DATA_DIR / "last_run.txt"
+        hb_path.write_text(
+            f"{_NOW.strftime('%Y-%m-%d %H:%M:%S KST')} | "
+            f"enriched={len(enriched)} | sec_rows={len(sec_rows_display)} | "
+            f"inst_overlap={len(inst_overlap)} | size={out.stat().st_size // 1024}KB\n",
+            encoding="utf-8",
+        )
+    except Exception as _e:
+        print(f"[heartbeat] 기록 실패: {_e}")
+
     print(f"[딥다이브] 완료. 총 {len(enriched)}개 종목 | 파일: {out.stat().st_size // 1024}KB")
 
 

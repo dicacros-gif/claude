@@ -2,15 +2,20 @@ name: Daily Stock Analysis
 
 on:
   schedule:
-    # 미국장 종료 후 데이터 안정화 기다림
-    # 00:00 UTC = 09:00 KST (다음날)
-    # EDT(3~11월): 미국장 16:00 ET = 20:00 UTC → 4시간 버퍼
-    # EST(11~3월): 미국장 16:00 ET = 21:00 UTC → 3시간 버퍼
-    - cron: '0 0 * * *'
+    # 다중 cron — GitHub Actions cron은 지연/누락 가능성 있어 백업 슬롯 추가
+    # 신고가 누적 보존이 최우선 — 같은 날 여러 번 실행되어도 dedup으로 안전
+    - cron: '0 0 * * *'    # 09:00 KST (primary, 미국장 종료 + 4시간 버퍼)
+    - cron: '0 4 * * *'    # 13:00 KST (1차 fallback)
+    - cron: '0 10 * * *'   # 19:00 KST (2차 fallback, KR 장중 데이터)
   workflow_dispatch:   # 수동 실행 허용
 
 permissions:
   contents: write
+
+# 같은 워크플로우 동시 실행 방지
+concurrency:
+  group: daily-stock-analysis
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -20,6 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -30,21 +37,50 @@ jobs:
       - name: Install dependencies
         run: pip install --upgrade pip && pip install -r requirements.txt
 
+      - name: Pull latest (avoid push conflict)
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main || echo "Pull skipped"
+
       - name: Run build_deep_highs
+        id: build
         env:
           PYTHONHTTPSVERIFY: "0"
           PYTHONIOENCODING: "utf-8"
           TZ: Asia/Seoul
-        run: python build_deep_highs.py
-
-      - name: Commit and push index.html + data/
+        continue-on-error: true   # 빌드 실패해도 heartbeat은 커밋
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html data/
+          set -o pipefail
+          python build_deep_highs.py 2>&1 | tee build.log
+          echo "build_status=$?" >> $GITHUB_OUTPUT
+
+      - name: Write last-run heartbeat
+        if: always()
+        run: |
+          mkdir -p data
+          TS="$(TZ=Asia/Seoul date +'%Y-%m-%d %H:%M:%S KST')"
+          STATUS="${{ steps.build.outcome }}"
+          echo "$TS | status=$STATUS" > data/last_run.txt
+          echo "[heartbeat] $TS status=$STATUS"
+
+      - name: Commit and push (always)
+        if: always()
+        run: |
+          git add index.html data/ 2>/dev/null || true
           if git diff --staged --quiet; then
-            echo "변경 없음 — 커밋 생략"
+            echo "no changes — skipping commit"
           else
-            git commit -m "Daily update $(TZ=Asia/Seoul date +'%Y-%m-%d %H:%M KST')"
-            git push
+            MSG="Daily update $(TZ=Asia/Seoul date +'%Y-%m-%d %H:%M KST')"
+            STATUS="${{ steps.build.outcome }}"
+            if [ "$STATUS" != "success" ]; then
+              MSG="Heartbeat (build $STATUS) $(TZ=Asia/Seoul date +'%Y-%m-%d %H:%M KST')"
+            fi
+            git commit -m "$MSG"
+            # push with retry
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push origin main && break
+              echo "push retry $i"
+              sleep 5
+            done
           fi
