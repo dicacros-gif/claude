@@ -4369,29 +4369,44 @@ _TAB_CONFIG = [
     ("sec_commun",     "통신/미디어",       "#005F73"),
     ("sec_utilities",  "유틸리티",         "#2B5219"),
     ("sec_transport",  "운송/물류",         "#5C4033"),
-    # 세부 테마 — 산업 키워드 기반
+    # 세부 테마 — IT·테크 (10개)
     ("theme_semi",     "반도체",           "#7B3F00"),
+    ("theme_semi_eq",  "반도체장비",        "#9C5A19"),
     ("theme_software", "소프트웨어",        "#4A0080"),
     ("theme_internet", "인터넷",           "#6B0080"),
     ("theme_ai",       "AI",               "#5B2D8E"),
     ("theme_cloud",    "클라우드",         "#1565C0"),
     ("theme_cyber",    "사이버보안",        "#3F1A78"),
-    ("theme_ev",       "전기차/배터리",     "#1B6B1B"),
-    ("theme_renew",    "신재생에너지",      "#2B5219"),
+    ("theme_fintech",  "핀테크",           "#1F5B8B"),
+    ("theme_optic",    "광통신",           "#1A5F7A"),
+    ("theme_telco",    "통신서비스",        "#005F73"),
+    # 세부 테마 — 에너지/모빌리티 (8개)
+    ("theme_ev",       "전기차",           "#1B6B1B"),
+    ("theme_battery",  "2차전지/배터리",    "#2D7D2D"),
+    ("theme_solar",    "태양광",           "#B8860B"),
+    ("theme_wind",     "풍력",             "#005F73"),
+    ("theme_hydrogen", "수소",             "#1565C0"),
     ("theme_oil",      "석유/가스",         "#8B4513"),
+    ("theme_auto",     "자동차",           "#7B3F00"),
+    ("theme_aero",     "항공우주/방산",     "#3D5A80"),
+    # 세부 테마 — 헬스 (4개)
     ("theme_biotech",  "바이오테크",        "#C8326D"),
     ("theme_pharma",   "제약",             "#A52A6A"),
     ("theme_medical",  "의료기기",         "#9C3373"),
+    ("theme_health_sv","의료서비스",        "#B23A75"),
+    # 세부 테마 — 금융 (3개)
     ("theme_bank",     "은행",             "#1F4E79"),
     ("theme_insur",    "보험",             "#2C5687"),
     ("theme_reit",     "부동산/REIT",       "#5B7C99"),
-    ("theme_auto",     "자동차",           "#7B3F00"),
-    ("theme_aero",     "항공우주/방산",     "#3D5A80"),
-    ("theme_media",    "미디어/게임",       "#9C27B0"),
-    ("theme_optic",    "광통신",           "#1A5F7A"),
+    # 세부 테마 — 산업/소비 (8개)
+    ("theme_steel",    "철강/금속",         "#5C4033"),
+    ("theme_chem",     "화학",             "#7B3F00"),
     ("theme_construct","건설/엔지니어링",   "#5C4033"),
+    ("theme_shipping", "조선/해운",         "#1F5B8B"),
     ("theme_food",     "식음료",           "#B8860B"),
-    ("theme_apparel",  "의류/화장품",       "#A0522D"),
+    ("theme_apparel",  "의류/패션",         "#A0522D"),
+    ("theme_cosmetic", "화장품/뷰티",       "#C8326D"),
+    ("theme_media",    "미디어/게임",       "#9C27B0"),
     ("theme_summary",  "테마_요약",         "#6B0080"),
     # 시장 데이터
     ("market",         "시장지표",          "#1F4E79"),
@@ -4538,32 +4553,48 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     for tid, secset in _SEC_GROUPS_PRE.items():
         _sec_counts[tid] = sum(1 for r in _all_uni_raw if str(r.get("sector", "")) in secset)
 
-    # 세부 테마 — industry 키워드 기준
+    # 세부 테마 — industry 키워드 기준 (37개 세분화)
     _THEME_KEYWORDS_PRE = {
-        "theme_semi":      ["semiconductor", "반도체"],
-        "theme_software":  ["software"],
-        "theme_internet":  ["internet"],
-        "theme_ai":        ["semiconductor", "data process", "computer", "artificial",
-                            "internet software", "packaged software"],
-        "theme_cloud":     ["cloud", "data center"],
-        "theme_cyber":     ["security"],
-        "theme_ev":        ["motor vehicle", "auto parts", "electrical product", "battery"],
-        "theme_renew":     ["renewable", "solar", "alternative power", "wind"],
+        # IT/테크
+        "theme_semi":      ["semiconductor"],
+        "theme_semi_eq":   ["industrial machinery"],
+        "theme_software":  ["software", "packaged software", "information technology"],
+        "theme_internet":  ["internet", "internet retail", "internet services"],
+        "theme_ai":        ["semiconductor", "data process", "internet software"],
+        "theme_cloud":     ["cloud", "data center", "data process"],
+        "theme_cyber":     ["security", "software"],
+        "theme_fintech":   ["finance/rental", "investment trusts", "financial conglomerates"],
+        "theme_optic":     ["fiber", "optical", "communications equipment"],
+        "theme_telco":     ["specialty telecommunications", "major telecommunications",
+                            "wireless telecommunications"],
+        # 에너지/모빌리티
+        "theme_ev":        ["motor vehicle"],
+        "theme_battery":   ["battery", "electrical product"],
+        "theme_solar":     ["solar"],
+        "theme_wind":      ["wind"],
+        "theme_hydrogen":  ["hydrogen", "alternative power"],
         "theme_oil":       ["oil", "gas", "petroleum", "pipelines"],
+        "theme_auto":      ["motor vehicle", "auto parts"],
+        "theme_aero":      ["aerospace", "defense"],
+        # 헬스
         "theme_biotech":   ["biotech"],
         "theme_pharma":    ["pharmaceutical"],
         "theme_medical":   ["medical specialties", "medical equipment", "medical/nursing"],
+        "theme_health_sv": ["health services", "hospital", "managed health"],
+        # 금융
         "theme_bank":      ["bank", "regional bank", "savings"],
         "theme_insur":     ["insurance"],
         "theme_reit":      ["real estate", "reit"],
-        "theme_auto":      ["motor vehicle", "auto"],
-        "theme_aero":      ["aerospace", "defense"],
+        # 산업/소비
+        "theme_steel":     ["steel", "metals", "aluminum"],
+        "theme_chem":      ["chemical"],
+        "theme_construct": ["construction", "engineering", "homebuilding"],
+        "theme_shipping":  ["marine shipping", "marine transportation", "shipbuilding"],
+        "theme_food":      ["food", "beverage", "restaurant"],
+        "theme_apparel":   ["apparel", "footwear", "textile"],
+        "theme_cosmetic":  ["personal care", "household products"],
         "theme_media":     ["media", "broadcast", "publishing", "movie", "gaming",
                             "entertainment", "casino"],
-        "theme_optic":     ["fiber", "optical", "광통신", "communications equipment"],
-        "theme_construct": ["construction", "engineering"],
-        "theme_food":      ["food", "beverage"],
-        "theme_apparel":   ["apparel", "footwear", "household products", "personal care"],
     }
     _theme_counts = {}
     for tid, kws in _THEME_KEYWORDS_PRE.items():
@@ -4684,8 +4715,25 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
 
     universe_us = universe_us or []
     universe_kr = universe_kr or []
-    _by_us = [_basic_row_from_tv(r, "US") for r in universe_us]
-    _by_kr = [_basic_row_from_tv(r, "KR") for r in universe_kr]
+
+    def _row_complete(r: dict) -> bool:
+        """필수 필드(가격·시총·기업명) 누락된 행은 제외 — 할루시네이션 방지."""
+        if not r.get("기업명") or not r.get("티커"):
+            return False
+        try:
+            close = float(r.get("종가") or 0)
+            mcap  = float(r.get("시가총액") or 0)
+        except (ValueError, TypeError):
+            return False
+        return close > 0 and mcap > 0
+
+    _by_us_all = [_basic_row_from_tv(r, "US") for r in universe_us]
+    _by_kr_all = [_basic_row_from_tv(r, "KR") for r in universe_kr]
+    _by_us = [r for r in _by_us_all if _row_complete(r)]
+    _by_kr = [r for r in _by_kr_all if _row_complete(r)]
+    _dropped = (len(_by_us_all) - len(_by_us)) + (len(_by_kr_all) - len(_by_kr))
+    if _dropped > 0:
+        print(f"    [universe] 누락 데이터 제외: {_dropped}개 (가격·시총·기업명 무효)")
     _by_nasdaq = [r for r in _by_us if (r.get("거래소", "") or "").upper() == "NASDAQ"]
     _by_nyse   = [r for r in _by_us if (r.get("거래소", "") or "").upper() in ("NYSE", "AMEX")]
     _by_kospi  = [r for r in _by_kr if (r.get("거래소", "") or "").upper() == "KRX"]
@@ -4745,39 +4793,59 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
         panels_html.append(_panel_wrap(_tid, _label, len(_rows),
                                        _make_table_html(_by_mcap(_rows), UNIVERSE_HEADERS)))
 
-    # ── 세부 테마 (industry 키워드 기반) ─────────────
+    # ── 세부 테마 (37개, industry 키워드 기반) ─────────────
     _THEME_GROUPS = [
-        ("theme_semi",     "반도체",            ["semiconductor", "반도체"]),
-        ("theme_software", "소프트웨어",        ["software"]),
-        ("theme_internet", "인터넷",           ["internet"]),
-        ("theme_ai",       "AI",               ["semiconductor", "data process", "computer",
-                                                 "artificial", "internet software",
-                                                 "packaged software"]),
-        ("theme_cloud",    "클라우드",         ["cloud", "data center"]),
-        ("theme_cyber",    "사이버보안",        ["security"]),
-        ("theme_ev",       "전기차/배터리",     ["motor vehicle", "auto parts",
-                                                 "electrical product", "battery"]),
-        ("theme_renew",    "신재생에너지",      ["renewable", "solar",
-                                                 "alternative power", "wind"]),
+        # IT/테크
+        ("theme_semi",     "반도체",            ["semiconductor"]),
+        ("theme_semi_eq",  "반도체장비",        ["industrial machinery"]),
+        ("theme_software", "소프트웨어",        ["software", "packaged software",
+                                                 "information technology"]),
+        ("theme_internet", "인터넷",           ["internet", "internet retail",
+                                                 "internet services"]),
+        ("theme_ai",       "AI",               ["semiconductor", "data process",
+                                                 "internet software"]),
+        ("theme_cloud",    "클라우드",         ["cloud", "data center", "data process"]),
+        ("theme_cyber",    "사이버보안",        ["security", "software"]),
+        ("theme_fintech",  "핀테크",           ["finance/rental", "investment trusts",
+                                                 "financial conglomerates"]),
+        ("theme_optic",    "광통신",           ["fiber", "optical",
+                                                 "communications equipment"]),
+        ("theme_telco",    "통신서비스",        ["specialty telecommunications",
+                                                 "major telecommunications",
+                                                 "wireless telecommunications"]),
+        # 에너지/모빌리티
+        ("theme_ev",       "전기차",           ["motor vehicle"]),
+        ("theme_battery",  "2차전지/배터리",    ["battery", "electrical product"]),
+        ("theme_solar",    "태양광",           ["solar"]),
+        ("theme_wind",     "풍력",             ["wind"]),
+        ("theme_hydrogen", "수소",             ["hydrogen", "alternative power"]),
         ("theme_oil",      "석유/가스",         ["oil", "gas", "petroleum", "pipelines"]),
+        ("theme_auto",     "자동차",           ["motor vehicle", "auto parts"]),
+        ("theme_aero",     "항공우주/방산",     ["aerospace", "defense"]),
+        # 헬스
         ("theme_biotech",  "바이오테크",        ["biotech"]),
         ("theme_pharma",   "제약",             ["pharmaceutical"]),
         ("theme_medical",  "의료기기",         ["medical specialties", "medical equipment",
                                                  "medical/nursing"]),
+        ("theme_health_sv","의료서비스",        ["health services", "hospital",
+                                                 "managed health"]),
+        # 금융
         ("theme_bank",     "은행",             ["bank", "regional bank", "savings"]),
         ("theme_insur",    "보험",             ["insurance"]),
         ("theme_reit",     "부동산/REIT",       ["real estate", "reit"]),
-        ("theme_auto",     "자동차",           ["motor vehicle", "auto"]),
-        ("theme_aero",     "항공우주/방산",     ["aerospace", "defense"]),
+        # 산업/소비
+        ("theme_steel",    "철강/금속",         ["steel", "metals", "aluminum"]),
+        ("theme_chem",     "화학",             ["chemical"]),
+        ("theme_construct","건설/엔지니어링",   ["construction", "engineering",
+                                                 "homebuilding"]),
+        ("theme_shipping", "조선/해운",         ["marine shipping", "marine transportation",
+                                                 "shipbuilding"]),
+        ("theme_food",     "식음료",           ["food", "beverage", "restaurant"]),
+        ("theme_apparel",  "의류/패션",         ["apparel", "footwear", "textile"]),
+        ("theme_cosmetic", "화장품/뷰티",       ["personal care", "household products"]),
         ("theme_media",    "미디어/게임",       ["media", "broadcast", "publishing",
                                                  "movie", "gaming", "entertainment",
                                                  "casino"]),
-        ("theme_optic",    "광통신",           ["fiber", "optical", "광통신",
-                                                 "communications equipment"]),
-        ("theme_construct","건설/엔지니어링",   ["construction", "engineering"]),
-        ("theme_food",     "식음료",           ["food", "beverage"]),
-        ("theme_apparel",  "의류/화장품",       ["apparel", "footwear",
-                                                 "household products", "personal care"]),
     ]
     for _tid, _label, _kws in _THEME_GROUPS:
         kws_lc = [k.lower() for k in _kws]
