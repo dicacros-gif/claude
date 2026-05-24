@@ -1,1 +1,1 @@
-2026-05-24 20:19:45 KST | status=failure
+2026-05-24 22:06:13 KST | enriched=54 | sec_rows=1421 | inst_overlap=86 | size=3849KB

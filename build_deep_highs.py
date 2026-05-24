@@ -2641,6 +2641,32 @@ _HDR_BG = {
     "quality": "#00416A",
     "theme":   "#005F73",
 }
+# 화이트모드 셀 미세 색조 (카테고리별) — 가독성/구분감 향상, 다크모드는 영향 없음
+_CAT_BODY_TINT = {
+    "base":    None,           # 흰 배경 유지
+    "flow":    "#EFF6FF",      # 옅은 청색 (수급)
+    "lead":    "#FAF0FF",      # 옅은 보라 (선행매매)
+    "export":  "#F0FAF0",      # 옅은 녹색 (수출)
+    "growth":  "#F5FBED",      # 옅은 연두 (성장)
+    "value":   "#FEF8F0",      # 옅은 베이지 (밸류)
+    "score":   "#F8F4FF",      # 옅은 라일락 (점수)
+    "risk":    "#FFF5F5",      # 옅은 분홍 (리스크)
+    "quality": "#F0F8FB",      # 옅은 하늘 (품질)
+    "theme":   "#F0FAFC",      # 옅은 청록 (테마)
+}
+_CAT_BODY_TINT_ALT = {
+    # 짝수 행에는 약간 더 짙은 톤
+    "base":    None,
+    "flow":    "#E0EBF8",
+    "lead":    "#F4E6FA",
+    "export":  "#E5F4E5",
+    "growth":  "#ECF7DE",
+    "value":   "#FCF1DC",
+    "score":   "#F1E8FB",
+    "risk":    "#FCE9E9",
+    "quality": "#E2EFF6",
+    "theme":   "#E0F3F6",
+}
 _COL_CATEGORY: dict[str, str] = {
     # 기본
     "수집일": "base", "국가": "base", "나라": "base", "티커": "base", "기업명": "base",
@@ -2893,8 +2919,13 @@ def _grad_bg(fv: float, full_scale: float = 50.0,
 
 
 def _cell_style(col: str, val: object, odd: bool) -> tuple[str, str]:
-    # CSS 변수 → 다크모드 자동 전환 (no !important conflict)
-    base = "background:var(--cell-odd);" if odd else "background:var(--cell-even);"
+    # 카테고리별 화이트모드 미세 색조 — 다크모드는 CSS [data-t=dark]에서 오버라이드
+    _cat = _COL_CATEGORY.get(col, "base")
+    _tint = (_CAT_BODY_TINT_ALT if odd else _CAT_BODY_TINT).get(_cat)
+    if _tint:
+        base = f"background:{_tint};"
+    else:
+        base = "background:var(--cell-odd);" if odd else "background:var(--cell-even);"
     R = "text-align:right;"
     C = "text-align:center;"
     S = "font-size:9px;"
@@ -4086,6 +4117,28 @@ table.dtbl tr.drow:hover td{
 [data-t=dark] table.dtbl td{
   border-bottom-color:#2a3444 !important;
   border-right-color:#2a3444 !important;}
+/* 다크모드: 카테고리 tint 배경을 dark cell-odd/cell-even로 강제 오버라이드 */
+[data-t=dark] table.dtbl td[style*="background:#EFF6FF"],
+[data-t=dark] table.dtbl td[style*="background:#E0EBF8"],
+[data-t=dark] table.dtbl td[style*="background:#FAF0FF"],
+[data-t=dark] table.dtbl td[style*="background:#F4E6FA"],
+[data-t=dark] table.dtbl td[style*="background:#F0FAF0"],
+[data-t=dark] table.dtbl td[style*="background:#E5F4E5"],
+[data-t=dark] table.dtbl td[style*="background:#F5FBED"],
+[data-t=dark] table.dtbl td[style*="background:#ECF7DE"],
+[data-t=dark] table.dtbl td[style*="background:#FEF8F0"],
+[data-t=dark] table.dtbl td[style*="background:#FCF1DC"],
+[data-t=dark] table.dtbl td[style*="background:#F8F4FF"],
+[data-t=dark] table.dtbl td[style*="background:#F1E8FB"],
+[data-t=dark] table.dtbl td[style*="background:#FFF5F5"],
+[data-t=dark] table.dtbl td[style*="background:#FCE9E9"],
+[data-t=dark] table.dtbl td[style*="background:#F0F8FB"],
+[data-t=dark] table.dtbl td[style*="background:#E2EFF6"],
+[data-t=dark] table.dtbl td[style*="background:#F0FAFC"],
+[data-t=dark] table.dtbl td[style*="background:#E0F3F6"]{
+  background:var(--cell-even) !important; color:var(--t1) !important;}
+[data-t=dark] table.dtbl tr:nth-child(even) td[style*="background:#"]:not([style*="background:#1"]):not([style*="background:#7"]):not([style*="background:#A"]):not([style*="background:#0"]){
+  background:var(--cell-odd) !important;}
 /* 다크모드 컬러 셀 오버라이드 (CSS 변수 기반 기본 셀은 자동 전환) */
 [data-t=dark] td[style*="background:#D4EDDA"]{background:#1a3a25 !important;color:#86efac !important;}
 [data-t=dark] td[style*="background:#D4F5DC"]{background:#1a3a25 !important;color:#86efac !important;}
@@ -4788,32 +4841,16 @@ def main():
             enriched.append(row)
     print(f"    처리 완료: {len(enriched)}개")
 
-    # 5a. 누적 보존 — TV 응답 실패한 과거 추적 종목을 히스토리에서 복원
-    # 과거에 한 번이라도 신고가에 잡혔던 종목은 절대 사라지지 않음
+    # 5a. CRITICAL: stale 가격을 오늘 데이터로 표시하지 않음 (할루시네이션 방지).
+    # TV/yfinance 응답이 없는 종목은 오늘 디스플레이에서 제외.
+    # CSV 히스토리에는 과거 행이 그대로 보존되므로 종목 추적은 유지됨.
     today_str = _NOW.strftime("%Y-%m-%d")
     enriched_tickers = {r.get("_ticker", "") for r in enriched if r.get("_ticker")}
-    seed_lookup = {p.get("_ticker", ""): p for p in persistent_seed}
-    restored = 0
-    for ptk, p_raw in seed_lookup.items():
-        if ptk in enriched_tickers:
-            continue
-        # persistent_seed의 raw는 TV 형식 (close, exchange 등) — 과거 enriched CSV에서 변환
-        # 히스토리 CSV에서 가장 최근 enriched 행을 가져와 오늘 행으로 보존
-        # → 정량 데이터는 stale하지만 종목 자체는 추적 유지
-        hist_rows = _read_csv_as_list(ENRICHED_HIGH_CSV)
-        latest = None
-        for h in hist_rows:
-            if h.get("_ticker") == ptk:
-                if latest is None or (h.get("수집일", "") > latest.get("수집일", "")):
-                    latest = h
-        if latest:
-            preserved = dict(latest)
-            preserved["수집일"] = today_str
-            preserved["_persistent_stale"] = "Y"  # stale 표시
-            enriched.append(preserved)
-            restored += 1
-    if restored > 0:
-        print(f"    누적 보존 (TV 응답 실패 종목 히스토리 복원): {restored}개")
+    missing_persistent = [p.get("_ticker", "") for p in persistent_seed
+                          if p.get("_ticker", "") and p.get("_ticker", "") not in enriched_tickers]
+    if missing_persistent:
+        print(f"    [stale skip] TV 응답 실패 종목 {len(missing_persistent)}개 — "
+              f"오늘 디스플레이 제외 (CSV 과거 기록은 유지)")
 
     # 6. CSV 히스토리 저장 — 누적 (기존 행 절대 삭제 안함)
     print("[6] CSV 히스토리 저장 (누적)...")
