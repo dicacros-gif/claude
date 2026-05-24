@@ -3635,11 +3635,12 @@ def _make_dashboard_html(enriched: list[dict], collected_at: str) -> str:
     ]
     tops_html = "".join(_top5_section(t, i, r, f) for t, i, r, f in tops)
 
+    _short_ts = f"{_NOW.month}/{_NOW.day} {_NOW.strftime('%H:%M')}"
     return f'''
 <div class="dash-header">
   <div>
     <span style="font-size:1.1rem;font-weight:900;">52주 신고가 딥다이브</span>
-    <span style="margin-left:12px;font-size:0.8rem;color:#888;">수집: {_esc(collected_at)} | 총 {n_total}개 종목</span>
+    <span style="margin-left:12px;font-size:0.8rem;color:#888;">업데이트: {_esc(_short_ts)} | 총 {n_total}개 종목</span>
   </div>
   <div style="margin-top:8px;">{grades_html}</div>
   <div style="margin-top:6px;">{country_html}</div>
@@ -4591,10 +4592,10 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     _tab_counts.update(_sec_counts)
     _tab_counts.update(_theme_counts)
 
-    # "일별_트래킹" 탭 옆에 업데이트 시각 표시
+    # 상단 타임스탬프 — 5/24 22:07 형태 (short M/D HH:MM)
     _m  = str(_NOW.month)
     _d  = str(_NOW.day)
-    _ts_short = f"{_m}/{_d} {_NOW.strftime('%H:%M')} KST"
+    _ts_short = f"{_m}/{_d} {_NOW.strftime('%H:%M')}"
     tab_buttons = []
     for tid, tlabel, tcolor in _TAB_CONFIG:
         _cnt = _tab_counts.get(tid)
@@ -5035,7 +5036,7 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
 </head>
 <body>
 <div class="topbar">
-  <div class="ts-display">📅 {_esc(_ts_short)}</div>
+  <div class="ts-display">업데이트: {_esc(_ts_short)}</div>
   <nav class="nav">{"".join(tab_buttons)}</nav>
   <div class="tt" id="dm-toggle" style="margin-left:0.4rem;">
     <span class="tt-label">🌙</span>
