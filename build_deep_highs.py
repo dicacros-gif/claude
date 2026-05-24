@@ -360,6 +360,31 @@ def fetch_tradingview_highs(market: str) -> list[dict]:
     return _tv_scan(market, filters, range_end=200)
 
 
+def fetch_tradingview_full_universe(market: str, max_rows: int = 2500) -> list[dict]:
+    """전체 상장 종목 — 시가총액 큰 순으로 max_rows개.
+
+    KOSPI/KOSDAQ/NASDAQ/NYSE 유니버스 탭용. yfinance 보강 없이 TV 데이터만 표시.
+    """
+    filters = []
+    if market == "america":
+        filters.append({"left": "exchange", "operation": "in_range",
+                         "right": ["NASDAQ", "NYSE", "AMEX"]})
+    elif market == "korea":
+        filters.append({"left": "exchange", "operation": "in_range",
+                         "right": ["KRX", "KOSDAQ"]})
+    # 페니스톡만 제외 (시총 작은 종목도 포함 — 누락 방지)
+    if market == "america":
+        filters.append({"left": "close", "operation": "greater", "right": 0.5})
+        filters.append({"left": "market_cap_basic", "operation": "greater",
+                        "right": 10e6})
+    else:
+        filters.append({"left": "close", "operation": "greater", "right": 100})
+        filters.append({"left": "market_cap_basic", "operation": "greater",
+                        "right": 10e9})
+    return _tv_scan(market, filters, sort_by="market_cap_basic",
+                    range_end=max_rows)
+
+
 def fetch_tradingview_volume_surge(market: str) -> list[dict]:
     """상대거래량(10일) > 2배 거래량 급증 종목"""
     filters = [
@@ -4068,13 +4093,27 @@ body{font-family:"Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
   -webkit-overflow-scrolling:touch;}
 .topbar-title{font-size:0.72rem;font-weight:900;white-space:nowrap;
   color:var(--t1);margin-right:0.5rem;}
-.nav{display:flex;gap:0.2rem;overflow-x:auto;flex:1;min-width:0;}
+.nav{display:flex;gap:0.2rem;overflow-x:auto;flex:1;min-width:0;
+  justify-content:center;flex-wrap:wrap;align-content:flex-start;
+  scrollbar-width:thin;scrollbar-color:var(--bd) transparent;}
+.nav::-webkit-scrollbar{height:4px;}
+.nav::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px;}
 .tab-btn{border:1px solid var(--bd);background:var(--card);color:var(--t2);
   border-radius:999px;padding:0.28rem 0.65rem;font-size:0.68rem;
   font-weight:800;white-space:nowrap;cursor:pointer;transition:all 0.2s;
-  font-family:inherit;}
+  font-family:inherit;flex-shrink:0;display:inline-flex;
+  align-items:center;gap:4px;}
 .tab-btn:hover{background:var(--acL);border-color:var(--ac);color:var(--ac);}
 .tab-btn.on{background:var(--ac);border-color:var(--ac);color:#fff;}
+.tab-count{font-size:0.6rem;font-weight:600;opacity:0.7;
+  background:rgba(0,0,0,0.06);padding:1px 5px;border-radius:999px;
+  margin-left:2px;}
+.tab-btn.on .tab-count{background:rgba(255,255,255,0.25);opacity:0.95;}
+.ts-display{font-size:0.75rem;font-weight:700;color:var(--t1);
+  background:var(--acL);border:1px solid var(--bd);
+  border-radius:999px;padding:3px 10px;white-space:nowrap;
+  margin-right:0.5rem;flex-shrink:0;}
+[data-t=dark] .ts-display{color:var(--t1);background:rgba(74,222,128,0.15);}
 /* dark toggle */
 .tt{display:flex;align-items:center;gap:0.3rem;cursor:pointer;
   user-select:none;margin-left:0.5rem;}
@@ -4302,18 +4341,64 @@ _HTML_JS = r'''
 
 
 _TAB_CONFIG = [
+    # 핵심 분석
     ("dashboard",      "대시보드",         "#155724"),
     ("priority_top",   "우선순위_TOP",      "#1E6B00"),
     ("lead_signal",    "선행매매_시그널",   "#7030A0"),
     ("export_top",     "수출해외_상위",     "#005F00"),
     ("long_term",      "장기투자_후보",     "#1A4A00"),
     ("flow_detail",    "외국인_수급",       "#003399"),
+    # Universe / 거래소
+    ("us_universe",    "US UNIVERSE",      "#1F3864"),
+    ("nasdaq",         "NASDAQ",           "#0066B2"),
+    ("nyse",           "NYSE",             "#003B6F"),
+    ("kr_universe",    "KR UNIVERSE",      "#7B0080"),
+    ("kospi",          "KOSPI",            "#5E2D8E"),
+    ("kosdaq",         "KOSDAQ",           "#7030A0"),
+    # 11개 광역 섹터 (TradingView 분류 기준)
+    ("sec_energy_min", "에너지/광물",       "#8B4513"),
+    ("sec_materials",  "화학/소재",         "#7B3F00"),
+    ("sec_manufact",   "제조/산업재",       "#5B7C99"),
+    ("sec_electronic", "전자기술",          "#1A5F7A"),
+    ("sec_health",     "헬스케어",          "#C8326D"),
+    ("sec_tech",       "IT/SW",            "#4A0080"),
+    ("sec_consumer",   "소비재",           "#B8860B"),
+    ("sec_retail",     "유통/소매",         "#A0522D"),
+    ("sec_finance",    "금융",             "#1F4E79"),
+    ("sec_commun",     "통신/미디어",       "#005F73"),
+    ("sec_utilities",  "유틸리티",         "#2B5219"),
+    ("sec_transport",  "운송/물류",         "#5C4033"),
+    # 세부 테마 — 산업 키워드 기반
+    ("theme_semi",     "반도체",           "#7B3F00"),
+    ("theme_software", "소프트웨어",        "#4A0080"),
+    ("theme_internet", "인터넷",           "#6B0080"),
+    ("theme_ai",       "AI",               "#5B2D8E"),
+    ("theme_cloud",    "클라우드",         "#1565C0"),
+    ("theme_cyber",    "사이버보안",        "#3F1A78"),
+    ("theme_ev",       "전기차/배터리",     "#1B6B1B"),
+    ("theme_renew",    "신재생에너지",      "#2B5219"),
+    ("theme_oil",      "석유/가스",         "#8B4513"),
+    ("theme_biotech",  "바이오테크",        "#C8326D"),
+    ("theme_pharma",   "제약",             "#A52A6A"),
+    ("theme_medical",  "의료기기",         "#9C3373"),
+    ("theme_bank",     "은행",             "#1F4E79"),
+    ("theme_insur",    "보험",             "#2C5687"),
+    ("theme_reit",     "부동산/REIT",       "#5B7C99"),
+    ("theme_auto",     "자동차",           "#7B3F00"),
+    ("theme_aero",     "항공우주/방산",     "#3D5A80"),
+    ("theme_media",    "미디어/게임",       "#9C27B0"),
+    ("theme_optic",    "광통신",           "#1A5F7A"),
+    ("theme_construct","건설/엔지니어링",   "#5C4033"),
+    ("theme_food",     "식음료",           "#B8860B"),
+    ("theme_apparel",  "의류/화장품",       "#A0522D"),
     ("theme_summary",  "테마_요약",         "#6B0080"),
+    # 시장 데이터
     ("market",         "시장지표",          "#1F4E79"),
     ("inst_overlap",   "기관중복보유",      "#004C6D"),
     ("sec_detail",     "유명기관_13F",      "#006699"),
     ("earnings_cal",   "실적캘린더",        "#7B3300"),
     ("sector_perf",    "섹터성과",          "#2B5219"),
+    # 원시 데이터
     ("highs_us",       "신고가_미국",       "#555555"),
     ("highs_kr",       "신고가_한국",       "#555555"),
     ("vol_us",         "거래량급증_미국",   "#555555"),
@@ -4383,7 +4468,9 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
                   market_data: list[dict], fg: dict,
                   insider_rows: list[dict], inst_overlap: list[dict],
                   sector_rows: list[dict], earnings_rows: list[dict],
-                  collected_at: str, kr_names: dict | None = None) -> str:
+                  collected_at: str, kr_names: dict | None = None,
+                  universe_us: list[dict] | None = None,
+                  universe_kr: list[dict] | None = None) -> str:
 
     enr_us  = sorted([r for r in enriched if r.get("국가") == "US"],
                      key=lambda x: x.get("투자우선점수", 0) or 0, reverse=True)
@@ -4420,24 +4507,103 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
                          key=lambda x: x.get("투자우선점수",0) or 0,
                          reverse=True)
 
+    # ── 모든 탭의 count 사전 계산 (전체 유니버스 기준) ───
+    _u_us = universe_us or []
+    _u_kr = universe_kr or []
+    def _ex_filter(rows, exs):
+        return [r for r in rows if (r.get("exchange", "") or "").upper() in exs]
+    _pre_nasdaq = _ex_filter(_u_us, {"NASDAQ"})
+    _pre_nyse   = _ex_filter(_u_us, {"NYSE", "AMEX"})
+    _pre_kospi  = _ex_filter(_u_kr, {"KRX"})
+    _pre_kosdaq = _ex_filter(_u_kr, {"KOSDAQ"})
+
+    # 광역 섹터 그룹 (TV sector 필드 기준)
+    _SEC_GROUPS_PRE = {
+        "sec_energy_min": {"Energy Minerals", "Non-Energy Minerals"},
+        "sec_materials":  {"Process Industries"},
+        "sec_manufact":   {"Producer Manufacturing", "Industrial Services"},
+        "sec_electronic": {"Electronic Technology"},
+        "sec_health":     {"Health Technology", "Health Services"},
+        "sec_tech":       {"Technology Services", "Commercial Services"},
+        "sec_consumer":   {"Consumer Non-Durables", "Consumer Durables", "Consumer Services"},
+        "sec_retail":     {"Retail Trade", "Distribution Services"},
+        "sec_finance":    {"Finance"},
+        "sec_commun":     {"Communications"},
+        "sec_utilities":  {"Utilities"},
+        "sec_transport":  {"Transportation"},
+    }
+    _all_uni_raw = _u_us + _u_kr
+    _sec_counts = {}
+    for tid, secset in _SEC_GROUPS_PRE.items():
+        _sec_counts[tid] = sum(1 for r in _all_uni_raw if str(r.get("sector", "")) in secset)
+
+    # 세부 테마 — industry 키워드 기준
+    _THEME_KEYWORDS_PRE = {
+        "theme_semi":      ["semiconductor", "반도체"],
+        "theme_software":  ["software"],
+        "theme_internet":  ["internet"],
+        "theme_ai":        ["semiconductor", "data process", "computer", "artificial",
+                            "internet software", "packaged software"],
+        "theme_cloud":     ["cloud", "data center"],
+        "theme_cyber":     ["security"],
+        "theme_ev":        ["motor vehicle", "auto parts", "electrical product", "battery"],
+        "theme_renew":     ["renewable", "solar", "alternative power", "wind"],
+        "theme_oil":       ["oil", "gas", "petroleum", "pipelines"],
+        "theme_biotech":   ["biotech"],
+        "theme_pharma":    ["pharmaceutical"],
+        "theme_medical":   ["medical specialties", "medical equipment", "medical/nursing"],
+        "theme_bank":      ["bank", "regional bank", "savings"],
+        "theme_insur":     ["insurance"],
+        "theme_reit":      ["real estate", "reit"],
+        "theme_auto":      ["motor vehicle", "auto"],
+        "theme_aero":      ["aerospace", "defense"],
+        "theme_media":     ["media", "broadcast", "publishing", "movie", "gaming",
+                            "entertainment", "casino"],
+        "theme_optic":     ["fiber", "optical", "광통신", "communications equipment"],
+        "theme_construct": ["construction", "engineering"],
+        "theme_food":      ["food", "beverage"],
+        "theme_apparel":   ["apparel", "footwear", "household products", "personal care"],
+    }
+    _theme_counts = {}
+    for tid, kws in _THEME_KEYWORDS_PRE.items():
+        kws_lc = [k.lower() for k in kws]
+        _theme_counts[tid] = sum(
+            1 for r in _all_uni_raw
+            if any(k in str(r.get("industry","")).lower() for k in kws_lc)
+        )
+
+    _tab_counts = {
+        "priority_top":   len(by_priority),
+        "lead_signal":    len(by_lead),
+        "export_top":     len(by_export),
+        "long_term":      len(by_lt),
+        "flow_detail":    len(by_flow),
+        "us_universe":    len(_u_us),
+        "nasdaq":         len(_pre_nasdaq),
+        "nyse":           len(_pre_nyse),
+        "kr_universe":    len(_u_kr),
+        "kospi":          len(_pre_kospi),
+        "kosdaq":         len(_pre_kosdaq),
+        "highs_us":       len(enr_us),
+        "highs_kr":       len(enr_kr),
+        "tracking":       len(by_tracking),
+    }
+    _tab_counts.update(_sec_counts)
+    _tab_counts.update(_theme_counts)
+
     # "일별_트래킹" 탭 옆에 업데이트 시각 표시
     _m  = str(_NOW.month)
     _d  = str(_NOW.day)
     _ts_short = f"{_m}/{_d} {_NOW.strftime('%H:%M')} KST"
     tab_buttons = []
     for tid, tlabel, tcolor in _TAB_CONFIG:
-        if tid == "tracking":
-            tab_buttons.append(
-                f'<button class="tab-btn" data-tab="{tid}">'
-                f'{_esc(tlabel)}'
-                f'<span style="margin-left:5px;font-size:0.6rem;font-weight:400;'
-                f'opacity:0.85;white-space:nowrap;">{_esc(_ts_short)}</span>'
-                f'</button>'
-            )
-        else:
-            tab_buttons.append(
-                f'<button class="tab-btn" data-tab="{tid}">{_esc(tlabel)}</button>'
-            )
+        _cnt = _tab_counts.get(tid)
+        _cnt_html = (f'<span class="tab-count">{_cnt:,}</span>'
+                     if _cnt is not None and _cnt > 0 else "")
+        tab_buttons.append(
+            f'<button class="tab-btn" data-tab="{tid}">'
+            f'{_esc(tlabel)}{_cnt_html}</button>'
+        )
 
     panels_html = []
 
@@ -4469,6 +4635,156 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
     panels_html.append(_panel_wrap("flow_detail", "외국인 수급",
                                    len(by_flow),
                                    _make_table_html(by_flow, FLOW_HEADERS)))
+
+    # ── Universe / 거래소 분류 (전체 종목, TV 기본 데이터) ─────
+    def _sort_score(rows):
+        return sorted(rows, key=lambda x: x.get("투자우선점수", 0) or 0, reverse=True)
+
+    def _basic_row_from_tv(raw: dict, country: str) -> dict:
+        """TV 스캔 raw → 디스플레이용 기본 row (yfinance/FnGuide 보강 없음)."""
+        tk_full = raw.get("_ticker", "") or ""
+        bare = tk_full.split(":")[-1] if ":" in tk_full else tk_full
+        name = raw.get("description", "") or raw.get("name", "")
+        # 한국 종목명 보정
+        if country == "KR":
+            from_dict = _KNOWN_KR_NAMES.get(bare)
+            if from_dict and (not name or str(name).lower() in _INVALID_KR_NAMES):
+                name = from_dict
+        close = _safe(raw.get("close"))
+        hi52 = _safe(raw.get("price_52_week_high"))
+        lo52 = _safe(raw.get("price_52_week_low"))
+        pos52 = None
+        if hi52 and close and hi52 > 0:
+            pos52 = round((close / hi52) * 100, 1)
+        return {
+            "_ticker":           tk_full,
+            "국가":              country,
+            "티커":              bare,
+            "기업명":            name,
+            "거래소":            raw.get("exchange", "") or "",
+            "섹터":              raw.get("sector", "") or "",
+            "산업":              raw.get("industry", "") or "",
+            "종가":              close,
+            "변동률%":           _safe(raw.get("change")),
+            "시가총액":          _safe(raw.get("market_cap_basic")),
+            "52주고가":          hi52,
+            "52주저가":          lo52,
+            "52주고가대비위치%": pos52,
+            "PER_TTM":           _safe(raw.get("price_earnings_ttm")),
+            "P/B":               _safe(raw.get("price_book_fq")),
+            "ROE%":              _safe(raw.get("return_on_equity")),
+            "매출성장률_YoY%":   _safe(raw.get("total_revenue_yoy_growth_fq")),
+            "EPS성장률_YoY%":    _safe(raw.get("earnings_per_share_diluted_yoy_growth_fq")),
+            "영업이익률%":       _safe(raw.get("operating_margin_ttm")),
+            "RSI":               _safe(raw.get("RSI")),
+            "상대거래량":        _safe(raw.get("relative_volume_10d_calc")),
+            "1개월수익률%":      _safe(raw.get("Perf.1M")),
+        }
+
+    universe_us = universe_us or []
+    universe_kr = universe_kr or []
+    _by_us = [_basic_row_from_tv(r, "US") for r in universe_us]
+    _by_kr = [_basic_row_from_tv(r, "KR") for r in universe_kr]
+    _by_nasdaq = [r for r in _by_us if (r.get("거래소", "") or "").upper() == "NASDAQ"]
+    _by_nyse   = [r for r in _by_us if (r.get("거래소", "") or "").upper() in ("NYSE", "AMEX")]
+    _by_kospi  = [r for r in _by_kr if (r.get("거래소", "") or "").upper() == "KRX"]
+    _by_kosdaq = [r for r in _by_kr if (r.get("거래소", "") or "").upper() == "KOSDAQ"]
+
+    # 시총 큰 순으로 정렬 + 탭당 최대 1500 캡 (HTML 크기 제어)
+    def _by_mcap(rows, cap=1500):
+        s = sorted(rows, key=lambda x: x.get("시가총액", 0) or 0, reverse=True)
+        return s[:cap] if cap else s
+
+    # 유니버스 탭 전용 헤더 (TV 기본 데이터로 채울 수 있는 컬럼만)
+    UNIVERSE_HEADERS = [
+        "티커", "기업명", "거래소", "섹터", "산업",
+        "종가", "변동률%", "시가총액", "52주고가대비위치%",
+        "PER_TTM", "P/B", "ROE%", "영업이익률%",
+        "매출성장률_YoY%", "EPS성장률_YoY%",
+        "RSI", "상대거래량", "1개월수익률%",
+    ]
+
+    panels_html.append(_panel_wrap("us_universe", "US UNIVERSE",
+                                   len(_by_us),
+                                   _make_table_html(_by_mcap(_by_us), UNIVERSE_HEADERS)))
+    panels_html.append(_panel_wrap("nasdaq", "NASDAQ",
+                                   len(_by_nasdaq),
+                                   _make_table_html(_by_mcap(_by_nasdaq), UNIVERSE_HEADERS)))
+    panels_html.append(_panel_wrap("nyse", "NYSE",
+                                   len(_by_nyse),
+                                   _make_table_html(_by_mcap(_by_nyse), UNIVERSE_HEADERS)))
+    panels_html.append(_panel_wrap("kr_universe", "KR UNIVERSE",
+                                   len(_by_kr),
+                                   _make_table_html(_by_mcap(_by_kr), UNIVERSE_HEADERS)))
+    panels_html.append(_panel_wrap("kospi", "KOSPI",
+                                   len(_by_kospi),
+                                   _make_table_html(_by_mcap(_by_kospi), UNIVERSE_HEADERS)))
+    panels_html.append(_panel_wrap("kosdaq", "KOSDAQ",
+                                   len(_by_kosdaq),
+                                   _make_table_html(_by_mcap(_by_kosdaq), UNIVERSE_HEADERS)))
+
+    # ── 12개 광역 섹터 (TV sector 필드 기준) ──────────
+    _all_universe = _by_us + _by_kr
+    _SECTOR_GROUPS = [
+        ("sec_energy_min", "에너지/광물",     {"Energy Minerals", "Non-Energy Minerals"}),
+        ("sec_materials",  "화학/소재",       {"Process Industries"}),
+        ("sec_manufact",   "제조/산업재",     {"Producer Manufacturing", "Industrial Services"}),
+        ("sec_electronic", "전자기술",        {"Electronic Technology"}),
+        ("sec_health",     "헬스케어",        {"Health Technology", "Health Services"}),
+        ("sec_tech",       "IT/SW",          {"Technology Services", "Commercial Services"}),
+        ("sec_consumer",   "소비재",         {"Consumer Non-Durables", "Consumer Durables", "Consumer Services"}),
+        ("sec_retail",     "유통/소매",       {"Retail Trade", "Distribution Services"}),
+        ("sec_finance",    "금융",           {"Finance"}),
+        ("sec_commun",     "통신/미디어",     {"Communications"}),
+        ("sec_utilities",  "유틸리티",       {"Utilities"}),
+        ("sec_transport",  "운송/물류",       {"Transportation"}),
+    ]
+    for _tid, _label, _sectors in _SECTOR_GROUPS:
+        _rows = [r for r in _all_universe if str(r.get("섹터", "")) in _sectors]
+        panels_html.append(_panel_wrap(_tid, _label, len(_rows),
+                                       _make_table_html(_by_mcap(_rows), UNIVERSE_HEADERS)))
+
+    # ── 세부 테마 (industry 키워드 기반) ─────────────
+    _THEME_GROUPS = [
+        ("theme_semi",     "반도체",            ["semiconductor", "반도체"]),
+        ("theme_software", "소프트웨어",        ["software"]),
+        ("theme_internet", "인터넷",           ["internet"]),
+        ("theme_ai",       "AI",               ["semiconductor", "data process", "computer",
+                                                 "artificial", "internet software",
+                                                 "packaged software"]),
+        ("theme_cloud",    "클라우드",         ["cloud", "data center"]),
+        ("theme_cyber",    "사이버보안",        ["security"]),
+        ("theme_ev",       "전기차/배터리",     ["motor vehicle", "auto parts",
+                                                 "electrical product", "battery"]),
+        ("theme_renew",    "신재생에너지",      ["renewable", "solar",
+                                                 "alternative power", "wind"]),
+        ("theme_oil",      "석유/가스",         ["oil", "gas", "petroleum", "pipelines"]),
+        ("theme_biotech",  "바이오테크",        ["biotech"]),
+        ("theme_pharma",   "제약",             ["pharmaceutical"]),
+        ("theme_medical",  "의료기기",         ["medical specialties", "medical equipment",
+                                                 "medical/nursing"]),
+        ("theme_bank",     "은행",             ["bank", "regional bank", "savings"]),
+        ("theme_insur",    "보험",             ["insurance"]),
+        ("theme_reit",     "부동산/REIT",       ["real estate", "reit"]),
+        ("theme_auto",     "자동차",           ["motor vehicle", "auto"]),
+        ("theme_aero",     "항공우주/방산",     ["aerospace", "defense"]),
+        ("theme_media",    "미디어/게임",       ["media", "broadcast", "publishing",
+                                                 "movie", "gaming", "entertainment",
+                                                 "casino"]),
+        ("theme_optic",    "광통신",           ["fiber", "optical", "광통신",
+                                                 "communications equipment"]),
+        ("theme_construct","건설/엔지니어링",   ["construction", "engineering"]),
+        ("theme_food",     "식음료",           ["food", "beverage"]),
+        ("theme_apparel",  "의류/화장품",       ["apparel", "footwear",
+                                                 "household products", "personal care"]),
+    ]
+    for _tid, _label, _kws in _THEME_GROUPS:
+        kws_lc = [k.lower() for k in _kws]
+        _rows = [r for r in _all_universe
+                 if any(k in str(r.get("산업","")).lower() for k in kws_lc)]
+        panels_html.append(_panel_wrap(_tid, _label, len(_rows),
+                                       _make_table_html(_by_mcap(_rows), UNIVERSE_HEADERS)))
+
     # 테마_요약
     panels_html.append(f'''
 <section class="panel" id="panel-theme_summary">
@@ -4719,6 +5035,7 @@ def generate_html(enriched: list[dict], volume_us: list[dict],
 </head>
 <body>
 <div class="topbar">
+  <div class="ts-display">📅 {_esc(_ts_short)}</div>
   <nav class="nav">{"".join(tab_buttons)}</nav>
   <div class="tt" id="dm-toggle" style="margin-left:0.4rem;">
     <span class="tt-label">🌙</span>
@@ -4764,6 +5081,13 @@ def main():
     vol_us = fetch_tradingview_volume_surge("america")
     vol_kr = fetch_tradingview_volume_surge("korea")
     print(f"    US: {len(vol_us)}개, KR: {len(vol_kr)}개")
+
+    # 2b. 전체 유니버스 스캔 (모든 섹터/테마 탭에서 사용 — 누락 없이)
+    # 시총 큰 순 + 가격/시총 필터로 핵심 종목 커버
+    print("[2b] TradingView 전체 유니버스 수집 (모든 종목, 모든 섹터)...")
+    universe_us_raw = fetch_tradingview_full_universe("america", max_rows=3500)
+    universe_kr_raw = fetch_tradingview_full_universe("korea", max_rows=2500)
+    print(f"    US: {len(universe_us_raw)}개, KR: {len(universe_kr_raw)}개")
 
     # 2a. Persistent universe — 모든 과거 추적 종목 영구 누적 (캡 없음)
     print("[2a] persistent universe 로드 (영구 누적, 무제한)...")
@@ -4917,7 +5241,9 @@ def main():
     html = generate_html(enriched, vol_us, vol_kr, sec_rows_display,
                          market_data, fg, insider_rows, inst_overlap,
                          sector_rows, earnings_rows, collected_at,
-                         kr_names=flow_data)
+                         kr_names=flow_data,
+                         universe_us=universe_us_raw,
+                         universe_kr=universe_kr_raw)
     out  = write_html(html, OUTPUT_HTML)
     print(f"    저장: {out}")
 
