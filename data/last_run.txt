@@ -1,1 +1,1 @@
-2026-05-24 22:44:22 KST | enriched=54 | sec_rows=1421 | inst_overlap=86 | size=3850KB
+2026-05-25 11:05:51 KST | status=success
