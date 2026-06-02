@@ -1,4 +1,13 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-06-01 20:19:58,2026-05-28,BOC,Boston Omaha Corp,Kenan Frank H. II,Dir,P - Purchase,$13.23,"+50,752","+$671,250","441,477"
+2026-06-01 18:28:25,2026-05-28,PAX,Patria Investments Ltd,Neto Olimpio Matarazzo,Dir,P - Purchase,$11.48,"+30,000","+$344,400","530,724"
+2026-06-01 17:46:57,2026-05-28,STRR,"Star Equity Holdings, Inc.",Eberwein Jeffrey E.,"CEO, 10%",P - Purchase,$11.74,"+16,656","+$195,612","1,081,936"
+2026-06-01 17:02:44,2026-05-27,PRIM,Primoris Services Corp,Vadlamudi Koti,"Pres, CEO",P - Purchase,$127.96,"+7,815","+$1,000,004","7,815"
+2026-06-01 16:44:12,2026-05-28,HOOD,"Robinhood Markets, Inc.",Malka Meyer,Dir,P - Purchase,$80.39,"+249,000","+$20,018,206","7,572,855"
+2026-06-01 16:37:08,2026-05-28,VTS,"Vitesse Energy, Inc.",Steinberg Joseph S,Dir,P - Purchase,$17.00,"+59,118","+$1,005,006","2,726,567"
+2026-06-01 16:30:19,2026-06-01,RLI,Rli Corp,Kellogg Clark C,Dir,P - Purchase,$50.90,"+3,000","+$152,700","4,502"
+2026-06-01 16:11:13,2026-05-29,ASND,Ascendis Pharma A/S,Bienaime Jean Jacques,Dir,P - Purchase,$223.12,+500,"+$111,562",900
+2026-06-01 16:05:54,2026-05-28,LEE,"Lee Enterprises, Inc",Hoffmann David Henry,"Dir, 10%",P - Purchase,$11.12,"+45,600","+$507,074","12,043,049"
 2026-06-01 11:37:52,2026-05-29,TFSL,Tfs Financial Corp,Weir Daniel F,Dir,P - Purchase,$15.85,"+7,000","+$110,950","85,191"
 2026-06-01 08:59:04,2026-05-29,L,Loews Corp,Robusto Dino,Dir,P - Purchase,$104.74,"+5,000","+$523,700","10,235"
 2026-06-01 07:54:41,2026-05-28,KINS,"Kingstone Companies, Inc.",Newgarden Thomas,Dir,P - Purchase,$15.21,"+14,000","+$212,958","99,366"
