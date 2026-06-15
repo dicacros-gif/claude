@@ -1,4 +1,9 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-06-15 10:10:52,2026-06-15,NEWT,"Newtekone, Inc.",Sloane Barry,"Pres, COB, CEO",P - Purchase,$14.21,"+11,000","+$156,260","1,176,914"
+2026-06-15 08:22:34,2026-06-11,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$17.59,"+19,582","+$344,445","18,888,665"
+2026-06-15 08:00:07,2026-06-11,GPGI,"Gpgi, Inc.",Knott Thomas R.,"See remarks, 10%",P - Purchase,$11.67,"+85,250","+$994,868","50,299,622"
+2026-06-15 07:55:33,2026-06-11,CMCL,Caledonia Mining Corp Plc,Gapare Victor,"Dir, 10%",P - Purchase,$18.70,"+11,750","+$219,725","2,455,122"
+2026-06-15 07:15:06,2026-06-11,IBP,"Installed Building Products, Inc.",Miller Michael Thomas,"EVP, CFO",P - Purchase,$200.62,+990,"+$198,610","60,629"
 2026-06-12 17:44:40,2026-06-12,INR,"Infinity Natural Resources, Inc.",Gray Steven D,Dir,P - Purchase,$12.81,"+25,000","+$320,175","107,411"
 2026-06-12 16:40:51,2026-06-10,PEB,Pebblebrook Hotel Trust,Bortz Jon E,"COB, CEO",P - Purchase,$17.48,"+40,000","+$699,200","1,855,110"
 2026-06-12 16:34:47,2026-06-12,EVTC,"Evertec, Inc.",Smith Brian John,Dir,P - Purchase,$26.42,"+16,202","+$427,999","88,222"
