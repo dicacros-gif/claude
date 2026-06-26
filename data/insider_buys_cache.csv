@@ -1,4 +1,7 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-06-25 21:10:06,2026-06-23,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$71.60,"+3,477","+$248,962","5,744,088"
+2026-06-25 18:18:09,2026-06-23,LILA,Liberty Latin America Ltd.,Bracken Charles H R,Dir,P - Purchase,$20.50,"+9,800","+$200,900","23,767"
+2026-06-25 16:22:33,2026-06-24,PGY,Pagaya Technologies Ltd.,Krubiner Gal,CEO,P - Purchase,$15.43,"+16,230","+$250,468","555,906"
 2026-06-24 21:26:05,2026-06-22,KARD,"Kardigan, Inc.","Hrtg Gpe, LLC",10%,P - Purchase,$16.00,"+3,125,000","+$50,000,000","16,917,034"
 2026-06-24 20:59:44,2026-05-06,PATK,Patrick Industries Inc,Petkovich Jacob R,Pres - Marine,P - Purchase,$95.57,"+1,300","+$124,247","46,290"
 2026-06-24 20:00:03,2026-06-22,LILA,Liberty Latin America Ltd.,Malone John C,Director Emeritus,P - Purchase,$10.51,"+2,657,931","+$27,932,059","30,724,777"
@@ -496,6 +499,3 @@
 2026-05-12 20:28:21,2026-02-12,APC,Arko Petroleum Corp.,Blackstone Holdings I L.P.,10%,P - Purchase,$17.66,"+100,000","+$1,766,000","125,000"
 2026-05-12 20:00:02,2026-05-11,ONT,"Onterris, Inc.",Dicks Allan,CFO,P - Purchase,$15.36,"+6,535","+$100,378","218,178"
 2026-05-12 19:26:43,2026-05-11,ZTS,Zoetis Inc.,McCallister Michael B,Dir,P - Purchase,$77.76,"+3,000","+$233,273","31,893"
-2026-05-12 18:49:21,2026-05-11,IBP,"Installed Building Products, Inc.",Miller Michael Thomas,"EVP, CFO",P - Purchase,$207.82,"+2,400","+$498,771","59,639"
-2026-05-12 18:48:14,2026-05-11,IBP,"Installed Building Products, Inc.",Wheeler Brad A,COO,P - Purchase,$209.13,+716,"+$149,737","14,988"
-2026-05-12 17:44:18,2026-05-11,XRN,Chiron Real Estate Inc.,Kiernan Robert J,"CFO, Treasurer",P - Purchase,$33.49,"+3,000","+$100,470","6,000"
