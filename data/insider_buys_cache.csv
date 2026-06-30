@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-06-30 08:03:03,2026-06-23,COE,51Talk Online Education Group,Huang Jack Jiajia,"CEO, 10%",P - Purchase,$15.54,"+1,063,080","+$16,524,757","78,341,720"
+2026-06-30 06:24:40,2026-06-29,TSM,Taiwan Semiconductor Manufacturing Co Ltd,Tien Bor-Zen,VP,P - Purchase,$76.17,"+2,000","+$152,340","13,413"
 2026-06-29 19:59:47,2026-05-11,MOBI,"Mobia Medical, Inc.","Green Park & Golf Ventures - Houston, LLC",10%,P - Purchase,$15.00,"+60,537","+$908,055","60,537"
 2026-06-29 19:59:24,2026-05-11,MOBI,"Mobia Medical, Inc.","Green Park & Golf Ventures Ii, LLC",10%,P - Purchase,$15.00,"+33,333","+$499,995","311,112"
 2026-06-29 19:55:23,2026-05-11,MOBI,"Mobia Medical, Inc.","Green Park & Golf Ventures Ii, LLC",10%,P - Purchase,$15.00,"+81,000","+$1,215,000","81,000"
@@ -497,5 +499,3 @@
 2026-05-13 20:55:51,2026-05-11,RSG,"Republic Services, Inc.","Cascade Investment, L.L.C.",10%,P - Purchase,$201.40,"+499,150","+$100,528,322","110,315,982"
 2026-05-13 17:45:56,2026-05-11,ARTV,"Artiva Biotherapeutics, Inc.","Ra Capital Management, L.P.","Dir, 10%",P - Purchase,$11.52,"+6,510,416","+$74,999,992","16,363,718"
 2026-05-13 17:12:05,2026-05-12,KINS,"Kingstone Companies, Inc.",Newgarden Thomas,Dir,P - Purchase,$14.44,"+30,502","+$440,457","85,366"
-2026-05-13 17:10:38,2026-05-11,ODTX,"Odyssey Therapeutics, Inc.","Tpg Gp A, LLC",Former 10% Owner,P - Purchase,$18.00,"+1,388,889","+$25,000,002","3,690,146"
-2026-05-13 17:02:09,2026-05-13,ITIC,Investors Title Co,"Parker, Jr. Elton C.",Dir,P - Purchase,$231.00,+538,"+$124,278","3,750"
