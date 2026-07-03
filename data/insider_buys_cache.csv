@@ -1,4 +1,9 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-02 19:04:41,2026-06-30,BGDE,"Big Digital Energy, Inc.","Endeavor Blockchain, LLC",10%,P - Purchase,"$1,000.00","+16,700","+$16,700,000","16,700"
+2026-07-02 18:11:30,2026-07-01,SLGL,Sol-Gel Technologies Ltd.,Opaleye Management Inc.,10%,P - Purchase,$71.97,"+1,712","+$123,220","506,712"
+2026-07-02 16:58:31,2026-07-01,HTO,H2O America,Atlas Infrastructure Partners (Uk) Ltd.,10%,P - Purchase,$60.76,"+2,132","+$129,535","4,612,481"
+2026-07-02 16:15:17,2026-07-02,LIME,"Neutron Holdings, Inc.","Uber Technologies, Inc",10%,P - Purchase,$25.00,"+800,000","+$20,000,000","14,859,661"
+2026-07-02 15:38:32,2026-07-01,BBD,Bank Bradesco,Bueno Julio Cesar,"CLO, Exec Officer",P - Purchase,$18.10,"+110,441","+$1,998,983","560,347"
 2026-07-01 20:09:53,2026-06-29,FTH,"Faeth Therapeutics, Inc.",Stephenson Brian C,CFO,P - Purchase,$23.92,"+13,634","+$326,127","46,688"
 2026-07-01 20:00:05,2026-06-29,RH,Rh,Alberini Carlos,Dir,P - Purchase,$160.90,"+11,388","+$1,832,322","35,364"
 2026-07-01 18:05:32,2026-06-30,GTLB,Gitlab Inc.,Staples William,CEO,P - Purchase,$29.36,"+4,188","+$122,960","758,828"
@@ -494,8 +499,3 @@
 2026-05-14 17:03:53,2026-05-13,ECL,Ecolab Inc.,Maclennan David,Dir,P - Purchase,$250.65,"+1,000","+$250,650","29,439"
 2026-05-14 16:51:39,2026-05-12,PLNT,"Planet Fitness, Inc.",Keating Colleen,CEO,P - Purchase,$49.54,"+5,000","+$247,700","141,511"
 2026-05-14 16:34:19,2026-05-14,IIIV,"I3 Verticals, Inc.",Daily Gregory S,"CEO, 10%",P - Purchase,$19.23,"+50,000","+$961,500","366,227"
-2026-05-14 16:30:42,2026-05-13,PSN,Parsons Corp,Ball George L.,Dir,P - Purchase,$50.00,"+10,000","+$500,000","355,383"
-2026-05-14 16:23:25,2026-05-13,NPB,Northpointe Bancshares Inc,Williams Charles Alan,"COB, CEO, 10%",P - Purchase,$17.08,"+25,000","+$427,030","3,144,445"
-2026-05-14 16:05:04,2026-05-12,SLGL,Sol-Gel Technologies Ltd.,Opaleye Management Inc.,10%,P - Purchase,$67.36,"+3,437","+$231,502","503,437"
-2026-05-14 16:04:11,2026-05-13,POOL,Pool Corp,Perez De La Mesa Manuel J,Dir,P - Purchase,$175.95,"+10,000","+$1,759,471","958,155"
-2026-05-14 16:03:09,2026-05-14,ACM,Aecom,Kapoor Gaurav,CFO (PAO),P - Purchase,$71.12,"+1,420","+$100,990","88,224"
