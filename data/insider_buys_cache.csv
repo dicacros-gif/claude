@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-13 07:06:08,2026-05-15,CAI,"Caris Life Sciences, Inc.",Halbert Jon,Dir,P - Purchase,$14.56,"+68,000","+$990,080","1,461,106"
+2026-07-13 06:51:00,2026-07-06,COE,51Talk Online Education Group,Huang Jack Jiajia,"CEO, 10%",P - Purchase,$16.55,"+562,560","+$9,312,806","80,349,200"
 2026-07-10 19:39:30,2026-07-08,NTSK,Netskope Inc,"Iconiq Strategic Partners VIII Holdings, L.P.",10%,P - Purchase,$11.82,"+610,291","+$7,216,049","66,877,804"
 2026-07-10 19:37:28,2026-07-08,NTSK,Netskope Inc,Griffith William J.G.,"Dir, 10%",P - Purchase,$11.82,"+610,291","+$7,216,081","66,877,804"
 2026-07-10 18:08:09,2026-06-30,BGDE,"Big Digital Energy, Inc.","Endeavor Blockchain, LLC",10%,P - Purchase,"$1,000.00","+16,700","+$16,700,000","16,700"
@@ -497,5 +499,3 @@
 2026-05-15 18:13:04,2026-05-14,GSHD,"Goosehead Insurance, Inc.",Miller Mark,"Pres, CEO",P - Purchase,$36.89,"+5,000","+$184,450","40,000"
 2026-05-15 17:07:36,2026-05-13,GLP,Global Partners LP,Global Gp LLC,General Partner,P - Purchase,$49.09,"+15,000","+$736,350","37,400"
 2026-05-15 16:46:17,2026-05-13,TXO,"Txo Partners, L.P.",Simpson Bob R,"Dir, 10%",P - Purchase,$12.97,"+301,597","+$3,911,980","7,801,597"
-2026-05-15 16:30:50,2026-05-15,EQPT,Equipmentshare.Com Inc,Bhatia Naveen,Dir,P - Purchase,$24.22,"+10,000","+$242,200","312,000"
-2026-05-15 16:24:06,2026-04-02,SNSE,"Sensei Biotherapeutics, Inc.",Millennium Management LLC,10%,P - Purchase,$33.54,"+4,215","+$141,364","133,986"
