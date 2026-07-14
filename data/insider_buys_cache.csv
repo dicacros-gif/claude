@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-13 19:20:55,2026-07-10,CCCTU,Columbus Circle Capital Corp III,Columbus Circle 3 Sponsor Corp LLC,10%,P - Purchase,$10.00,"+265,000","+$2,650,000","265,000"
+2026-07-13 16:38:54,2026-07-09,ENR,"Energizer Holdings, Inc.","Aqua Capital, Ltd.",10%,P - Purchase,$20.56,"+60,000","+$1,233,570","7,480,000"
+2026-07-13 12:02:47,2026-07-07,HTO,H2O America,Atlas Infrastructure Partners (Uk) Ltd.,10%,P - Purchase,$62.03,"+2,784","+$172,692","4,615,265"
+2026-07-13 11:49:53,2026-07-10,CMC,Commercial Metals Co,Matt Peter R,"Pres, CEO",P - Purchase,$61.30,"+8,230","+$504,499","181,522"
 2026-07-13 07:06:08,2026-05-15,CAI,"Caris Life Sciences, Inc.",Halbert Jon,Dir,P - Purchase,$14.56,"+68,000","+$990,080","1,461,106"
 2026-07-13 06:51:00,2026-07-06,COE,51Talk Online Education Group,Huang Jack Jiajia,"CEO, 10%",P - Purchase,$16.55,"+562,560","+$9,312,806","80,349,200"
 2026-07-10 19:39:30,2026-07-08,NTSK,Netskope Inc,"Iconiq Strategic Partners VIII Holdings, L.P.",10%,P - Purchase,$11.82,"+610,291","+$7,216,049","66,877,804"
@@ -495,7 +499,3 @@
 2026-05-15 20:03:01,2026-05-15,BROS,Dutch Bros Inc.,Penegor Todd Allan,Dir,P - Purchase,$51.18,"+2,000","+$102,350","5,358"
 2026-05-15 19:25:26,2026-05-11,PLSE,"Pulse Biosciences, Inc.",Duggan Robert W,"Dir, 10%",P - Purchase,$19.69,"+660,233","+$12,999,988","49,450,345"
 2026-05-15 19:07:09,2026-05-13,WGS,Genedx Holdings Corp.,Meister Keith A.,"Dir, 10%",P - Purchase,$39.19,"+351,273","+$13,765,345","5,137,843"
-2026-05-15 18:18:09,2026-05-14,CVBF,Cvb Financial Corp,Borba George A Jr,Dir,P - Purchase,$19.92,"+25,097","+$499,982","7,752,673"
-2026-05-15 18:13:04,2026-05-14,GSHD,"Goosehead Insurance, Inc.",Miller Mark,"Pres, CEO",P - Purchase,$36.89,"+5,000","+$184,450","40,000"
-2026-05-15 17:07:36,2026-05-13,GLP,Global Partners LP,Global Gp LLC,General Partner,P - Purchase,$49.09,"+15,000","+$736,350","37,400"
-2026-05-15 16:46:17,2026-05-13,TXO,"Txo Partners, L.P.",Simpson Bob R,"Dir, 10%",P - Purchase,$12.97,"+301,597","+$3,911,980","7,801,597"
