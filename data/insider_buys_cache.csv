@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-14 21:15:04,2026-07-10,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$75.45,"+3,334","+$251,556","5,757,855"
 2026-07-14 17:14:19,2026-07-10,NTSK,Netskope Inc,Griffith William J.G.,"Dir, 10%",P - Purchase,$12.29,"+306,399","+$3,765,698","67,184,203"
 2026-07-14 17:10:52,2026-07-10,NTSK,Netskope Inc,"Iconiq Strategic Partners VIII Holdings, L.P.",10%,P - Purchase,$12.29,"+306,399","+$3,765,698","67,184,203"
 2026-07-13 19:20:55,2026-07-10,CCCTU,Columbus Circle Capital Corp III,Columbus Circle 3 Sponsor Corp LLC,10%,P - Purchase,$10.00,"+265,000","+$2,650,000","265,000"
@@ -498,4 +499,3 @@
 2026-05-15 20:49:36,2026-05-12,AMR,"Alpha Metallurgical Resources, Inc.",Courtis Kenneth S.,Dir,P - Purchase,$189.22,"+15,000","+$2,838,325","975,394"
 2026-05-15 20:06:17,2026-05-13,KBR,"Kbr, Inc.",Evans Shad E.,"EVP, CFO",P - Purchase,$30.60,"+8,375","+$256,275","43,725"
 2026-05-15 20:05:54,2026-05-14,GPGI,"Gpgi, Inc.",Mikkilineni Krishna,Dir,P - Purchase,$12.34,"+8,106","+$100,031","75,669"
-2026-05-15 20:03:01,2026-05-15,BROS,Dutch Bros Inc.,Penegor Todd Allan,Dir,P - Purchase,$51.18,"+2,000","+$102,350","5,358"
