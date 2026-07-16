@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-15 16:05:26,2026-07-13,SLGL,Sol-Gel Technologies Ltd.,Opaleye Management Inc.,10%,P - Purchase,$73.64,"+1,695","+$124,819","508,936"
+2026-07-15 14:50:53,2026-07-13,ENR,"Energizer Holdings, Inc.","Aqua Capital, Ltd.",10%,P - Purchase,$20.21,"+100,000","+$2,020,832","7,580,000"
 2026-07-14 21:15:04,2026-07-10,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$75.45,"+3,334","+$251,556","5,757,855"
 2026-07-14 17:14:19,2026-07-10,NTSK,Netskope Inc,Griffith William J.G.,"Dir, 10%",P - Purchase,$12.29,"+306,399","+$3,765,698","67,184,203"
 2026-07-14 17:10:52,2026-07-10,NTSK,Netskope Inc,"Iconiq Strategic Partners VIII Holdings, L.P.",10%,P - Purchase,$12.29,"+306,399","+$3,765,698","67,184,203"
@@ -497,5 +499,3 @@
 2026-05-15 21:10:03,2026-05-13,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$71.73,"+3,475","+$249,273","5,713,016"
 2026-05-15 20:49:37,2026-05-13,RLYB,Rallybio Corp,"Adar1 Capital Management, LLC",10%,P - Purchase,$13.99,"+79,559","+$1,112,977","910,143"
 2026-05-15 20:49:36,2026-05-12,AMR,"Alpha Metallurgical Resources, Inc.",Courtis Kenneth S.,Dir,P - Purchase,$189.22,"+15,000","+$2,838,325","975,394"
-2026-05-15 20:06:17,2026-05-13,KBR,"Kbr, Inc.",Evans Shad E.,"EVP, CFO",P - Purchase,$30.60,"+8,375","+$256,275","43,725"
-2026-05-15 20:05:54,2026-05-14,GPGI,"Gpgi, Inc.",Mikkilineni Krishna,Dir,P - Purchase,$12.34,"+8,106","+$100,031","75,669"
