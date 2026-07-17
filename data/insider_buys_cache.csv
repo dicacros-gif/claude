@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-17 06:15:03,2026-07-15,JEF,Jefferies Financial Group Inc.,"Sumitomo Mitsui Financial Group, Inc.",Dir,P - Purchase,$53.96,"+5,906,542","+$318,717,006","8,566,379"
 2026-07-15 16:05:26,2026-07-13,SLGL,Sol-Gel Technologies Ltd.,Opaleye Management Inc.,10%,P - Purchase,$73.64,"+1,695","+$124,819","508,936"
 2026-07-15 14:50:53,2026-07-13,ENR,"Energizer Holdings, Inc.","Aqua Capital, Ltd.",10%,P - Purchase,$20.21,"+100,000","+$2,020,832","7,580,000"
 2026-07-14 21:15:04,2026-07-10,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$75.45,"+3,334","+$251,556","5,757,855"
@@ -498,4 +499,3 @@
 2026-05-18 06:07:47,2026-05-14,TGLS,Tecnoglass Inc.,Energy Holding Corp,10%,P - Purchase,$40.51,"+100,000","+$4,050,577","20,831,985"
 2026-05-15 21:10:03,2026-05-13,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$71.73,"+3,475","+$249,273","5,713,016"
 2026-05-15 20:49:37,2026-05-13,RLYB,Rallybio Corp,"Adar1 Capital Management, LLC",10%,P - Purchase,$13.99,"+79,559","+$1,112,977","910,143"
-2026-05-15 20:49:36,2026-05-12,AMR,"Alpha Metallurgical Resources, Inc.",Courtis Kenneth S.,Dir,P - Purchase,$189.22,"+15,000","+$2,838,325","975,394"
