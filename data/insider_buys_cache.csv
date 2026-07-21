@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-20 17:30:09,2026-07-16,CBIO,"Crescent Biopharma, Inc.",Fairmount Funds Management LLC,"Dir, 10%",P - Purchase,$14.50,"+853,450","+$12,375,025","3,601,316"
+2026-07-20 16:20:04,2026-07-17,BXSY,Bexil Investment Trust,Winmill & Co. Inc,"See ""Explanation of Responses""",P - Purchase,$17.02,"+9,000","+$153,180","249,056"
+2026-07-20 08:17:10,2026-07-09,COE,51Talk Online Education Group,Huang Jack Jiajia,"CEO, 10%",P - Purchase,$17.12,"+495,360","+$8,480,293","80,905,280"
+2026-07-20 08:03:08,2026-07-16,FCEL,Fuelcell Energy Inc,Livingston III Homer John,Dir,P - Purchase,$18.79,"+26,343","+$494,967","26,343"
 2026-07-17 21:15:03,2026-07-15,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$74.03,"+3,348","+$247,865","5,761,203"
 2026-07-17 20:11:08,2026-06-25,LILA,Liberty Latin America Ltd.,Fries Michael T,Exec COB,P - Purchase,$20.39,"+49,382","+$1,006,711","149,335"
 2026-07-17 16:37:10,2026-07-15,ENR,"Energizer Holdings, Inc.","Aqua Capital, Ltd.",10%,P - Purchase,$20.72,"+80,000","+$1,657,756","7,660,000"
@@ -495,7 +499,3 @@
 2026-05-18 16:58:06,2026-05-15,SHAK,Shake Shack Inc.,Lynch Robert,CEO,P - Purchase,$60.39,"+5,000","+$301,940","77,845"
 2026-05-18 16:57:34,2026-05-15,SHAK,Shake Shack Inc.,Meyer Daniel Harris,"Dir, 10%",P - Purchase,$61.88,"+32,258","+$1,996,215","1,659,236"
 2026-05-18 16:36:56,2026-05-15,AAT,"American Assets Trust, Inc.",Rady Ernest S,"Exec COB, 10%",P - Purchase,$20.94,"+100,528","+$2,104,922","13,304,251"
-2026-05-18 16:33:39,2026-05-15,AMRZ,Amrize Ltd,Jenisch Jan Philipp,"COB, CEO",P - Purchase,$49.53,"+28,417","+$1,407,571","2,236,999"
-2026-05-18 16:27:30,2026-05-15,CHTR,"Charter Communications, Inc. /Mo/",Ramos Mauricio,Dir,P - Purchase,$140.93,"+9,929","+$1,399,308","19,309"
-2026-05-18 16:15:02,2026-05-14,TKO,"Tko Group Holdings, Inc.",Kraft Jonathan,Dir,P - Purchase,$189.96,"+5,200","+$987,797","43,432"
-2026-05-18 16:10:12,2026-05-15,MSCI,Msci Inc.,Fernandez Henry A,"COB, CEO",P - Purchase,$562.40,"+4,000","+$2,249,591","2,188,937"
