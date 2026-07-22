@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-21 18:01:43,2026-07-17,CAG,Conagra Brands Inc.,Brase John P,"Pres, CEO",P - Purchase,$14.59,"+35,000","+$510,633","35,000"
+2026-07-21 16:36:39,2026-07-17,ENR,"Energizer Holdings, Inc.","Aqua Capital, Ltd.",10%,P - Purchase,$20.21,"+100,000","+$2,020,850","7,760,000"
 2026-07-21 06:44:32,2026-07-19,TSM,Taiwan Semiconductor Manufacturing Co Ltd,Lin Shyue-Shyh,VP,P - Purchase,$71.79,"+3,000","+$215,360","33,518"
 2026-07-20 17:30:09,2026-07-16,CBIO,"Crescent Biopharma, Inc.",Fairmount Funds Management LLC,"Dir, 10%",P - Purchase,$14.50,"+853,450","+$12,375,025","3,601,316"
 2026-07-20 16:20:04,2026-07-17,BXSY,Bexil Investment Trust,Winmill & Co. Inc,"See ""Explanation of Responses""",P - Purchase,$17.02,"+9,000","+$153,180","249,056"
@@ -497,5 +499,3 @@
 2026-05-18 16:59:52,2026-05-15,SHAK,Shake Shack Inc.,Silverman Josh,Dir,P - Purchase,$60.38,"+8,290","+$500,525","18,287"
 2026-05-18 16:59:01,2026-05-15,SHAK,Shake Shack Inc.,Chapman Charles J III,Dir,P - Purchase,$61.36,"+2,000","+$122,726","6,425"
 2026-05-18 16:58:34,2026-05-15,SHAK,Shake Shack Inc.,Balbale Sumaiya,Dir,P - Purchase,$61.42,"+4,068","+$249,866","13,407"
-2026-05-18 16:58:06,2026-05-15,SHAK,Shake Shack Inc.,Lynch Robert,CEO,P - Purchase,$60.39,"+5,000","+$301,940","77,845"
-2026-05-18 16:57:34,2026-05-15,SHAK,Shake Shack Inc.,Meyer Daniel Harris,"Dir, 10%",P - Purchase,$61.88,"+32,258","+$1,996,215","1,659,236"
