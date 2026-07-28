@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-27 21:15:06,2026-07-23,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$280.15,"+3,268","+$915,526","5,767,908"
+2026-07-27 17:15:19,2026-07-23,ENR,"Energizer Holdings, Inc.","Aqua Capital, Ltd.",10%,P - Purchase,$20.62,"+120,000","+$2,473,994","8,000,000"
+2026-07-27 16:14:58,2026-07-24,BXSY,Bexil Investment Trust,Winmill & Co. Inc,"See ""Explanation of Responses""",P - Purchase,$16.93,"+9,400","+$159,164","266,843"
+2026-07-27 09:04:09,2026-07-21,COE,51Talk Online Education Group,Huang Jack Jiajia,"CEO, 10%",P - Purchase,$16.18,"+1,103,820","+$17,864,986","82,631,240"
 2026-07-24 16:34:00,2026-07-22,FSBC,Five Star Bancorp,Allbaugh Larry Eugene,"Dir, 10%",P - Purchase,$44.00,"+96,591","+$4,250,004","3,121,868"
 2026-07-24 16:33:37,2026-07-22,FSBC,Five Star Bancorp,Perry-Smith Robert Truxtun,Dir,P - Purchase,$44.00,"+31,363","+$1,379,972","258,898"
 2026-07-24 16:32:46,2026-07-22,FSBC,Five Star Bancorp,Deary-Bell Shannon,Dir,P - Purchase,$44.00,"+5,682","+$250,008","95,074"
@@ -495,7 +499,3 @@
 2026-05-20 10:26:49,2026-05-19,AMRZ,Amrize Ltd,Jenisch Jan Philipp,"COB, CEO",P - Purchase,$49.39,"+19,001","+$938,451","2,256,000"
 2026-05-19 20:30:29,2026-05-19,CVBF,Cvb Financial Corp,Borba George A Jr,Dir,P - Purchase,$19.85,"+25,187","+$500,000","7,777,860"
 2026-05-19 19:24:31,2026-05-15,RIVN,"Rivian Automotive, Inc. / De",Gomez Aidan N.,Dir,P - Purchase,$13.97,"+18,000","+$251,460","54,232"
-2026-05-19 18:44:03,2026-05-15,EROK,"Eaglerock Land, LLC",Nelson James Carl,Dir,P - Purchase,$18.50,"+100,000","+$1,850,000","50,000"
-2026-05-19 18:41:38,2026-05-15,EROK,"Eaglerock Land, LLC",Wallace Michael Wayne,Dir,P - Purchase,$18.50,"+250,000","+$4,625,000","250,000"
-2026-05-19 18:40:13,2026-05-15,EROK,"Eaglerock Land, LLC",Reed Stephanie L,Dir,P - Purchase,$18.50,"+13,513","+$249,991","13,513"
-2026-05-19 18:39:05,2026-05-14,LWAY,"Lifeway Foods, Inc.",Zolezzi William,10%,P - Purchase,$25.45,"+165,045","+$4,200,968","2,101,540"
