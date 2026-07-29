@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-28 19:29:49,2026-07-27,ACI,"Albertsons Companies, Inc.",Moriarty Thomas M,"EVP, M, A, Corporate Affairs",P - Purchase,$11.51,"+170,500","+$1,962,285","308,946"
+2026-07-28 17:05:55,2026-07-28,CVBF,Cvb Financial Corp,O Brien Raymond V III,Dir,P - Purchase,$22.77,"+20,000","+$455,300","85,780"
+2026-07-28 16:38:59,2026-07-24,GSHD,"Goosehead Insurance, Inc.",Durable Capital Partners LP,10%,P - Purchase,$59.22,"+153,723","+$9,104,027","2,534,004"
+2026-07-28 15:37:23,2026-07-27,MTAK,Market Technology Acquisition Corp,Market Technology Acquisition Sponsor LLC,10%,P - Purchase,$10.00,"+452,500","+$4,525,000","452,500"
 2026-07-27 21:15:06,2026-07-23,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$280.15,"+3,268","+$915,526","5,767,908"
 2026-07-27 17:15:19,2026-07-23,ENR,"Energizer Holdings, Inc.","Aqua Capital, Ltd.",10%,P - Purchase,$20.62,"+120,000","+$2,473,994","8,000,000"
 2026-07-27 16:14:58,2026-07-24,BXSY,Bexil Investment Trust,Winmill & Co. Inc,"See ""Explanation of Responses""",P - Purchase,$16.93,"+9,400","+$159,164","266,843"
@@ -495,7 +499,3 @@
 2026-05-20 16:06:27,2026-05-18,FRPT,"Freshpet, Inc.",McLevish Timothy R,Dir,P - Purchase,$48.67,"+3,000","+$146,010","39,879"
 2026-05-20 15:25:42,2026-05-18,UTGN,Utg Inc,Correll Jesse T,"COB, CEO, 10%",P - Purchase,$54.96,"+4,850","+$266,556","2,052,904"
 2026-05-20 15:04:42,2026-05-18,UTGN,Utg Inc,First Southern Funding LLC,10%,P - Purchase,$54.96,"+4,850","+$266,556","1,693,683"
-2026-05-20 13:34:41,2026-05-18,AXIA,Axia Energia S.A.,Batista De Lima Filho Pedro,Dir,P - Purchase,$11.27,"+49,600","+$559,144","6,111,815"
-2026-05-20 10:26:49,2026-05-19,AMRZ,Amrize Ltd,Jenisch Jan Philipp,"COB, CEO",P - Purchase,$49.39,"+19,001","+$938,451","2,256,000"
-2026-05-19 20:30:29,2026-05-19,CVBF,Cvb Financial Corp,Borba George A Jr,Dir,P - Purchase,$19.85,"+25,187","+$500,000","7,777,860"
-2026-05-19 19:24:31,2026-05-15,RIVN,"Rivian Automotive, Inc. / De",Gomez Aidan N.,Dir,P - Purchase,$13.97,"+18,000","+$251,460","54,232"
