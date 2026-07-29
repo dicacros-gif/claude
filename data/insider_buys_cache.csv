@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-28 21:30:16,2026-07-24,SCTX,"Scribe Therapeutics, Inc.",Aghazadeh Behzad,"See Remarks, 10%",P - Purchase,$15.16,"+2,391,238","+$36,259,761","3,088,888"
 2026-07-28 19:29:49,2026-07-27,ACI,"Albertsons Companies, Inc.",Moriarty Thomas M,"EVP, M, A, Corporate Affairs",P - Purchase,$11.51,"+170,500","+$1,962,285","308,946"
 2026-07-28 17:05:55,2026-07-28,CVBF,Cvb Financial Corp,O Brien Raymond V III,Dir,P - Purchase,$22.77,"+20,000","+$455,300","85,780"
 2026-07-28 16:38:59,2026-07-24,GSHD,"Goosehead Insurance, Inc.",Durable Capital Partners LP,10%,P - Purchase,$59.22,"+153,723","+$9,104,027","2,534,004"
@@ -498,4 +499,3 @@
 2026-05-20 16:37:54,2026-05-19,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$17.45,"+16,828","+$293,720","18,791,083"
 2026-05-20 16:06:27,2026-05-18,FRPT,"Freshpet, Inc.",McLevish Timothy R,Dir,P - Purchase,$48.67,"+3,000","+$146,010","39,879"
 2026-05-20 15:25:42,2026-05-18,UTGN,Utg Inc,Correll Jesse T,"COB, CEO, 10%",P - Purchase,$54.96,"+4,850","+$266,556","2,052,904"
-2026-05-20 15:04:42,2026-05-18,UTGN,Utg Inc,First Southern Funding LLC,10%,P - Purchase,$54.96,"+4,850","+$266,556","1,693,683"
