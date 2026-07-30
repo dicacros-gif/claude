@@ -1,4 +1,9 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-29 19:09:52,2026-07-27,SCTX,"Scribe Therapeutics, Inc.","Ah Bio Fund Ii, L.P.",10%,P - Purchase,$15.00,"+333,333","+$4,999,995","3,082,725"
+2026-07-29 18:50:42,2026-07-27,SCTX,"Scribe Therapeutics, Inc.",Gordon Carl L,Dir,P - Purchase,$15.00,"+1,000,000","+$15,000,000","1,348,825"
+2026-07-29 18:47:29,2026-07-27,SCTX,"Scribe Therapeutics, Inc.",Orbimed Advisors LLC,Dir,P - Purchase,$15.00,"+1,000,000","+$15,000,000","1,348,825"
+2026-07-29 16:39:00,2026-07-27,BWMX,"Betterware De Mexico, S.A.P.I. De C.V",Campos Luis,"Chairman, 10%",P - Purchase,$16.41,"+46,830","+$768,480","20,249,565"
+2026-07-29 16:17:53,2026-07-28,BXSY,Bexil Investment Trust,Winmill & Co. Inc,"See ""Explanation of Responses""",P - Purchase,$16.99,"+7,029","+$119,446","273,872"
 2026-07-28 21:30:16,2026-07-24,SCTX,"Scribe Therapeutics, Inc.",Aghazadeh Behzad,"See Remarks, 10%",P - Purchase,$15.16,"+2,391,238","+$36,259,761","3,088,888"
 2026-07-28 19:29:49,2026-07-27,ACI,"Albertsons Companies, Inc.",Moriarty Thomas M,"EVP, M, A, Corporate Affairs",P - Purchase,$11.51,"+170,500","+$1,962,285","308,946"
 2026-07-28 17:05:55,2026-07-28,CVBF,Cvb Financial Corp,O Brien Raymond V III,Dir,P - Purchase,$22.77,"+20,000","+$455,300","85,780"
@@ -494,8 +499,3 @@
 2026-05-20 18:55:14,2026-05-19,EQPT,Equipmentshare.Com Inc,Hill W Bryan,Dir,P - Purchase,$22.89,"+21,803","+$499,071","35,794"
 2026-05-20 17:54:17,2026-05-18,WEX,Wex Inc.,Groch James R,Dir,P - Purchase,$142.95,"+1,500","+$214,425","17,957"
 2026-05-20 17:48:55,2026-05-18,TXO,"Txo Partners, L.P.",Simpson Bob R,"Dir, 10%",P - Purchase,$13.28,"+148,403","+$1,970,745","7,950,000"
-2026-05-20 17:40:08,2026-05-18,GLP,Global Partners LP,Global Gp LLC,General Partner,P - Purchase,$49.92,"+25,000","+$1,247,875","62,400"
-2026-05-20 16:58:53,2026-05-19,HRTG,"Heritage Insurance Holdings, Inc.",Whiting Paul L,Dir,P - Purchase,$23.56,"+16,000","+$376,950","163,997"
-2026-05-20 16:37:54,2026-05-19,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$17.45,"+16,828","+$293,720","18,791,083"
-2026-05-20 16:06:27,2026-05-18,FRPT,"Freshpet, Inc.",McLevish Timothy R,Dir,P - Purchase,$48.67,"+3,000","+$146,010","39,879"
-2026-05-20 15:25:42,2026-05-18,UTGN,Utg Inc,Correll Jesse T,"COB, CEO, 10%",P - Purchase,$54.96,"+4,850","+$266,556","2,052,904"
