@@ -1,4 +1,9 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-30 21:15:03,2026-07-28,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$78.50,"+3,191","+$250,501","5,771,099"
+2026-07-30 18:39:21,2026-07-28,MLPT,"Maplight Therapeutics, Inc.","Catalyst4, Inc.",10%,P - Purchase,$12.67,"+1,209,225","+$15,314,794","20,906,689"
+2026-07-30 17:04:06,2026-07-28,LBRT,Liberty Energy Inc.,Murti Arjun N,Dir,P - Purchase,$17.79,"+14,053","+$250,009","41,621"
+2026-07-30 10:36:23,2026-07-28,NWFL,Norwood Financial Corp,Shook James,Dir,P - Purchase,$34.55,"+3,100","+$107,105","13,411"
+2026-07-30 08:32:47,2026-07-28,ACI,"Albertsons Companies, Inc.",Morris Susan,CEO,P - Purchase,$11.42,"+39,409","+$449,938","1,092,956"
 2026-07-30 06:57:37,2026-07-24,COE,51Talk Online Education Group,Huang Jack Jiajia,"CEO, 10%",P - Purchase,$16.76,"+637,200","+$10,681,309","83,268,440"
 2026-07-29 19:09:52,2026-07-27,SCTX,"Scribe Therapeutics, Inc.","Ah Bio Fund Ii, L.P.",10%,P - Purchase,$15.00,"+333,333","+$4,999,995","3,082,725"
 2026-07-29 18:50:42,2026-07-27,SCTX,"Scribe Therapeutics, Inc.",Gordon Carl L,Dir,P - Purchase,$15.00,"+1,000,000","+$15,000,000","1,348,825"
@@ -494,8 +499,3 @@
 2026-05-20 21:10:03,2026-05-18,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$73.50,"+3,436","+$252,536","5,716,452"
 2026-05-20 21:03:05,2026-05-20,MP,Mp Materials Corp. / De,Rosenthal Michael Stuart,COO,P - Purchase,$56.62,"+17,000","+$962,540","1,460,295"
 2026-05-20 20:51:06,2026-05-19,LQDA,Liquidia Corp,Caligan Partners LP,"See Remarks, 10%",P - Purchase,$59.98,"+5,300","+$317,894","16,290,998"
-2026-05-20 20:45:33,2026-05-18,RLYB,Rallybio Corp,"Adar1 Capital Management, LLC",10%,P - Purchase,$13.98,"+16,209","+$226,563","926,352"
-2026-05-20 20:31:13,2026-05-20,BETR,Better Home & Finance Holding Co,Garg Vishal,"CEO, 10%",P - Purchase,$25.00,"+15,600","+$389,994","102,660"
-2026-05-20 19:45:45,2026-05-18,WGS,Genedx Holdings Corp.,"Casdin Capital, LLC","Dir, 10%",P - Purchase,$42.92,"+500,000","+$21,459,736","3,880,072"
-2026-05-20 18:55:14,2026-05-19,EQPT,Equipmentshare.Com Inc,Hill W Bryan,Dir,P - Purchase,$22.89,"+21,803","+$499,071","35,794"
-2026-05-20 17:54:17,2026-05-18,WEX,Wex Inc.,Groch James R,Dir,P - Purchase,$142.95,"+1,500","+$214,425","17,957"
