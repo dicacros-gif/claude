@@ -1,4 +1,7 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-07-31 16:42:12,2026-07-30,IONS,Ionis Pharmaceuticals Inc,Hayden Michael R,Dir,P - Purchase,$52.94,"+20,000","+$1,058,700","78,298"
+2026-07-31 16:05:30,2026-07-29,CATLU,Catalyst Acquisition Corp.,Catalyst Sponsor LLC,10%,P - Purchase,$10.00,"+270,000","+$2,700,000","270,000"
+2026-07-31 15:37:25,2026-07-30,BMI,Badger Meter Inc,Callahan Edward F.,VP-Engineering,P - Purchase,$135.25,+751,"+$101,572","1,937"
 2026-07-30 21:15:03,2026-07-28,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$78.50,"+3,191","+$250,501","5,771,099"
 2026-07-30 18:39:21,2026-07-28,MLPT,"Maplight Therapeutics, Inc.","Catalyst4, Inc.",10%,P - Purchase,$12.67,"+1,209,225","+$15,314,794","20,906,689"
 2026-07-30 17:04:06,2026-07-28,LBRT,Liberty Energy Inc.,Murti Arjun N,Dir,P - Purchase,$17.79,"+14,053","+$250,009","41,621"
@@ -496,6 +499,3 @@
 2026-05-21 15:38:08,2026-05-20,CRESY,Cresud Inc,Zang Saul,Dir,P - Purchase,$10.63,"+17,000","+$180,783","334,720"
 2026-05-21 12:31:58,2026-05-19,AMRZ,Amrize Ltd,Gross Mario,Chief Supply Chain Officer,P - Purchase,$49.01,"+4,000","+$196,032","34,747"
 2026-05-20 21:29:39,2026-05-19,FBIN,"Fortune Brands Innovations, Inc.",Garden Edward P,Dir,P - Purchase,$33.40,"+408,900","+$13,656,552","3,567,532"
-2026-05-20 21:10:03,2026-05-18,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$73.50,"+3,436","+$252,536","5,716,452"
-2026-05-20 21:03:05,2026-05-20,MP,Mp Materials Corp. / De,Rosenthal Michael Stuart,COO,P - Purchase,$56.62,"+17,000","+$962,540","1,460,295"
-2026-05-20 20:51:06,2026-05-19,LQDA,Liquidia Corp,Caligan Partners LP,"See Remarks, 10%",P - Purchase,$59.98,"+5,300","+$317,894","16,290,998"
