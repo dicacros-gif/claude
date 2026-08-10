@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-08-10 06:31:12,2026-07-31,COE,51Talk Online Education Group,Huang Jack Jiajia,"CEO, 10%",P - Purchase,$18.58,"+740,760","+$13,761,121","84,482,720"
+2026-08-10 06:07:10,2026-08-07,PRCT,Procept Biorobotics Corp,Wood Larry L,"Pres, CEO",P - Purchase,$20.85,"+23,900","+$498,315","338,103"
 2026-08-07 21:47:17,2026-08-06,ATTO,"Attovia Therapeutics, Inc.","Redmile Group, LLC",10%,P - Purchase,$17.00,"+600,000","+$10,200,000","2,165,708"
 2026-08-07 21:15:04,2026-08-05,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$78.96,"+3,181","+$251,170","5,776,804"
 2026-08-07 19:36:40,2026-08-05,CCB,Coastal Financial Corp,Hovde Steven D,"Dir, 10%",P - Purchase,$43.88,"+15,000","+$658,250","1,743,793"
@@ -497,5 +499,3 @@
 2026-05-28 07:24:49,2026-05-27,MTDR,Matador Resources Co,Foran Joseph Wm,"COB, CEO",P - Purchase,$52.36,"+4,675","+$244,783","5,455,655"
 2026-05-27 18:42:33,2026-05-27,BOC,Boston Omaha Corp,Royal Jeffrey C,Dir,P - Purchase,$12.69,"+41,046","+$520,983","100,690"
 2026-05-27 18:18:27,2026-05-22,TWFG,"Twfg, Inc.",Doak Michael,Dir,P - Purchase,$18.83,"+46,880","+$882,586","678,515"
-2026-05-27 17:49:18,2026-05-27,FONR,Fonar Corp,Shane Hilary,10%,P - Purchase,$18.99,"+71,414","+$1,356,152","890,171"
-2026-05-27 17:20:02,2026-05-22,APUR,Aperture Ac,Aperture Sponsor LLC,10%,P - Purchase,$10.00,"+223,000","+$2,230,000","223,000"
