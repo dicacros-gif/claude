@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-08-17 21:53:45,2026-08-13,MOBI,"Mobia Medical, Inc.",Tansey Casey M,Dir,P - Purchase,$11.63,"+68,559","+$797,173","301,891"
+2026-08-17 21:04:48,2026-08-13,LWAY,"Lifeway Foods, Inc.","Divisadero Street Capital Management, LP",10%,P - Purchase,$24.85,"+246,568","+$6,126,812","2,348,108"
 2026-08-17 20:04:32,2026-08-13,DKL,"Delek Logistics Partners, LP",Soreq Avigal,Pres,P - Purchase,$50.00,"+2,500","+$125,000","84,782"
 2026-08-17 20:02:18,2026-08-13,DKL,"Delek Logistics Partners, LP",Hobbs Mark Wayne,EVP,P - Purchase,$50.00,"+4,000","+$200,000","24,125"
 2026-08-17 19:56:57,2026-08-13,DKL,"Delek Logistics Partners, LP",Yemin Ezra Uzi,COB,P - Purchase,$50.00,"+6,000","+$300,000","221,918"
@@ -497,5 +499,3 @@
 2026-06-09 20:45:14,2026-06-05,LFTO,"Liftoff Mobile, Inc.","General Atlantic Genpar, L.P.","Dir, 10%",P - Purchase,$23.00,"+1,304,347","+$29,999,981","25,315,646"
 2026-06-09 20:43:11,2026-06-05,LFTO,"Liftoff Mobile, Inc.","General Atlantic (Lft), L.P.","Dir, 10%",P - Purchase,$23.00,"+1,304,347","+$29,999,981","25,315,646"
 2026-06-09 17:40:12,2026-06-05,IMNM,Immunome Inc.,Bienaime Jean Jacques,Dir,P - Purchase,$19.45,"+10,500","+$204,260","43,415"
-2026-06-09 17:15:17,2026-06-04,DGAC,Disciplined Growth Acquisition Corp,Disciplined Growth Sponsor LLC,10%,P - Purchase,$10.00,"+181,750","+$1,817,500","181,750"
-2026-06-09 17:06:09,2026-03-05,TT,Trane Technologies Plc,Hayes John A,Dir,P - Purchase,$430.44,+400,"+$172,176","2,525"
