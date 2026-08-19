@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-08-18 21:02:43,2026-08-14,ASND,Ascendis Pharma A/S,Bienaime Jean Jacques,Dir,P - Purchase,$246.33,"+2,000","+$492,654","2,900"
+2026-08-18 20:31:08,2026-08-13,CODI,Compass Diversified Holdings,Sawtelle Zachary T.,See Remark (a),P - Purchase,$12.42,"+17,000","+$211,147","73,588"
 2026-08-18 19:06:38,2026-08-14,EQPT,Equipmentshare.Com Inc,Schlacks William J.,"Founder, Pres",P - Purchase,$20.43,"+8,950","+$182,884","14,365,498"
 2026-08-18 18:55:39,2026-08-14,MLPT,"Maplight Therapeutics, Inc.","Catalyst4, Inc.",10%,P - Purchase,$11.38,"+4,400,000","+$50,072,000","25,306,689"
 2026-08-18 17:51:12,2026-08-17,AUGO,Aura Minerals Inc.,Sousa Mauad Bruno,Dir,P - Purchase,$78.93,"+11,000","+$868,230","448,765"
@@ -497,5 +499,3 @@
 2026-06-11 18:33:43,2026-06-05,AII,"American Integrity Insurance Group, Inc.",Sowell James E,10%,P - Purchase,$16.88,"+136,356","+$2,301,242","4,610,180"
 2026-06-11 18:31:33,2026-06-11,STEP,Stepstone Group Inc.,McCabe Michael I,Head of Strategy,P - Purchase,$41.85,"+120,000","+$5,022,072","3,398,945"
 2026-06-11 18:12:04,2026-06-09,VIA,"Via Transportation, Inc.",Peres Nechemia Jacob,Dir,P - Purchase,$14.70,"+25,000","+$367,500","5,162,551"
-2026-06-11 17:57:48,2026-06-10,RYAN,"Ryan Specialty Holdings, Inc.",Rogers John W Jr,Dir,P - Purchase,$35.16,"+7,500","+$263,732","117,933"
-2026-06-11 17:04:19,2026-06-09,GLP,Global Partners LP,Global Gp LLC,General Partner,P - Purchase,$49.81,"+10,000","+$498,050","126,584"
