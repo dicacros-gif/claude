@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-08-20 21:05:40,2026-08-18,MOBI,"Mobia Medical, Inc.",Tansey Casey M,Dir,P - Purchase,$12.07,"+16,441","+$198,523","318,332"
+2026-08-20 20:43:03,2026-08-20,AMR,"Alpha Metallurgical Resources, Inc.",Courtis Kenneth S.,Dir,P - Purchase,$193.50,"+15,000","+$2,902,552","1,000,394"
 2026-08-20 18:10:28,2026-08-18,SGRY,"Surgery Partners, Inc.",Deluca Teresa,Dir,P - Purchase,$14.33,"+11,250","+$161,213","68,093"
 2026-08-20 17:14:33,2026-08-18,ET,Energy Transfer LP,Warren Kelcy L,Dir,P - Purchase,$21.26,"+1,000,000","+$21,263,520","455,659,009"
 2026-08-20 17:07:35,2026-08-19,BWA,Borgwarner Inc,Kalathur Rajesh,Dir,P - Purchase,$67.59,"+7,407","+$500,664","7,407"
@@ -497,5 +499,3 @@
 2026-06-15 16:30:19,2026-06-11,NDAQ,"Nasdaq, Inc.",Investor Ab,10%,P - Purchase,$85.98,"+56,782","+$4,882,116","58,439,208"
 2026-06-15 16:15:27,2026-06-11,HLNE,Hamilton Lane Inc,Rogers Hartley R.,"Exec Co-COB, 10%",P - Purchase,$78.49,"+38,290","+$3,005,339","6,660,144"
 2026-06-15 16:13:05,2026-06-11,HLNE,Hamilton Lane Inc,Berkman David J,Dir,P - Purchase,$76.27,"+15,000","+$1,144,050","50,000"
-2026-06-15 16:07:12,2026-06-12,PAR,Par Technology Corp,Pascal Keith,Dir,P - Purchase,$15.16,"+13,000","+$197,080","41,749"
-2026-06-15 16:05:03,2026-06-11,INR,"Infinity Natural Resources, Inc.",Quinn William J,"Dir, 10%",P - Purchase,$13.20,"+11,497","+$151,750","28,960,732"
