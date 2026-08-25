@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-08-24 21:41:55,2026-08-20,PRE,Prenetics Global Ltd,Yeung Danny Sheng Wu,CEO,P - Purchase,$20.34,"+24,681","+$501,998","112,416"
 2026-08-24 17:30:03,2026-08-24,KURA,"Kura Oncology, Inc.",Wilson Troy Edward,"Pres, CEO",P - Purchase,$12.39,"+100,000","+$1,239,000","1,214,650"
 2026-08-24 17:25:03,2026-08-20,USAC,"USA Compression Partners, LP",Whitehurst Bradford D.,Dir,P - Purchase,$26.22,"+10,000","+$262,200","43,616"
 2026-08-24 17:21:48,2026-08-24,ABCL,Abcellera Biologics Inc.,Hayden Michael R,Dir,P - Purchase,$10.64,"+53,613","+$570,442","1,491,642"
@@ -498,4 +499,3 @@
 2026-06-16 16:11:17,2026-06-16,FISV,Fiserv Inc,Rosman Adam L.,"Chief Admin., Legal Officer",P - Purchase,$49.33,"+10,150","+$500,700","136,724"
 2026-06-16 16:10:06,2026-06-16,FISV,Fiserv Inc,Yarkoni Charlotte,Dir,P - Purchase,$49.49,"+2,023","+$100,118","10,146"
 2026-06-16 16:09:10,2026-06-16,FISV,Fiserv Inc,Disimone Harry,Dir,P - Purchase,$48.41,"+2,088","+$101,080","26,313"
-2026-06-16 16:08:05,2026-06-16,FISV,Fiserv Inc,Nixon Gordon M.,Dir,P - Purchase,$49.57,"+7,500","+$371,775","17,656"
