@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-08-25 20:42:01,2026-08-25,TTMI,Ttm Technologies Inc,Roks Edwin,"Pres, CEO",P - Purchase,$111.77,"+10,000","+$1,117,700","64,814"
 2026-08-25 19:25:03,2026-08-21,AMRC,"Ameresco, Inc.",Cox Brian C,Dir,P - Purchase,$21.64,"+4,625","+$100,085","44,325"
 2026-08-25 17:05:14,2026-08-25,AMR,"Alpha Metallurgical Resources, Inc.",Courtis Kenneth S.,Dir,P - Purchase,$216.53,"+5,000","+$1,082,665","1,020,394"
 2026-08-25 16:23:18,2026-08-21,AMT,American Tower Corp /Ma/,Kalathur Rajesh,Dir,P - Purchase,$177.00,"+2,829","+$500,733","7,936"
@@ -498,4 +499,3 @@
 2026-06-16 21:10:03,2026-06-12,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$74.18,"+3,360","+$249,250","5,737,147"
 2026-06-16 20:41:42,2026-06-12,AMR,"Alpha Metallurgical Resources, Inc.",Courtis Kenneth S.,Dir,P - Purchase,$200.73,"+10,000","+$2,007,296","985,394"
 2026-06-16 18:19:27,2026-06-12,PBLS,"Parabilis Medicines, Inc.",Sebulsky Alan,Dir,P - Purchase,$27.06,"+17,500","+$473,529","30,000"
-2026-06-16 18:00:57,2026-06-15,KNOP,Knot Offshore Partners LP,Seglem Trygve,Dir,P - Purchase,$20.00,"+1,250,000","+$25,000,000","11,462,361"
