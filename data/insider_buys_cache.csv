@@ -1,4 +1,7 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-08-27 15:12:26,2026-08-25,CINF,Cincinnati Financial Corp,Debbink Dirk J,Dir,P - Purchase,$171.64,"+1,000","+$171,640","62,059"
+2026-08-27 14:23:53,2026-08-26,AVBC,"Avidia Bancorp, Inc.",Grimaldo Joseph F,Dir,P - Purchase,$22.02,"+5,000","+$110,088","69,655"
+2026-08-27 13:54:42,2026-08-25,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$19.05,"+19,508","+$371,649","18,985,688"
 2026-08-26 18:46:49,2026-08-25,BSX,Boston Scientific Corp,Morano Susan E,Dir,P - Purchase,$49.22,"+2,040","+$100,408","13,784"
 2026-08-26 18:18:58,2026-08-25,NGL,Ngl Energy Partners LP,Collingsworth James M,Dir,P - Purchase,$16.83,"+11,008","+$185,226","774,878"
 2026-08-26 17:52:16,2026-08-24,OPLN,"Openlane, Inc.",Kelly Peter J,CEO,P - Purchase,$33.72,"+14,830","+$499,999","14,830"
@@ -496,6 +499,3 @@
 2026-06-22 14:45:36,2026-06-17,ENR,"Energizer Holdings, Inc.","Aqua Capital, Ltd.",10%,P - Purchase,$20.99,"+64,314","+$1,350,011","7,300,000"
 2026-06-22 07:07:36,2026-06-17,AVO,"Mission Produce, Inc.",Taylor Bruce C.,Dir,P - Purchase,$11.27,"+286,410","+$3,227,841","6,691,540"
 2026-06-18 18:23:46,2026-06-12,XRAY,Dentsply Sirona Inc.,Mazelsky Jonathan Jay,Dir,P - Purchase,$10.14,"+10,000","+$101,400","61,669"
-2026-06-18 17:08:30,2026-05-07,ABT,Abbott Laboratories,Stratton John G,Dir,P - Purchase,$86.82,"+2,000","+$173,640","23,319"
-2026-06-18 17:00:15,2026-06-18,CAES,"Cantor Equity Partners Vii, Inc.","Cantor Ep Holdings Vii, LLC",10%,P - Purchase,$10.00,"+600,000","+$6,000,000","600,000"
-2026-06-18 16:43:18,2026-06-17,INR,"Infinity Natural Resources, Inc.",Gieselman Scott,Dir,P - Purchase,$12.94,"+10,000","+$129,440","108,929"
