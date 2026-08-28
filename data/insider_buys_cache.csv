@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-08-28 07:54:00,2026-08-26,KLAR,Klarna Group Plc,Siemiatkowski Sebastian,CEO,P - Purchase,$14.37,"+692,506","+$9,949,164","25,344,322"
 2026-08-27 19:51:53,2026-08-26,AMRC,"Ameresco, Inc.",Sakellaris George P,"CEO, 10%",P - Purchase,$22.66,"+5,000","+$113,280","2,310,597"
 2026-08-27 18:06:21,2026-08-27,SGI,Somnigroup International Inc.,Thompson Scott L,"CEO, Pres",P - Purchase,$62.84,"+30,000","+$1,885,314","4,123,634"
 2026-08-27 18:02:13,2026-08-27,JTTT,Jatt III Acquisition Corp,Jatt Ventures III L.P.,10%,P - Purchase,$10.00,"+234,000","+$2,340,000","1,959,000"
@@ -498,4 +499,3 @@
 2026-06-22 19:57:28,2026-06-22,MSTR,Strategy Inc,Le Phong,"Pres, CEO",P - Purchase,$90.80,"+11,000","+$998,756","156,018"
 2026-06-22 19:03:38,2026-06-18,FCBM,"First Carolina Financial Services, Inc.",Robbins Charles Austin Jr,Dir,P - Purchase,$12.50,"+14,000","+$175,000","385,492"
 2026-06-22 19:03:23,2026-06-18,FCBM,"First Carolina Financial Services, Inc.",Lucas James A Jr,Dir,P - Purchase,$12.50,"+19,180","+$239,750","684,180"
-2026-06-22 19:03:12,2026-06-18,FCBM,"First Carolina Financial Services, Inc.",Gussenhoven John Walter,Dir,P - Purchase,$12.50,"+16,000","+$200,000","334,016"
