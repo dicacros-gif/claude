@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-08-28 17:38:55,2026-08-05,ATTO,"Attovia Therapeutics, Inc.",Walsh Colin,Dir,P - Purchase,$17.58,"+585,000","+$10,285,000","3,020,632"
+2026-08-28 17:38:09,2026-08-05,ATTO,"Attovia Therapeutics, Inc.",Goldman Sachs Group Inc,Former 10% Owner,P - Purchase,$17.58,"+585,000","+$10,285,000","3,020,632"
+2026-08-28 17:35:38,2026-08-28,RNAQ,Rainier Acquisition Corp,Grossman Jonas,"Dir, 10%",P - Purchase,$10.00,"+194,375","+$1,943,750","194,375"
+2026-08-28 17:11:18,2026-08-26,SITE,"Siteone Landscape Supply, Inc.",Black Doug,CEO,P - Purchase,$96.13,"+5,000","+$480,650","602,427"
 2026-08-28 16:50:26,2026-08-26,RSG,"Republic Services, Inc.","Cascade Investment, L.L.C.",10%,P - Purchase,$220.52,"+560,100","+$123,511,813","113,935,127"
 2026-08-28 16:24:32,2026-08-26,DKS,"Dick'S Sporting Goods, Inc.",Mathrani Sandeep,Dir,P - Purchase,$128.89,"+1,550","+$199,783","13,761"
 2026-08-28 16:24:09,2026-08-27,DKS,"Dick'S Sporting Goods, Inc.",Barrenechea Mark J,Dir,P - Purchase,$130.72,"+17,000","+$2,222,240","27,790"
@@ -495,7 +499,3 @@
 2026-06-24 17:21:03,2026-06-22,KMX,Carmax Inc,Bensen Peter J,Dir,P - Purchase,$52.20,"+2,500","+$130,500","24,796"
 2026-06-24 17:20:54,2026-06-22,KMX,Carmax Inc,Barr Keith,"Pres, CEO",P - Purchase,$53.01,"+9,400","+$498,247","33,375"
 2026-06-24 16:20:56,2026-06-22,KARD,"Kardigan, Inc.",Berns Paul L,"Dir, 10%",P - Purchase,$16.00,"+1,250,000","+$20,000,000","15,062,741"
-2026-06-24 16:18:45,2026-06-22,KARD,"Kardigan, Inc.","Arch Venture Partners Xiii, LLC","Dir, 10%",P - Purchase,$16.00,"+1,250,000","+$20,000,000","15,042,035"
-2026-06-24 16:16:30,2026-06-23,F,Ford Motor Co,Thornton John L,Dir,P - Purchase,$14.05,"+10,600","+$148,880","486,685"
-2026-06-24 16:04:15,2026-06-22,COR,"Cencora, Inc.",Tyler Lauren M,Dir,P - Purchase,$270.23,+550,"+$148,627","4,359"
-2026-06-24 12:55:22,2026-06-22,NOG,"Northern Oil & Gas, Inc.",Akradi Bahram,Dir,P - Purchase,$19.40,"+25,760","+$499,741","1,713,444"
