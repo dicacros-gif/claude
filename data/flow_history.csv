@@ -23663,15 +23663,17 @@
 2026-08-31,NYSE:WT,"WisdomTree, Inc.",,,,,,48.2
 2026-08-31,NYSE:DINO,HF Sinclair Corporation,,,,,,43.5
 2026-08-31,NYSE:DK,Delek US Holdings Inc,,,,,,39.8
-2026-09-01,NASDAQ:APGE,"Apogee Therapeutics, Inc.",,,,,,36.5
 2026-09-01,NYSE:BIO.B,"Bio-Rad Laboratories, Inc.",,,,,,40.2
+2026-09-01,NYSE:OGN,Organon & Co.,,,,,,34.8
+2026-09-01,NASDAQ:SBLK,Star Bulk Carriers Corp.,,,,,,44.9
 2026-09-01,NYSE:SHO/PH,"Sunstone Hotel Investors, Inc.",,,,,,40.6
-2026-09-01,NYSE:CIM/PB,Chimera Investment Corp Cum Red Pfd…,,,,,,33.3
-2026-09-01,NASDAQ:RCBC,River City Bank,,,,,,38.7
+2026-09-01,NASDAQ:FRNM,"Freenome, Inc.",,,,,,34.9
+2026-09-01,NYSE:EVAC,EQV Ventures Acquisition Corp.,,,,,,33.7
+2026-09-01,NASDAQ:MESH,Meshflow Acquisition Corp.,,,,,,34.9
 2026-09-01,NASDAQ:KFII,K&F Growth Acquisition Corp.,,,,,,35.4
-2026-09-01,NASDAQ:MEVO,M Evo Global Acquisition Corp II…,,,,,,34.7
 2026-09-01,NASDAQ:WENN,Wen Acquisition Corp Class A,,,,,,34.9
 2026-09-01,NASDAQ:YICCU,Yorkville International Capital…,,,,,,34.7
+2026-09-01,NYSE:VACI,Viking Acquisition Corp.,,,,,,33.6
 2026-09-01,NASDAQ:SDHI,Siddhi Acquisition Corp.,,,,,,32.9
 2026-09-01,NASDAQ:DRDB,Roman DBDR Acquisition Corp. II,,,,,,34.3
 2026-09-01,NASDAQ:OBA,Oxley Bridge Acquisition Limited…,,,,,,35.8
@@ -23682,8 +23684,8 @@
 2026-09-01,NASDAQ:VHCP,Vine Hill Capital Investment Corp.,,,,,,34.9
 2026-09-01,NASDAQ:HVMC,Highview Merger Corp.,,,,,,33.6
 2026-09-01,NASDAQ:GSRF,GSR IV Acquisition Corp.,,,,,,34.1
-2026-09-01,KRX:031330,에스에이엠티,0.01552722,0.01552722,-0.00074176,-0.00074176,,42.5
-2026-09-01,KRX:037460,삼지전자,0.00244218,0.00244218,0.00043949,0.00043949,저점매집,48.8
+2026-09-01,KRX:031330,에스에이엠티,0.01754849,0.01754849,-0.00139093,-0.00139093,,42.5
+2026-09-01,KRX:037460,삼지전자,0.00259067,0.00259067,0.00047711,0.00047711,저점매집,48.8
 2026-09-01,KRX:446440,에피바이오텍,0.0,0.0,0.0,0.0,,32.2
 2026-09-01,NASDAQ:ALF,Centurion Acquisition Corp.,,,,,,34.4
 2026-09-01,NASDAQ:APXT,Apex Treasury Corporation Class A,,,,,,33.2
@@ -23693,9 +23695,9 @@
 2026-09-01,NASDAQ:KOYN,CSLM Digital Asset Acquisition Corp…,,,,,,33.7
 2026-09-01,NASDAQ:PNRG,PrimeEnergy Resources Corporation,,,,,,41.2
 2026-09-01,NASDAQ:SAAQU,Space Asset Acquisition Corp.,,,,,,32.9
-2026-09-01,NASDAQ:VLGEA,"Village Super Market, Inc.",,,,,,33.9
-2026-09-01,NASDAQ:XMTR,"Xometry, Inc.",,,,,,36.5
-2026-09-01,NYSE:AIZ,"Assurant, Inc.",,,,,,41.1
+2026-09-01,NASDAQ:VLGEA,"Village Super Market, Inc.",,,,,,35.1
+2026-09-01,NASDAQ:XMTR,"Xometry, Inc.",,,,,,36.6
+2026-09-01,NYSE:AIZ,"Assurant, Inc.",,,,,,41.9
 2026-09-01,NYSE:ENB,Enbridge Inc.,,,,,,35.8
 2026-09-01,NYSE:NVGS,Navigator Holdings Ltd.,,,,,,40.4
 2026-09-01,NYSE:SOBO,South Bow Corp,,,,,,46.2
@@ -23703,52 +23705,50 @@
 2026-09-01,NYSE:VACI.U,Viking Acquisition Corp.,,,,,,32.7
 2026-09-01,NASDAQ:DMII,Drugs Made In America Acquisition…,,,,,,34.6
 2026-09-01,NYSE:BWLP,BW LPG Limited,,,,,,42.1
-2026-09-01,NYSE:PBA,Pembina Pipeline Corporation,,,,,,43.6
-2026-09-01,NYSE:VACI,Viking Acquisition Corp.,,,,,,32.0
+2026-09-01,NYSE:PBA,Pembina Pipeline Corporation,,,,,,42.8
 2026-09-01,NASDAQ:AACOU,Abony Acquisition Corp.,,,,,,33.7
 2026-09-01,NASDAQ:GIW,GigCapital8 Corp.,,,,,,34.9
 2026-09-01,NASDAQ:TOYO,"TOYO Co., Ltd",,,,,,45.9
 2026-09-01,NYSE:PBT,Permian Basin Royalty Trust,,,,,,40.2
 2026-09-01,NASDAQ:IACOU,Idea Acquisition Corp.,,,,,,35.1
 2026-09-01,NASDAQ:LWAC,LightWave Acquisition Corp.,,,,,,34.4
-2026-09-01,NYSE:CODI/PA,Compass Diversified Holdings 7.25%…,,,,,,29.1
-2026-09-01,KRX:005930,삼성전자,0.9135704,0.9135704,-0.03392696,-0.03392696,,68.9
-2026-09-01,KRX:477850,마키나락스,0.05505686,0.05505686,-0.00130422,-0.00130422,,40.9
+2026-09-01,NYSE:CODI/PA,Compass Diversified Holdings 7.25%…,,,,,,29.9
+2026-09-01,KRX:005930,삼성전자,0.8250546,0.8250546,-0.03936023,-0.03936023,,68.9
+2026-09-01,KRX:477850,마키나락스,0.04519286,0.04519286,-0.00071635,-0.00071635,,40.9
 2026-09-01,NASDAQ:GCGRU,General Catalyst Global Resilience…,,,,,,33.5
 2026-09-01,NASDAQ:RREVU,RRE Ventures Acquisition Corp.,,,,,,34.9
 2026-09-01,NYSE:APLE,Apple Hospitality REIT Inc,,,,,,38.6
 2026-09-01,NYSE:CLBR,Colombier Acquisition Corp.,,,,,,33.5
-2026-09-01,NYSE:CLDT,Chatham Lodging Trust,,,,,,41.2
+2026-09-01,NYSE:CLDT,Chatham Lodging Trust,,,,,,40.8
 2026-09-01,NYSE:DBRG,"DigitalBridge Group, Inc.",,,,,,40.3
-2026-09-01,KRX:001820,삼화콘덴서,0.04737773,0.04737773,0.00150939,0.00150939,,52.9
-2026-09-01,KRX:025560,미래산업,0.02715609,0.02715609,-0.00723814,-0.00723814,,45.2
+2026-09-01,KRX:001820,삼화콘덴서,0.0410464,0.0410464,0.00112626,0.00112626,,52.9
+2026-09-01,KRX:025560,미래산업,0.0267768,0.0267768,-0.00655777,-0.00655777,,45.2
 2026-09-01,AMEX:LEGO.U,Legato Merger Corp.,,,,,,33.2
-2026-09-01,AMEX:NINE,"Nine Energy Service, Inc.",,,,,,30.9
+2026-09-01,AMEX:NINE,"Nine Energy Service, Inc.",,,,,,30.8
 2026-09-01,NASDAQ:OYSE,Oyster Enterprises II Acquisition…,,,,,,34.6
-2026-09-01,NASDAQ:POLEU,Andretti Acquisition Corp.,,,,,,33.9
 2026-09-01,NASDAQ:SVAQU,Silicon Valley Acquisition Corp.,,,,,,33.2
 2026-09-01,NYSE:STK,Columbia Seligman Premium…,,,,,,37.1
-2026-09-01,KRX:001740,SK네트웍스,0.04602747,0.04602747,-0.00064521,-0.00064521,,43.5
-2026-09-01,KRX:052710,아모텍,0.01422475,0.01422475,-0.00110292,-0.00110292,,44.2
-2026-09-01,KRX:356680,엑스게이트,0.06039908,0.06039908,2.19e-06,2.19e-06,저점매집,49.4
-2026-09-01,KRX:457370,한켐,0.02923889,0.02923889,0.0,0.0,,42.0
-2026-09-01,KRX:018260,삼성에스디에스,0.01168824,0.01168824,0.00115397,0.00115397,,50.5
+2026-09-01,KRX:001740,SK네트웍스,0.04702051,0.04702051,-0.00032771,-0.00032771,,43.5
+2026-09-01,KRX:052710,아모텍,0.01142307,0.01142307,-0.00083242,-0.00083242,,44.2
+2026-09-01,KRX:356680,엑스게이트,0.05904743,0.05904743,-6.121e-05,-6.121e-05,,42.6
+2026-09-01,KRX:457370,한켐,0.02934705,0.02934705,0.0,0.0,,42.0
+2026-09-01,KRX:018260,삼성에스디에스,0.01161865,0.01161865,0.00140855,0.00140855,,50.5
 2026-09-01,NASDAQ:CDZIP,Cadiz Inc.,,,,,,27.0
 2026-09-01,NASDAQ:HACQ,HCM IV Acquisition Corp.,,,,,,33.2
 2026-09-01,NASDAQ:KCHV,Kochav Defense Acquisition Corp.,,,,,,35.2
 2026-09-01,NASDAQ:MOBI,"Mobia Medical, Inc.",,,,,,36.5
 2026-09-01,NYSE:MOV,"Movado Group, Inc.",,,,,,42.3
 2026-09-01,NYSE:XHR,"Xenia Hotels & Resorts, Inc.",,,,,,39.9
-2026-09-01,KRX:126730,코칩,0.02564288,0.02564288,-6.387e-05,-6.387e-05,,48.7
+2026-09-01,KRX:126730,코칩,0.03380276,0.03380276,-6.432e-05,-6.432e-05,,48.2
 2026-09-01,NASDAQ:BTSGU,"BrightSpring Health Services, Inc.",,,,,,39.6
 2026-09-01,NASDAQ:CHY,Calamos Convertible And High Income…,,,,,,39.5
 2026-09-01,NASDAQ:NHICU,NewHold Investment Corporation III…,,,,,,32.4
 2026-09-01,NASDAQ:RSVR,"Reservoir Media, Inc.",,,,,,39.3
 2026-09-01,NYSE:CURB,Curbline Properties Corp.,,,,,,42.3
-2026-09-01,KRX:009155,삼성전기우,0.00143192,0.00143192,-4.7e-05,-4.7e-05,,53.4
-2026-09-01,KRX:064400,LG씨엔에스,0.03274778,0.03274778,0.00092106,0.00092106,저점매집,56.1
-2026-09-01,KRX:066570,LG전자,0.03553602,0.03553602,0.002574,0.002574,저점매집,53.3
-2026-09-01,KRX:189330,씨이랩,0.02027668,0.02027668,-0.00024448,-0.00024448,,41.3
+2026-09-01,KRX:009155,삼성전기우,0.00132778,0.00132778,-2.413e-05,-2.413e-05,,53.4
+2026-09-01,KRX:064400,LG씨엔에스,0.03216897,0.03216897,0.00069025,0.00069025,저점매집,56.1
+2026-09-01,KRX:066570,LG전자,0.03652882,0.03652882,0.00116183,0.00116183,저점매집,53.3
+2026-09-01,KRX:189330,씨이랩,0.02028085,0.02028085,-0.0005961,-0.0005961,,41.3
 2026-09-01,NASDAQ:BIXI,Bitcoin Infrastructure Acquisition…,,,,,,32.9
 2026-09-01,NASDAQ:QQQX,Nuveen NASDAQ 100 Dynamic Overwrite…,,,,,,37.8
 2026-09-01,NASDAQ:VHCPU,Vine Hill Capital Investment Corp.,,,,,,33.7
@@ -23756,65 +23756,63 @@
 2026-09-01,NYSE:BST,BlackRock Science & Technology Trust,,,,,,37.0
 2026-09-01,NYSE:EVT,Eaton Vance Tax-Advantaged Dividend…,,,,,,39.3
 2026-09-01,NYSE:MOG.B,Moog Inc.,,,,,,39.5
-2026-09-01,NASDAQ:TACH,Titan Acquisition Corp Class A,,,,,,34.9
+2026-09-01,NASDAQ:TACH,Titan Acquisition Corp Class A,,,,,,34.2
 2026-09-01,NYSE:FFA,First Trust Enhanced Equity Income…,,,,,,39.2
-2026-09-01,KRX:066575,LG전자우,0.00307878,0.00307878,1.61e-05,1.61e-05,저점매집,53.1
-2026-09-01,KRX:090360,로보스타,0.00301309,0.00301309,-0.00011333,-0.00011333,,40.2
-2026-09-01,NASDAQ:CDNS,"Cadence Design Systems, Inc.",,,,,,47.9
+2026-09-01,KRX:066575,LG전자우,0.00300092,0.00300092,1.419e-05,1.419e-05,저점매집,53.1
+2026-09-01,KRX:090360,로보스타,0.00281515,0.00281515,-0.00018781,-0.00018781,,40.2
+2026-09-01,NASDAQ:CDNS,"Cadence Design Systems, Inc.",,,,,,47.3
 2026-09-01,NASDAQ:COHU,"Cohu, Inc.",,,,,,41.8
-2026-09-01,NASDAQ:MITK,"Mitek Systems, Inc.",,,,,,44.8
+2026-09-01,NASDAQ:MITK,"Mitek Systems, Inc.",,,,,,44.1
 2026-09-01,NASDAQ:SCSC,"ScanSource, Inc.",,,,,,42.7
 2026-09-01,NYSE:AMH/PH,American Homes 4 Rent 6.25 % Cum…,,,,,,38.3
 2026-09-01,NYSE:AVK,Advent Convertible and Income Fund,,,,,,38.8
 2026-09-01,NYSE:CLBR.U,Colombier Acquisition Corp.,,,,,,33.7
-2026-09-01,NYSE:EVAC,EQV Ventures Acquisition Corp.,,,,,,33.7
 2026-09-01,NYSE:LXFR,Luxfer Holdings PLC,,,,,,48.0
-2026-09-01,NYSE:MSGS,Madison Square Garden Sports Corp.,,,,,,34.0
+2026-09-01,NYSE:MSGS,Madison Square Garden Sports Corp.,,,,,,34.1
 2026-09-01,NASDAQ:EXTR,"Extreme Networks, Inc.",,,,,,44.9
 2026-09-01,NASDAQ:BRKRP,Bruker Corporation Cum Pfd…,,,,,,36.6
 2026-09-01,NASDAQ:CHRN,ChronoScale Holdings Corporation,,,,,,35.4
 2026-09-01,NYSE:BFS,"Saul Centers, Inc.",,,,,,39.7
-2026-09-01,NASDAQ:NEWTP,"NewtekOne, Inc.",,,,,,31.9
-2026-09-01,NASDAQ:ACNB,ACNB Corporation,,,,,,43.3
-2026-09-01,NASDAQ:BWFG,"Bankwell Financial Group, Inc.",,,,,,43.0
-2026-09-01,NASDAQ:CSX,CSX Corporation,,,,,,41.4
+2026-09-01,NASDAQ:NEWTP,"NewtekOne, Inc.",,,,,,33.1
+2026-09-01,NASDAQ:ACNB,ACNB Corporation,,,,,,42.1
+2026-09-01,NASDAQ:BWFG,"Bankwell Financial Group, Inc.",,,,,,42.2
+2026-09-01,NASDAQ:CSX,CSX Corporation,,,,,,41.5
 2026-09-01,NASDAQ:SHBI,"Shore Bancshares, Inc.",,,,,,43.3
 2026-09-01,NYSE:ALX,"Alexander's, Inc.",,,,,,41.7
 2026-09-01,NYSE:FTRA.U,FutureCorp Space Acquisition 1 Units,,,,,,34.7
 2026-09-01,NYSE:MEC,"Mayville Engineering Company, Inc.",,,,,,36.0
-2026-09-01,NYSE:TKR,Timken Company,,,,,,40.4
+2026-09-01,NYSE:TKR,Timken Company,,,,,,40.5
 2026-09-01,NASDAQ:ACAA,Averin Capital Acquisition Corp.,,,,,,33.5
 2026-09-01,NASDAQ:CRAN,Crane Harbor Acquisition Corp.,,,,,,33.7
 2026-09-01,NYSE:BCSS,Bain Capital GSS Investment Corp.,,,,,,34.4
-2026-09-01,NYSE:UNH,UnitedHealth Group Incorporated,,,,,,39.0
-2026-09-01,KRX:007815,코리아써우,3.372e-05,3.372e-05,0.0,0.0,,45.5
-2026-09-01,KRX:00781K,코리아써키트2우B,0.00010421,0.00010421,0.0,0.0,,41.0
-2026-09-01,KRX:023530,롯데쇼핑,0.00752296,0.00752296,0.00154635,0.00154635,저점매집,54.5
-2026-09-01,KRX:040350,크레오에스지,0.0032137,0.0032137,-1e-08,-1e-08,,38.5
-2026-09-01,KRX:069960,현대백화점,0.00672365,0.00672365,-0.00127988,-0.00127988,,49.6
-2026-09-01,KRX:085620,미래에셋생명,0.02801298,0.02801298,0.00146373,0.00146373,,43.0
-2026-09-01,KRX:183300,코미코,0.01765662,0.01765662,0.00049607,0.00049607,저점매집,51.8
-2026-09-01,NASDAQ:CBC,"Central Bancompany, Inc.",,,,,,40.0
+2026-09-01,NYSE:UNH,UnitedHealth Group Incorporated,,,,,,38.9
+2026-09-01,KRX:007815,코리아써우,2.688e-05,2.688e-05,0.0,0.0,,45.5
+2026-09-01,KRX:00781K,코리아써키트2우B,9.377e-05,9.377e-05,0.0,0.0,,41.0
+2026-09-01,KRX:023530,롯데쇼핑,0.00849222,0.00849222,0.00202575,0.00202575,저점매집,54.5
+2026-09-01,KRX:040350,크레오에스지,0.00812767,0.00812767,4.92e-06,4.92e-06,저점매집,45.3
+2026-09-01,KRX:069960,현대백화점,0.00747884,0.00747884,-0.00094045,-0.00094045,,49.6
+2026-09-01,KRX:085620,미래에셋생명,0.02620393,0.02620393,0.00093959,0.00093959,,43.0
+2026-09-01,KRX:183300,코미코,0.01649534,0.01649534,-0.00054802,-0.00054802,,45.0
+2026-09-01,NASDAQ:CBC,"Central Bancompany, Inc.",,,,,,40.7
 2026-09-01,NASDAQ:CTBI,"Community Trust Bancorp, Inc.",,,,,,43.1
 2026-09-01,NASDAQ:PAMT,PAMT Corp,,,,,,35.4
 2026-09-01,NASDAQ:PFIS,Peoples Financial Services Corp.,,,,,,39.8
 2026-09-01,NASDAQ:PGC,Peapack-Gladstone Financial…,,,,,,42.0
-2026-09-01,NASDAQ:QCRH,"QCR Holdings, Inc.",,,,,,40.8
+2026-09-01,NASDAQ:QCRH,"QCR Holdings, Inc.",,,,,,40.4
 2026-09-01,NASDAQ:TSBK,"Timberland Bancorp, Inc.",,,,,,42.7
 2026-09-01,NYSE:DCOM,"Dime Commercial Bancshares, Inc.",,,,,,43.1
-2026-09-01,NYSE:GRC,Gorman-Rupp Company,,,,,,39.2
+2026-09-01,NYSE:GRC,Gorman-Rupp Company,,,,,,39.3
 2026-09-01,NYSE:KIM/PN,Kimco Realty Corporation Depositary…,,,,,,38.3
-2026-09-01,KRX:240810,원익IPS,0.0246537,0.0246537,-0.003544,-0.003544,,55.2
-2026-09-01,KRX:403870,HPSP,0.12991378,0.12991378,0.01142428,0.01142428,저점매집,68.2
+2026-09-01,KRX:240810,원익IPS,0.02268447,0.02268447,-0.00373043,-0.00373043,,55.2
+2026-09-01,KRX:403870,HPSP,0.11039793,0.11039793,0.00796333,0.00796333,저점매집,68.2
 2026-09-01,NASDAQ:ITHA,ITHAX Acquisition Corp.,,,,,,33.7
-2026-09-01,NASDAQ:LPBB,Launch Two Acquisition Corp.,,,,,,32.4
-2026-09-01,NYSE:CTOS,Custom Truck One Source Inc,,,,,,35.9
+2026-09-01,NASDAQ:LPBB,Launch Two Acquisition Corp.,,,,,,34.0
+2026-09-01,NYSE:CTOS,Custom Truck One Source Inc,,,,,,36.0
 2026-09-01,NYSE:GCO,Genesco Inc.,,,,,,36.3
 2026-09-01,NYSE:IIPR,Innovative Industrial Properties Inc,,,,,,40.0
 2026-09-01,NASDAQ:FHB,"First Hawaiian, Inc.",,,,,,40.0
 2026-09-01,NASDAQ:HBNC,"Horizon Bancorp, Inc.",,,,,,45.4
 2026-09-01,NASDAQ:HOPE,"Hope Bancorp, Inc.",,,,,,40.0
-2026-09-01,NASDAQ:MESH,Meshflow Acquisition Corp.,,,,,,33.7
 2026-09-01,NASDAQ:SENEB,Seneca Foods Corporation Class B,,,,,,43.2
 2026-09-01,NASDAQ:SORNU,Soren Acquisition Corp.,,,,,,32.9
 2026-09-01,NASDAQ:WEYS,"Weyco Group, Inc.",,,,,,41.8
@@ -23823,70 +23821,68 @@
 2026-09-01,NASDAQ:OTGAU,OTG Acquisition Corp.,,,,,,34.9
 2026-09-01,NYSE:MTAL,Metals Acquisition Corp.,,,,,,41.8
 2026-09-01,NYSE:MTAL.U,Metals Acquisition Corp.,,,,,,41.8
-2026-09-01,NYSE:NGL/PB,NGL Energy Partners LP Cum Red Perp…,,,,,,34.5
-2026-09-01,KRX:004710,한솔테크닉스,0.01564088,0.01564088,-0.00233996,-0.00233996,,46.9
+2026-09-01,NYSE:NGL/PB,NGL Energy Partners LP Cum Red Perp…,,,,,,33.3
+2026-09-01,KRX:004710,한솔테크닉스,0.01499209,0.01499209,-0.00209948,-0.00209948,,46.9
 2026-09-01,NASDAQ:DGICB,Donegal Group Inc.,,,,,,36.3
-2026-09-01,NASDAQ:LPAA,Launch One Acquisition Corp.,,,,,,32.6
 2026-09-01,NYSE:RLJ,RLJ Lodging Trust,,,,,,40.6
-2026-09-01,KRX:320000,한울반도체,0.00359654,0.00359654,2e-08,2e-08,저점매집,47.5
+2026-09-01,KRX:320000,한울반도체,0.00848773,0.00848773,9.18e-06,9.18e-06,저점매집,47.5
 2026-09-01,NYSE:CBT,Cabot Corporation,,,,,,40.7
-2026-09-01,NYSE:CPAC,Cementos Pacasmayo SAA Sponsored ADR,,,,,,43.5
-2026-09-01,NYSE:NFJ,Virtus Dividend. Interest & Premium…,,,,,,38.4
+2026-09-01,NYSE:CPAC,Cementos Pacasmayo SAA Sponsored ADR,,,,,,43.2
+2026-09-01,NYSE:NFJ,Virtus Dividend. Interest & Premium…,,,,,,37.6
 2026-09-01,NASDAQ:CAIIU,Collective Acquisition Corp.,,,,,,33.7
 2026-09-01,NASDAQ:HST,"Host Hotels & Resorts, Inc.",,,,,,38.2
-2026-09-01,NASDAQ:KEYYU,Keystone Acquisition Corp.,,,,,,32.9
-2026-09-01,NASDAQ:KRAQ,KRAKacquisition Corp.,,,,,,34.1
-2026-09-01,NYSE:HLIO,"Helios Technologies, Inc.",,,,,,43.4
-2026-09-01,NYSE:IX,ORIX Corporation Sponsored ADR,,,,,,42.9
-2026-09-01,NYSE:NPO,Enpro Inc.,,,,,,45.1
+2026-09-01,NASDAQ:KRAQ,KRAKacquisition Corp.,,,,,,32.9
+2026-09-01,NYSE:HLIO,"Helios Technologies, Inc.",,,,,,43.5
+2026-09-01,NYSE:IX,ORIX Corporation Sponsored ADR,,,,,,43.7
+2026-09-01,NYSE:NPO,Enpro Inc.,,,,,,45.2
 2026-09-01,NASDAQ:FBIZ,First Business Financial Services…,,,,,,42.0
-2026-09-01,KRX:037710,광주신세계,0.00131532,0.00131532,-1.181e-05,-1.181e-05,,46.8
+2026-09-01,KRX:037710,광주신세계,0.00138471,0.00138471,-1.97e-06,-1.97e-06,,46.8
 2026-09-01,NASDAQ:FRME,First Merchants Corporation,,,,,,37.5
 2026-09-01,NYSE:FCBM,First Carolina Financial Services…,,,,,,34.6
 2026-09-01,NYSE:NTB,Bank of N.T. Butterfield & Son…,,,,,,42.9
 2026-09-01,NYSE:PLOW,"Douglas Dynamics, Inc.",,,,,,42.9
-2026-09-01,NYSE:UHAL,U-Haul Holding Company,,,,,,36.5
-2026-09-01,AMEX:NHC,National HealthCare Corporation,,,,,,38.8
+2026-09-01,NYSE:UHAL,U-Haul Holding Company,,,,,,36.9
+2026-09-01,AMEX:NHC,National HealthCare Corporation,,,,,,38.4
 2026-09-01,NASDAQ:CCXIU,Churchill Capital Corp.,,,,,,33.2
 2026-09-01,NASDAQ:FDBC,"Fidelity D & D Bancorp, Inc.",,,,,,40.9
 2026-09-01,NASDAQ:NWFL,Norwood Financial Corp.,,,,,,43.7
 2026-09-01,NYSE:ABBV,"AbbVie, Inc.",,,,,,47.9
 2026-09-01,NYSE:AEE,Ameren Corporation,,,,,,39.5
-2026-09-01,NYSE:AGL,agilon health inc,,,,,,30.5
+2026-09-01,NYSE:AGL,agilon health inc,,,,,,30.1
 2026-09-01,NYSE:ARL,"American Realty Investors, Inc.",,,,,,34.8
 2026-09-01,NYSE:ASB,Associated Banc-Corp,,,,,,38.4
-2026-09-01,NYSE:DCO,Ducommun Incorporated,,,,,,39.7
-2026-09-01,NYSE:DVA,DaVita Inc.,,,,,,40.8
-2026-09-01,NYSE:EIG,"Employers Holdings, Inc.",,,,,,37.8
+2026-09-01,NYSE:DCO,Ducommun Incorporated,,,,,,39.4
+2026-09-01,NYSE:DVA,DaVita Inc.,,,,,,40.7
+2026-09-01,NYSE:EIG,"Employers Holdings, Inc.",,,,,,37.0
 2026-09-01,NYSE:IDA,"IDACORP, Inc.",,,,,,41.8
-2026-09-01,NYSE:MCS,Marcus Corporation,,,,,,38.3
+2026-09-01,NYSE:MCS,Marcus Corporation,,,,,,38.4
 2026-09-01,NYSE:MLR,"Miller Industries, Inc.",,,,,,45.4
 2026-09-01,NYSE:NI,NiSource Inc,,,,,,41.0
 2026-09-01,NYSE:NNN,"NNN REIT, Inc.",,,,,,38.6
-2026-09-01,NYSE:OPLN,"OPENLANE, Inc.",,,,,,44.4
-2026-09-01,NYSE:PBI,Pitney Bowes Inc.,,,,,,41.3
+2026-09-01,NYSE:OPLN,"OPENLANE, Inc.",,,,,,44.5
+2026-09-01,NYSE:PBI,Pitney Bowes Inc.,,,,,,41.2
 2026-09-01,NYSE:PLGO,Pelagos Insurance Capital Limited,,,,,,46.1
 2026-09-01,NYSE:PRG,"PROG Holdings, Inc.",,,,,,45.2
 2026-09-01,NYSE:RHP,"Ryman Hospitality Properties, Inc.",,,,,,40.7
-2026-09-01,NYSE:SMBK,"SmartFinancial, Inc.",,,,,,41.3
-2026-09-01,NYSE:VSTS,Vestis Corporation,,,,,,35.3
+2026-09-01,NYSE:SMBK,"SmartFinancial, Inc.",,,,,,41.2
+2026-09-01,NYSE:VSTS,Vestis Corporation,,,,,,35.4
 2026-09-01,NYSE:WKC,World Kinect Corporation,,,,,,37.0
-2026-09-01,NYSE:WLYB,"John Wiley & Sons, Inc.",,,,,,44.7
-2026-09-01,NASDAQ:CCSI,"Consensus Cloud Solutions, Inc.",,,,,,43.8
+2026-09-01,NYSE:WLYB,"John Wiley & Sons, Inc.",,,,,,44.4
+2026-09-01,NASDAQ:CCSI,"Consensus Cloud Solutions, Inc.",,,,,,43.9
 2026-09-01,NASDAQ:IACQU,Irenic Acquisition Corp.,,,,,,32.9
-2026-09-01,NASDAQ:ZD,"Ziff Davis, Inc.",,,,,,41.2
+2026-09-01,NASDAQ:ZD,"Ziff Davis, Inc.",,,,,,41.6
 2026-09-01,NYSE:AFB,AllianceBernstein National…,,,,,,38.3
 2026-09-01,NYSE:AWR,American States Water Company,,,,,,42.8
-2026-09-01,NYSE:BYD,Boyd Gaming Corporation,,,,,,45.2
-2026-09-01,KRX:002990,금호건설,0.72140437,0.72140437,-0.00087856,-0.00087856,고점추세,41.6
+2026-09-01,NYSE:BYD,Boyd Gaming Corporation,,,,,,45.3
+2026-09-01,KRX:002990,금호건설,0.72963218,0.72963218,-0.00097161,-0.00097161,고점추세,41.6
 2026-09-01,NASDAQ:AGMB,AgomAb Therapeutics NV ADR,,,,,,36.9
-2026-09-01,NYSE:HG,"Hamilton Insurance Group, Ltd.",,,,,,46.9
-2026-09-01,NYSE:SHO/PI,"Sunstone Hotel Investors, Inc.",,,,,,40.6
-2026-09-01,NYSE:SPHR,Sphere Entertainment Co. Class A,,,,,,39.7
+2026-09-01,NYSE:HG,"Hamilton Insurance Group, Ltd.",,,,,,46.8
+2026-09-01,NYSE:SHO/PI,"Sunstone Hotel Investors, Inc.",,,,,,39.0
+2026-09-01,NYSE:SPHR,Sphere Entertainment Co. Class A,,,,,,39.8
 2026-09-01,NYSE:VKQ,Invesco Municipal Trust,,,,,,36.8
 2026-09-01,NASDAQ:CRAQ,Cal Redwood Acquisition Corp.,,,,,,35.6
 2026-09-01,NYSE:CAF,Morgan Stanley China A Share Fund…,,,,,,38.8
-2026-09-01,NYSE:EVN,Eaton Vance Municipal Income Trust,,,,,,38.0
+2026-09-01,NYSE:EVN,Eaton Vance Municipal Income Trust,,,,,,37.2
 2026-09-01,NYSE:SPXX,Nuveen S&P 500 Dynamic Overwrite…,,,,,,36.8
 2026-09-01,NASDAQ:AACI,Armada Acquisition Corp.,,,,,,33.7
 2026-09-01,NASDAQ:FMAO,"Farmers & Merchants Bancorp, Inc.",,,,,,41.6
@@ -23895,50 +23891,50 @@
 2026-09-01,NYSE:NAN,Nuveen New York Quality Municipal…,,,,,,37.2
 2026-09-01,NASDAQ:ARTCU,Art Technology Acquisition Corp.,,,,,,33.7
 2026-09-01,NASDAQ:CEPV,"Cantor Equity Partners V, Inc.",,,,,,32.6
-2026-09-01,NASDAQ:DRTS,Alpha Tau Medical Ltd,,,,,,38.4
+2026-09-01,NASDAQ:DRTS,Alpha Tau Medical Ltd,,,,,,37.8
 2026-09-01,NASDAQ:IEAG,Infinite Eagle Acquisition Corp.,,,,,,33.7
 2026-09-01,NYSE:AAT,"American Assets Trust, Inc.",,,,,,40.9
 2026-09-01,NYSE:AFL,Aflac Incorporated,,,,,,38.8
 2026-09-01,NYSE:KO,Coca-Cola Company,,,,,,42.0
-2026-09-01,NYSE:MET,"MetLife, Inc.",,,,,,43.4
+2026-09-01,NYSE:MET,"MetLife, Inc.",,,,,,44.2
 2026-09-01,NYSE:SPNT,SiriusPoint Ltd,,,,,,40.3
 2026-09-01,NYSE:THW,abrdn World Healthcare Fund of…,,,,,,37.4
 2026-09-01,NYSE:TRV,"Travelers Companies, Inc.",,,,,,42.2
 2026-09-01,NYSE:V,Visa Inc.,,,,,,44.8
-2026-09-01,NYSE:WELL,Welltower Inc.,,,,,,43.7
+2026-09-01,NYSE:WELL,Welltower Inc.,,,,,,44.5
 2026-09-01,NASDAQ:HCSG,"Healthcare Services Group, Inc.",,,,,,40.5
 2026-09-01,NASDAQ:KNSA,Kiniksa Pharmaceuticals…,,,,,,50.3
 2026-09-01,NASDAQ:LIVN,LivaNova Plc,,,,,,43.1
 2026-09-01,NASDAQ:NEWTG,"NewtekOne, Inc.",,,,,,31.1
-2026-09-01,NASDAQ:PNTG,Pennant Group Inc,,,,,,41.4
-2026-09-01,NASDAQ:PTRN,"Pattern Group, Inc.",,,,,,40.3
-2026-09-01,NASDAQ:SENEA,Seneca Foods Corporation Class A,,,,,,43.1
+2026-09-01,NASDAQ:PNTG,Pennant Group Inc,,,,,,41.7
+2026-09-01,NASDAQ:PTRN,"Pattern Group, Inc.",,,,,,40.4
+2026-09-01,NASDAQ:SENEA,Seneca Foods Corporation Class A,,,,,,42.2
 2026-09-01,NASDAQ:SIRI,SiriusXM Holdings Inc.,,,,,,39.4
 2026-09-01,NYSE:AMN,"AMN Healthcare Services, Inc.",,,,,,37.7
 2026-09-01,NYSE:CON,Concentra Group Holdings Parent…,,,,,,43.4
 2026-09-01,NYSE:EGP,"EastGroup Properties, Inc.",,,,,,41.8
 2026-09-01,NYSE:ETV,Eaton Vance Tax-Managed Buy-Write…,,,,,,38.4
 2026-09-01,NYSE:HQH,abrdn Healthcare Investors of Benef…,,,,,,36.6
-2026-09-01,NYSE:LXP,LXP Industrial Trust,,,,,,37.3
+2026-09-01,NYSE:LXP,LXP Industrial Trust,,,,,,36.9
 2026-09-01,NYSE:MFC,Manulife Financial Corporation,,,,,,43.4
 2026-09-01,NYSE:RSI,"Rush Street Interactive, Inc.",,,,,,48.1
 2026-09-01,NYSE:UTI,"Universal Technical Institute, Inc.",,,,,,36.4
-2026-09-01,NASDAQ:ALOV,Aldabra 4 Liquidity Opportunity…,,,,,,34.3
+2026-09-01,NASDAQ:ALOV,Aldabra 4 Liquidity Opportunity…,,,,,,33.7
 2026-09-01,NASDAQ:OTGA,OTG Acquisition Corp.,,,,,,33.7
 2026-09-01,NYSE:AGM.A,Federal Agricultural Mortgage…,,,,,,42.3
-2026-09-01,NYSE:SMFG,Sumitomo Mitsui Financial Group Inc…,,,,,,38.5
-2026-09-01,NYSE:STT,State Street Corporation,,,,,,41.0
-2026-09-01,NYSE:TWO/PA,Two Harbors Investment Corp.,,,,,,37.8
-2026-09-01,NYSE:TWO/PC,Two Harbors Investment Corp.,,,,,,37.9
+2026-09-01,NYSE:SMFG,Sumitomo Mitsui Financial Group Inc…,,,,,,38.4
+2026-09-01,NYSE:STT,State Street Corporation,,,,,,40.6
+2026-09-01,NYSE:TWO/PA,Two Harbors Investment Corp.,,,,,,36.5
+2026-09-01,NYSE:TWO/PC,Two Harbors Investment Corp.,,,,,,37.7
 2026-09-01,NASDAQ:GHXIU,"Gores Holdings XI, Inc.",,,,,,33.7
 2026-09-01,NYSE:NREF,"NexPoint Real Estate Finance, Inc.",,,,,,39.1
-2026-09-01,NYSE:TWO/PB,Two Harbors Investment Corp.,,,,,,37.9
-2026-09-01,NASDAQ:TXG,10x Genomics Inc Class A,,,,,,37.9
-2026-09-01,NASDAQ:BLZR,Trailblazer Acquisition Corp.,,,,,,34.7
+2026-09-01,NYSE:TWO/PB,Two Harbors Investment Corp.,,,,,,38.5
+2026-09-01,NASDAQ:TXG,10x Genomics Inc Class A,,,,,,38.0
+2026-09-01,NASDAQ:BLZR,Trailblazer Acquisition Corp.,,,,,,32.9
 2026-09-01,NASDAQ:ARCI,Archimedes Tech SPAC Partners III…,,,,,,33.7
-2026-09-01,KRX:003680,한성기업,0.0064934,0.0064934,1e-07,1e-07,저점매집,47.4
-2026-09-01,KRX:049080,기가레인,0.03882795,0.03882795,2.171e-05,2.171e-05,저점매집,46.7
-2026-09-01,NASDAQ:PTOR,Praetorian Acquisition Corp.,,,,,,33.2
+2026-09-01,KRX:003680,한성기업,0.00544877,0.00544877,0.00014906,0.00014906,저점매집,47.4
+2026-09-01,KRX:049080,기가레인,0.03873215,0.03873215,2.2e-05,2.2e-05,저점매집,46.7
+2026-09-01,NASDAQ:PTOR,Praetorian Acquisition Corp.,,,,,,34.4
 2026-09-01,NYSE:VLO,Valero Energy Corporation,,,,,,43.2
 2026-09-01,NYSE:RY,Royal Bank of Canada,,,,,,40.3
 2026-09-01,NASDAQ:HFWA,Heritage Financial Corporation,,,,,,40.0
@@ -23948,77 +23944,81 @@
 2026-09-01,NYSE:UHAL.B,U-Haul Holding Company,,,,,,31.8
 2026-09-01,NASDAQ:BCCQU,Bleichroeder Acquisition Corp.,,,,,,32.4
 2026-09-01,NYSE:KMPB,Kemper Corp 5.875 % Bonds…,,,,,,32.8
-2026-09-01,KRX:079940,가비아,0.00065157,0.00065157,7.327e-05,7.327e-05,고점추세,48.3
+2026-09-01,KRX:079940,가비아,0.00063287,0.00063287,7.956e-05,7.956e-05,고점추세,48.3
 2026-09-01,KRX:191600,블루탑,0.0,0.0,0.0,0.0,,31.1
-2026-09-01,KRX:089860,롯데렌탈,0.00533871,0.00533871,-0.00023481,-0.00023481,고점추세,43.8
+2026-09-01,KRX:089860,롯데렌탈,0.00752615,0.00752615,-0.00101786,-0.00101786,고점추세,43.8
 2026-09-01,NASDAQ:KCHVU,Kochav Defense Acquisition Corp.,,,,,,34.4
-2026-09-01,NYSE:CVLG,"Covenant Logistics Group, Inc.",,,,,,37.9
-2026-09-01,NYSE:LXP/PC,LXP Industrial Trust 6.5 % Cum Conv…,,,,,,36.5
+2026-09-01,NYSE:CVLG,"Covenant Logistics Group, Inc.",,,,,,38.0
+2026-09-01,NYSE:LXP/PC,LXP Industrial Trust 6.5 % Cum Conv…,,,,,,35.3
 2026-09-01,NYSE:PBF,"PBF Energy, Inc.",,,,,,40.8
-2026-09-01,KRX:093320,케이아이엔엑스,0.00039183,0.00039183,2.476e-05,2.476e-05,,53.2
-2026-09-01,KRX:475150,SK이터닉스,0.07187035,0.07187035,0.00320193,0.00320193,,50.3
+2026-09-01,KRX:093320,케이아이엔엑스,0.00044605,0.00044605,-1.6e-07,-1.6e-07,,50.3
+2026-09-01,KRX:475150,SK이터닉스,0.06478942,0.06478942,0.00022266,0.00022266,,50.3
 2026-09-01,NYSE:EPR/PC,EPR Properties 5 3/4 % Cum Conv Pfd…,,,,,,38.9
-2026-09-01,NYSE:RITM/PD,Rithm Capital Corp.,,,,,,36.3
+2026-09-01,NYSE:RITM/PD,Rithm Capital Corp.,,,,,,34.8
 2026-09-01,NYSE:BBVA,Banco Bilbao Vizcaya Argentaria…,,,,,,38.7
-2026-09-01,NASDAQ:CNOBP,"ConnectOne Bancorp, Inc.",,,,,,39.9
+2026-09-01,NASDAQ:CNOBP,"ConnectOne Bancorp, Inc.",,,,,,38.3
 2026-09-01,NYSE:AAC.U,Ares Acquisition Corp.,,,,,,33.2
-2026-09-01,NASDAQ:IOND,Ionic Digital Inc.,,,,,,37.2
+2026-09-01,NASDAQ:IOND,Ionic Digital Inc.,,,,,,37.3
 2026-09-01,NYSE:ALUB,Alussa Energy Acquisition Corp.,,,,,,33.2
-2026-09-01,NYSE:QUAD,"Quad/Graphics, Inc.",,,,,,39.2
-2026-09-01,KRX:014710,사조씨푸드,0.00194067,0.00194067,3.9e-07,3.9e-07,고점추세,44.2
-2026-09-01,NASDAQ:ADAML,"Adamas Trust, Inc.",,,,,,37.5
-2026-09-01,NASDAQ:LANDP,Gladstone Land Corp 6 % Cum Red Pfd…,,,,,,37.2
-2026-09-01,NYSE:NWG,NatWest Group Plc Sponsored ADR,,,,,,37.8
+2026-09-01,NYSE:QUAD,"Quad/Graphics, Inc.",,,,,,39.1
+2026-09-01,KRX:014710,사조씨푸드,0.00195143,0.00195143,1.6e-06,1.6e-06,고점추세,44.2
+2026-09-01,NASDAQ:ADAML,"Adamas Trust, Inc.",,,,,,37.2
+2026-09-01,NASDAQ:LANDP,Gladstone Land Corp 6 % Cum Red Pfd…,,,,,,36.9
+2026-09-01,NYSE:NWG,NatWest Group Plc Sponsored ADR,,,,,,37.7
 2026-09-01,NYSE:SAN,Banco Santander S.A. Sponsored ADR,,,,,,37.1
-2026-09-01,KRX:236200,슈프리마,0.00099454,0.00099454,6.019e-05,6.019e-05,,50.3
-2026-09-01,NASDAQ:XIIIU,Churchill Capital Corp.,,,,,,32.4
+2026-09-01,KRX:236200,슈프리마,0.00085913,0.00085913,2.105e-05,2.105e-05,,50.3
+2026-09-01,NASDAQ:XIIIU,Churchill Capital Corp.,,,,,,33.6
 2026-09-01,NASDAQ:LANDO,Gladstone Land Corp 6 % Cum Red Pfd…,,,,,,36.9
 2026-09-01,NASDAQ:GOODN,Gladstone Commercial Corp 6.625 %…,,,,,,40.0
-2026-09-01,NYSE:AOD,abrdn Total Dynamic Dividend Fund,,,,,,40.1
+2026-09-01,NYSE:AOD,abrdn Total Dynamic Dividend Fund,,,,,,38.9
 2026-09-01,NYSE:TRIN,"Trinity Capital, Inc.",,,,,,46.9
-2026-09-01,NASDAQ:WTBA,"West Bancorporation, Inc.",,,,,,41.8
+2026-09-01,NASDAQ:WTBA,"West Bancorporation, Inc.",,,,,,42.2
 2026-09-01,NYSE:BOE,BlackRock Enhanced Global Dividend…,,,,,,37.8
 2026-09-01,NYSE:EXG,Eaton Vance Tax-Managed Global…,,,,,,39.4
 2026-09-01,NYSE:HZO,"MarineMax, Inc.",,,,,,34.1
 2026-09-01,NASDAQ:CCD,Calamos Dynamic Convertible &…,,,,,,37.9
-2026-09-01,KRX:078935,GS우,0.00035361,0.00035361,5.362e-05,5.362e-05,고점추세,51.3
-2026-09-01,KRX:092230,KPX홀딩스,0.000334,0.000334,3.2e-07,3.2e-07,고점추세,48.5
-2026-09-01,KRX:181710,NHN,0.00913028,0.00913028,-0.00157205,-0.00157205,고점추세,51.8
+2026-09-01,KRX:078935,GS우,0.00035121,0.00035121,2.565e-05,2.565e-05,고점추세,51.3
+2026-09-01,KRX:092230,KPX홀딩스,0.00026454,0.00026454,-1.143e-05,-1.143e-05,고점추세,45.6
+2026-09-01,KRX:181710,NHN,0.00693248,0.00693248,-0.00039462,-0.00039462,고점추세,51.8
 2026-09-01,NASDAQ:CCNEP,CNB Financial Corporation…,,,,,,40.1
 2026-09-01,NASDAQ:WSBF,"Waterstone Financial, Inc.",,,,,,40.0
 2026-09-01,NYSE:JACS,Jackson Acquisition Co. II Class A,,,,,,36.5
-2026-09-01,NYSE:OGN,Organon & Co.,,,,,,34.8
 2026-09-01,NASDAQ:GHXI,"Gores Holdings XI, Inc.",,,,,,33.7
-2026-09-01,NYSE:HQL,abrdn Life Sciences Investors of…,,,,,,36.4
-2026-09-01,NASDAQ:ADAMN,"Adamas Trust, Inc.",,,,,,37.5
+2026-09-01,NYSE:HQL,abrdn Life Sciences Investors of…,,,,,,36.0
+2026-09-01,NASDAQ:ADAMN,"Adamas Trust, Inc.",,,,,,37.2
 2026-09-01,NASDAQ:AVAH,Aveanna Healthcare Holdings Inc,,,,,,39.8
 2026-09-01,NASDAQ:IMMX,"Immix Biopharma, Inc.",,,,,,40.0
-2026-09-01,NYSE:IVR/PC,Invesco Mortgage Capital Inc.,,,,,,40.4
-2026-09-01,KRX:192820,코스맥스,0.0098322,0.0098322,0.00175523,0.00175523,고점추세,51.4
+2026-09-01,NYSE:IVR/PC,Invesco Mortgage Capital Inc.,,,,,,40.0
+2026-09-01,KRX:192820,코스맥스,0.00977927,0.00977927,0.00150736,0.00150736,고점추세,51.4
 2026-09-01,AMEX:LEGO,Legato Merger Corp. IV,,,,,,32.4
 2026-09-01,NASDAQ:BRTMU,B&R Technology Merger Corp.,,,,,,31.6
 2026-09-01,NASDAQ:EVOX,Evolution Global Acquisition Corp…,,,,,,34.1
 2026-09-01,NASDAQ:NHPAP,"National Healthcare Properties, Inc.",,,,,,36.5
 2026-09-01,NASDAQ:RFAIU,RF Acquisition Corp II Unit,,,,,,32.8
 2026-09-01,NASDAQ:FERA,Fifth Era Acquisition Corporation I…,,,,,,35.9
-2026-09-01,NASDAQ:MAKO,Mako Mining Corp.,,,,,,60.7
-2026-09-01,KRX:005180,빙그레,0.005835,0.005835,0.00110203,0.00110203,고점추세,54.6
+2026-09-01,NASDAQ:MAKO,Mako Mining Corp.,,,,,,60.8
+2026-09-01,KRX:005180,빙그레,0.00489363,0.00489363,0.0006895,0.0006895,고점추세,54.6
 2026-09-01,NASDAQ:ABCL,"AbCellera Biologics, Inc.",,,,,,31.7
 2026-09-01,NASDAQ:CRNX,Crinetics Pharmaceuticals Inc,,,,,,42.2
 2026-09-01,NASDAQ:ITIC,Investors Title Company,,,,,,40.6
-2026-09-01,NYSE:WAL/PA,Western Alliance Bancorp Depositary…,,,,,,36.0
+2026-09-01,NYSE:WAL/PA,Western Alliance Bancorp Depositary…,,,,,,35.5
 2026-09-01,NASDAQ:CAII,Collective Acquisition Corp.,,,,,,34.9
-2026-09-01,KRX:001210,금호전기,0.67949094,0.67949094,-1.21e-06,-1.21e-06,고점추세,41.8
-2026-09-01,KRX:241710,코스메카코리아,0.00598756,0.00598756,-0.00057515,-0.00057515,고점추세,50.8
-2026-09-01,NASDAQ:ADAMM,"Adamas Trust, Inc.",,,,,,37.6
-2026-09-01,NASDAQ:CXII,Churchill Capital Corp XII Class A,,,,,,34.3
-2026-09-01,NASDAQ:GEN,Gen Digital Inc.,,,,,,45.6
+2026-09-01,KRX:001210,금호전기,0.77162164,0.77162164,-4.72e-06,-4.72e-06,고점추세,41.8
+2026-09-01,KRX:241710,코스메카코리아,0.00574176,0.00574176,-0.00059711,-0.00059711,고점추세,50.8
+2026-09-01,NASDAQ:ADAMM,"Adamas Trust, Inc.",,,,,,36.4
+2026-09-01,NASDAQ:CXII,Churchill Capital Corp XII Class A,,,,,,33.7
+2026-09-01,NASDAQ:GEN,Gen Digital Inc.,,,,,,46.4
 2026-09-01,NASDAQ:KRNY,Kearny Financial Corp.,,,,,,41.5
+2026-09-01,NASDAQ:MEVO,M Evo Global Acquisition Corp II…,,,,,,32.9
 2026-09-01,NYSE:AAC,Ares Acquisition Corp.,,,,,,32.4
 2026-09-01,NYSE:NLY/PG,"Annaly Capital Management, Inc.",,,,,,37.3
 2026-09-01,NYSE:WT,"WisdomTree, Inc.",,,,,,48.2
 2026-09-01,NASDAQ:ARTC,Art Technology Acquisition Corp.,,,,,,33.7
-2026-09-01,NYSE:DINO,HF Sinclair Corporation,,,,,,43.5
+2026-09-01,NYSE:DINO,HF Sinclair Corporation,,,,,,43.0
 2026-09-01,NYSE:DK,Delek US Holdings Inc,,,,,,39.8
-2026-09-01,NYSE:EMO,ClearBridge Energy Midstream…,,,,,,40.0
+2026-09-01,NYSE:EMO,ClearBridge Energy Midstream…,,,,,,39.6
 2026-09-01,NYSE:ETB,Eaton Vance Tax-Managed Buy-Write…,,,,,,37.9
+2026-09-01,NASDAQ:APGE,"Apogee Therapeutics, Inc.",,,,,,36.5
+2026-09-01,NASDAQ:RCBC,River City Bank,,,,,,38.4
+2026-09-01,NYSE:CIM/PB,Chimera Investment Corp Cum Red Pfd…,,,,,,33.3
+2026-09-01,NASDAQ:LWACU,LightWave Acquisition Corp.,,,,,,33.2
