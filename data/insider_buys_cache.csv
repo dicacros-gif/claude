@@ -1,4 +1,7 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-09-02 09:38:31,2026-08-31,VST,Vistra Corp.,Burke James A,"Pres, CEO",P - Purchase,$135.49,"+6,665","+$903,069","1,242,301"
+2026-09-02 09:19:26,2026-09-01,PNFP,"Pinnacle Financial Partners, Inc.",Blair Kevin S.,CEO,P - Purchase,$97.48,"+2,565","+$250,036","152,397"
+2026-09-02 08:17:45,2026-08-31,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$19.17,"+19,257","+$369,199","19,024,945"
 2026-09-01 19:50:18,2026-08-28,AUGO,Aura Minerals Inc.,Sousa Mauad Bruno,Dir,P - Purchase,$86.48,"+252,000","+$21,792,751","290,856"
 2026-09-01 17:07:55,2026-08-28,EQPT,Equipmentshare.Com Inc,Schlacks Jabbok,"Founder, CEO",P - Purchase,$17.62,"+25,000","+$440,395","14,381,548"
 2026-09-01 17:03:45,2026-09-01,DY,Dycom Industries Inc,Fallon David Joseph,Dir,P - Purchase,$286.92,+700,"+$200,844","1,043"
@@ -496,6 +499,3 @@
 2026-06-26 16:13:14,2026-06-25,KMX,Carmax Inc,Chawla Sona,Dir,P - Purchase,$53.39,"+2,000","+$106,780","21,702"
 2026-06-26 16:13:03,2026-06-24,KMX,Carmax Inc,Oneil Mark F,Dir,P - Purchase,$52.36,"+9,600","+$502,656","50,974"
 2026-06-26 16:09:54,2026-06-26,DPC,Dpc Holdings Ltd,Sanders Nick,Dir,P - Purchase,$33.00,"+294,243","+$9,710,019","453,858"
-2026-06-26 16:09:19,2026-06-26,DPC,Dpc Holdings Ltd,Quinn Michael (Mike) Joseph,"CEO, Exec Dir",P - Purchase,$33.00,"+435,121","+$14,358,993","462,850"
-2026-06-26 16:08:42,2026-06-26,DPC,Dpc Holdings Ltd,Meixner Willibald,Dir,P - Purchase,$33.00,"+3,784","+$124,872","4,730"
-2026-06-26 16:08:06,2026-06-26,DPC,Dpc Holdings Ltd,Mays Jason,COO,P - Purchase,$33.00,"+85,973","+$2,837,109","93,456"
