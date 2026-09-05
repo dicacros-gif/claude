@@ -1,4 +1,9 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-09-04 21:31:10,2026-08-31,LILA,Liberty Latin America Ltd.,De Angoitia Alfonso,Dir,P - Purchase,$20.95,"+476,190","+$9,978,488","491,084"
+2026-09-04 21:00:05,2026-09-02,ENOV,Enovis Corp,Engert Oliver,Chief Administrative Officer,P - Purchase,$19.74,"+7,598","+$149,971","61,238"
+2026-09-04 21:00:03,2026-09-04,ENOV,Enovis Corp,McDonald Damien,CEO,P - Purchase,$19.15,"+13,035","+$249,620","247,077"
+2026-09-04 16:11:14,2026-09-02,EQPT,Equipmentshare.Com Inc,Schlacks William J.,"Founder, Pres",P - Purchase,$17.79,"+10,000","+$177,900","14,377,498"
+2026-09-04 16:00:27,2026-09-02,MSCI,Msci Inc.,Taneja Rajat,Dir,P - Purchase,$560.00,"+1,786","+$1,000,160","5,404"
 2026-09-04 08:09:23,2026-09-02,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$19.48,"+19,595","+$381,768","19,044,540"
 2026-09-04 06:30:05,2026-07-02,TSM,Taiwan Semiconductor Manufacturing Co Ltd,Fang Shu-Hua,"SVP, GC",P - Purchase,$77.09,"+2,000","+$154,180","1,365,659"
 2026-09-03 20:33:17,2026-09-02,AON,Aon Plc,Knight Lester B,Dir,P - Purchase,$327.48,"+20,000","+$6,549,688","318,864"
@@ -494,8 +499,3 @@
 2026-07-01 14:11:16,2026-06-30,SPG,Simon Property Group Inc.,Leibowitz Reuben S,Dir,P - Purchase,$223.38,+508,"+$113,475","72,697"
 2026-07-01 13:41:50,2026-06-30,NVCT,"Nuvectis Pharma, Inc.",Mosseri Marlio Charles,10%,P - Purchase,$18.32,"+50,000","+$916,000","3,295,897"
 2026-07-01 13:39:50,2026-06-30,NVCT,"Nuvectis Pharma, Inc.",Bentsur Ron,"COB, CEO, 10%",P - Purchase,$20.00,"+12,500","+$250,000","3,688,424"
-2026-06-30 21:05:06,2026-06-29,HNRG,Hallador Energy Co,Hudson Daniel Timothy,Dir,P - Purchase,$16.94,"+10,000","+$169,400","15,000"
-2026-06-30 21:00:04,2026-06-26,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$69.20,"+3,602","+$249,258","5,747,690"
-2026-06-30 16:16:30,2026-06-30,AVO,"Mission Produce, Inc.",Pack Jay A,Dir,P - Purchase,$12.10,"+40,000","+$484,000","1,931,397"
-2026-06-30 08:03:03,2026-06-23,COE,51Talk Online Education Group,Huang Jack Jiajia,"CEO, 10%",P - Purchase,$15.54,"+1,063,080","+$16,524,757","78,341,720"
-2026-06-30 06:24:40,2026-06-29,TSM,Taiwan Semiconductor Manufacturing Co Ltd,Tien Bor-Zen,VP,P - Purchase,$76.17,"+2,000","+$152,340","13,413"
