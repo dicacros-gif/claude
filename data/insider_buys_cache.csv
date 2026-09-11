@@ -1,4 +1,9 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-09-11 09:24:07,2026-09-10,KMT,Kennametal Inc,Chowbey Sanjay,"Pres, CEO",P - Purchase,$29.10,"+7,000","+$203,700","246,839"
+2026-09-11 09:04:26,2026-09-08,CYBN,Cybin Inc.,Glavine Paul,Chief Growth Officer,P - Purchase,$12.47,"+100,000","+$1,247,190","4,502,193"
+2026-09-11 09:03:44,2026-09-08,CYBN,Cybin Inc.,Glavine Paul,Chief Growth Officer,P - Purchase,$12.47,"+100,000","+$1,247,190","4,502,193"
+2026-09-11 09:01:28,2026-09-08,CYBN,Cybin Inc.,So Eric H. L.,Exec Chair,P - Purchase,$12.39,"+100,000","+$1,238,670","4,518,630"
+2026-09-11 08:59:28,2026-09-09,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$19.13,"+23,469","+$448,912","19,084,377"
 2026-09-10 20:01:53,2026-09-10,PRTS,"Carparts.Com, Inc.",Huffaker Michael,COO,P - Purchase,$10.06,"+13,250","+$133,295","152,810"
 2026-09-10 19:57:42,2026-09-10,PRTS,"Carparts.Com, Inc.",Meniane David,CEO,P - Purchase,$10.06,"+13,250","+$133,295","312,664"
 2026-09-10 17:55:14,2026-09-10,GME,Gamestop Corp.,Cohen Ryan,"Pres, CEO, COB",P - Purchase,$20.38,"+1,000,000","+$20,375,900","39,347,842"
@@ -494,8 +499,3 @@
 2026-07-13 07:06:08,2026-05-15,CAI,"Caris Life Sciences, Inc.",Halbert Jon,Dir,P - Purchase,$14.56,"+68,000","+$990,080","1,461,106"
 2026-07-13 06:51:00,2026-07-06,COE,51Talk Online Education Group,Huang Jack Jiajia,"CEO, 10%",P - Purchase,$16.55,"+562,560","+$9,312,806","80,349,200"
 2026-07-10 19:39:30,2026-07-08,NTSK,Netskope Inc,"Iconiq Strategic Partners VIII Holdings, L.P.",10%,P - Purchase,$11.82,"+610,291","+$7,216,049","66,877,804"
-2026-07-10 19:37:28,2026-07-08,NTSK,Netskope Inc,Griffith William J.G.,"Dir, 10%",P - Purchase,$11.82,"+610,291","+$7,216,081","66,877,804"
-2026-07-10 18:08:09,2026-06-30,BGDE,"Big Digital Energy, Inc.","Endeavor Blockchain, LLC",10%,P - Purchase,"$1,000.00","+16,700","+$16,700,000","16,700"
-2026-07-10 17:29:11,2026-07-09,AVO,"Mission Produce, Inc.",Globalharvest Holdings Venture Ltd,10%,P - Purchase,$13.28,"+592,957","+$7,874,469","12,963,396"
-2026-07-09 21:10:03,2026-07-07,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$75.00,"+3,320","+$249,016","5,754,521"
-2026-07-09 19:00:41,2026-07-07,UUUU,Energy Fuels Inc,Bhappu Ross R.,"Pres, CEO",P - Purchase,$13.08,"+74,000","+$967,920","256,583"
