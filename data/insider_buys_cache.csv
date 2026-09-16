@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-09-16 09:00:48,2026-09-15,CELH,"Celsius Holdings, Inc.",Kravitz Hal,Dir,P - Purchase,$28.00,"+12,000","+$336,000","239,158"
+2026-09-16 08:47:32,2026-09-14,AVBC,"Avidia Bancorp, Inc.",Murphy Michael Dennis,Chairman of the Board,P - Purchase,$22.12,"+5,000","+$110,600","83,080"
 2026-09-15 21:30:12,2026-09-11,FTK,Flotek Industries Inc/Cn/,Wilks Matthew,Dir,P - Purchase,$26.01,"+1,319,493","+$34,320,013","1,537,285"
 2026-09-15 19:21:05,2026-09-11,LMB,"Limbach Holdings, Inc.",Horowitz Joshua,Dir,P - Purchase,$50.00,"+7,820","+$391,013","215,205"
 2026-09-15 17:07:12,2025-07-24,CARL,"Carlsmed, Inc.","Presidio Management Group Xii, L.L.C.",10%,P - Purchase,$15.00,"+200,000","+$3,000,000","200,000"
@@ -497,5 +499,3 @@
 2026-07-22 21:21:22,2026-07-20,CLBK,"Columbia Financial, Inc./Md/",Schlesinger Allyson Katz,"SEVP, Head of Consumer Banking",P - Purchase,$10.00,"+50,000","+$500,000","350,967"
 2026-07-22 21:20:58,2026-07-20,CLBK,"Columbia Financial, Inc./Md/",Splaine Thomas Jr,"EVP, CFO",P - Purchase,$10.00,"+50,000","+$500,000","75,262"
 2026-07-22 21:20:36,2026-07-20,CLBK,"Columbia Financial, Inc./Md/",Kemly Thomas J.,"Pres, CEO",P - Purchase,$10.00,"+53,057","+$530,570","1,386,290"
-2026-07-22 21:20:14,2026-07-20,CLBK,"Columbia Financial, Inc./Md/",Holland Noel R.,Dir,P - Purchase,$10.00,"+15,000","+$150,000","226,281"
-2026-07-22 21:19:50,2026-07-20,CLBK,"Columbia Financial, Inc./Md/",Prabhu Manesh Balachandran,"EVP, CIO",P - Purchase,$10.00,"+15,000","+$150,000","93,264"
