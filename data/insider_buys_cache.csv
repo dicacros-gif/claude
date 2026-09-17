@@ -1,4 +1,9 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-09-17 10:14:32,2026-09-15,SBLK,Star Bulk Carriers Corp.,Pappa Milena Maria,Dir,P - Purchase,$28.27,"+74,400","+$2,103,288","3,170,074"
+2026-09-17 10:04:25,2026-09-15,SBLK,Star Bulk Carriers Corp.,Pappas Alexandros,Head of Operations,P - Purchase,$28.27,"+74,400","+$2,103,288","2,535,150"
+2026-09-17 08:30:23,2026-09-15,SBLK,Star Bulk Carriers Corp.,Reskos Nikolaos,COO,P - Purchase,$28.27,"+10,000","+$282,700","410,875"
+2026-09-17 07:00:41,2026-09-16,ADC,Agree Realty Corp,Rakolta John Jr,Dir,P - Purchase,$68.78,"+20,000","+$1,375,600","654,748"
+2026-09-17 07:00:24,2026-09-16,ADC,Agree Realty Corp,Agree Joey,"Pres, CEO",P - Purchase,$68.06,"+7,360","+$500,922","686,427"
 2026-09-16 21:16:39,2026-09-14,MNR,Mach Natural Resources LP,Ward Tom L.,"See Remarks, 10%",P - Purchase,$11.60,"+172,413","+$1,999,991","28,353,502"
 2026-09-16 18:02:59,2026-09-15,FOX,Fox Corp,Murdoch Lachlan K,"Exec Chair, CEO",P - Purchase,$68.53,"+149,934","+$10,274,977","1,401,865"
 2026-09-16 18:02:09,2026-09-14,PLNT,"Planet Fitness, Inc.",Tanco Christopher,Dir,P - Purchase,$51.23,"+2,328","+$119,259","17,879"
@@ -494,8 +499,3 @@
 2026-07-24 16:31:02,2026-07-22,FSBC,Five Star Bancorp,Ramos Kevin Francis,Dir,P - Purchase,$44.00,"+5,682","+$250,008","187,546"
 2026-07-24 16:07:02,2026-07-23,VMI,Valmont Industries Inc,Schwietz John L,"EVP, CFO",P - Purchase,$486.15,+208,"+$101,118","2,992"
 2026-07-24 12:13:54,2026-07-24,PNFP,"Pinnacle Financial Partners, Inc.",McCabe Robert A Jr,Chief Banking Officer,P - Purchase,$99.90,"+10,013","+$1,000,299","324,233"
-2026-07-23 19:47:48,2026-07-22,BRTMU,B&R Technology Merger Corp.,B&R Technology Sponsor LLC (Cayman),10%,P - Purchase,$10.00,"+687,500","+$6,875,000","687,500"
-2026-07-23 16:24:22,2026-07-22,RBKB,"Rhinebeck Bancorp, Inc.",Loughlin Suzanne,Dir,P - Purchase,$11.93,"+12,500","+$149,120","46,828"
-2026-07-23 16:22:26,2026-07-22,RBKB,"Rhinebeck Bancorp, Inc.",Patzwahl Nancy Koskey,Dir,P - Purchase,$11.94,"+25,000","+$298,500","27,270"
-2026-07-23 16:21:33,2026-07-22,RBKB,"Rhinebeck Bancorp, Inc.",Smith Matthew James,"Pres, CEO",P - Purchase,$12.00,"+12,425","+$149,089","36,730"
-2026-07-23 16:16:48,2026-07-21,ENR,"Energizer Holdings, Inc.","Aqua Capital, Ltd.",10%,P - Purchase,$20.26,"+120,000","+$2,430,640","7,880,000"
