@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-09-18 08:29:54,2026-09-16,KRMN,Karman Holdings Inc.,Stinnett David,Dir,P - Purchase,$37.32,"+27,000","+$1,007,648","3,530,395"
+2026-09-18 07:52:57,2026-09-17,TFC,Truist Financial Corp,Lyons Michael P.,"Pres, CEO",P - Purchase,$48.36,"+21,000","+$1,015,577","21,000"
 2026-09-17 17:46:50,2026-09-16,INBX,"Inhibrx Biosciences, Inc.",Kayyem Jon Faiz,Dir,P - Purchase,$100.00,"+5,000","+$500,000","1,069,046"
 2026-09-17 17:11:13,2026-09-15,MNR,Mach Natural Resources LP,McMullen William Wallace,"See Remarks, 10%",P - Purchase,$11.27,"+34,514","+$388,902","74,894,431"
 2026-09-17 16:54:51,2026-09-16,BWMX,"Betterware De Mexico, S.A.P.I. De C.V",Chevallier Santiago Campos,MD Betterware Mexico,P - Purchase,$16.46,"+15,000","+$246,924","60,000"
@@ -497,5 +499,3 @@
 2026-07-28 17:05:55,2026-07-28,CVBF,Cvb Financial Corp,O Brien Raymond V III,Dir,P - Purchase,$22.77,"+20,000","+$455,300","85,780"
 2026-07-28 16:38:59,2026-07-24,GSHD,"Goosehead Insurance, Inc.",Durable Capital Partners LP,10%,P - Purchase,$59.22,"+153,723","+$9,104,027","2,534,004"
 2026-07-28 15:37:23,2026-07-27,MTAK,Market Technology Acquisition Corp,Market Technology Acquisition Sponsor LLC,10%,P - Purchase,$10.00,"+452,500","+$4,525,000","452,500"
-2026-07-27 21:15:06,2026-07-23,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$280.15,"+3,268","+$915,526","5,767,908"
-2026-07-27 17:15:19,2026-07-23,ENR,"Energizer Holdings, Inc.","Aqua Capital, Ltd.",10%,P - Purchase,$20.62,"+120,000","+$2,473,994","8,000,000"
