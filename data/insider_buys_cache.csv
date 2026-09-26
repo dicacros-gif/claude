@@ -1,4 +1,7 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-09-25 20:02:08,2026-09-23,LEN,Lennar Corp /New/,Berkshire Hathaway Inc,10%,P - Purchase,$81.19,"+1,679,700","+$136,382,789","25,927,026"
+2026-09-25 18:47:27,2026-09-25,CX,Cemex Sab De Cv,Zambrano Lozano Rogelio,Dir,P - Purchase,$17.28,"+400,800","+$6,926,305","10,000,000"
+2026-09-25 16:30:06,2026-09-23,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$34.13,"+219,273","+$7,484,665","124,336,154"
 2026-09-24 19:15:35,2026-09-23,HHH,Howard Hughes Holdings Inc.,Grandisson Marc,"Exec COB, Vantage",P - Purchase,$64.12,"+25,000","+$1,602,938","96,943"
 2026-09-24 17:00:03,2026-09-22,GSHD,"Goosehead Insurance, Inc.",Durable Capital Partners LP,10%,P - Purchase,$47.32,"+150,000","+$7,098,000","2,720,260"
 2026-09-24 16:22:37,2026-09-23,DKS,"Dick'S Sporting Goods, Inc.",Fitzgerald Larry Jr.,Dir,P - Purchase,$131.67,"+1,860","+$244,906","15,199"
@@ -496,6 +499,3 @@
 2026-08-05 19:00:31,2026-08-03,IR,Ingersoll Rand Inc.,Satpathy Aurobind,Dir,P - Purchase,$86.68,"+11,538","+$1,000,091","11,538"
 2026-08-05 18:21:59,2026-08-03,XIIIU,Churchill Capital Corp Xiii,Klein Michael Stuart,"See Remarks, 10%",P - Purchase,$10.00,"+350,000","+$3,500,000","350,000"
 2026-08-05 17:53:18,2026-08-04,WCC,Wesco International Inc,Castillo Daniel J,"EVP, GM, EES",P - Purchase,$365.89,+960,"+$351,254","16,305"
-2026-08-05 17:24:03,2026-08-04,GBFH,Gbank Financial Holdings Inc.,Nigro Todd Anthony,SECRETARY,P - Purchase,$21.07,"+5,000","+$105,350","349,787"
-2026-08-05 17:18:55,2026-08-04,GBFH,Gbank Financial Holdings Inc.,Nigro Edward Michael,"CEO, Exec COB",P - Purchase,$21.51,"+9,200","+$197,852","1,210,328"
-2026-08-05 17:16:33,2026-08-04,GBFH,Gbank Financial Holdings Inc.,Herbst Timothy P,Dir,P - Purchase,$21.50,"+10,000","+$214,971","352,784"
