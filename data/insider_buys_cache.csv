@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-09-28 12:18:36,2026-09-18,ZUMZ,Zumiez Inc,Ellis Adam Christopher,Pres International,P - Purchase,$13.40,"+10,000","+$134,000","83,664"
+2026-09-28 07:00:04,2026-09-25,DMRA,"Damora Therapeutics, Inc.",Jarrett Jennifer,"Dir, Pres, CEO",P - Purchase,$20.23,"+12,500","+$252,875","512,500"
 2026-09-25 20:02:08,2026-09-23,LEN,Lennar Corp /New/,Berkshire Hathaway Inc,10%,P - Purchase,$81.19,"+1,679,700","+$136,382,789","25,927,026"
 2026-09-25 18:47:27,2026-09-25,CX,Cemex Sab De Cv,Zambrano Lozano Rogelio,Dir,P - Purchase,$17.28,"+400,800","+$6,926,305","10,000,000"
 2026-09-25 16:30:06,2026-09-23,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$34.13,"+219,273","+$7,484,665","124,336,154"
@@ -497,5 +499,3 @@
 2026-08-06 16:05:30,2026-08-05,APTV,Aptiv Plc,Meister Paul M,Dir,P - Purchase,$47.33,"+105,631","+$4,999,959","138,424"
 2026-08-06 06:03:24,2026-08-05,TM,Toyota Motor Corp/,Kon Kenta,Pres,P - Purchase,$18.41,"+85,000","+$1,564,850","182,193"
 2026-08-05 19:00:31,2026-08-03,IR,Ingersoll Rand Inc.,Satpathy Aurobind,Dir,P - Purchase,$86.68,"+11,538","+$1,000,091","11,538"
-2026-08-05 18:21:59,2026-08-03,XIIIU,Churchill Capital Corp Xiii,Klein Michael Stuart,"See Remarks, 10%",P - Purchase,$10.00,"+350,000","+$3,500,000","350,000"
-2026-08-05 17:53:18,2026-08-04,WCC,Wesco International Inc,Castillo Daniel J,"EVP, GM, EES",P - Purchase,$365.89,+960,"+$351,254","16,305"
