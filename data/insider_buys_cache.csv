@@ -1,4 +1,7 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-09-30 11:15:36,2026-09-28,FUL,Fuller H B Co,Florness Daniel L,Dir,P - Purchase,$49.34,"+2,030","+$100,160","3,381"
+2026-09-30 11:15:33,2026-09-28,FUL,Fuller H B Co,Zaheer Srilata,Dir,P - Purchase,$49.08,"+2,040","+$100,119","3,386"
+2026-09-30 11:03:02,2026-09-28,NYAX,Nayax Ltd.,Nechmad Yair,"CEO, Co Founder, COB",P - Purchase,$44.90,"+46,935","+$2,107,580","7,480,493"
 2026-09-29 21:45:43,2026-09-28,ADRX,"Adarx Pharmaceuticals, Inc.","Sr One Capital Management, LLC",10%,P - Purchase,$17.00,"+1,600,000","+$27,200,000","9,936,661"
 2026-09-29 21:43:23,2026-09-28,ADRX,"Adarx Pharmaceuticals, Inc.",George Simeon,"Dir, 10%",P - Purchase,$17.00,"+1,600,000","+$27,200,000","9,936,661"
 2026-09-29 18:31:17,2022-03-10,ASX,"Light & Wonder, Inc.",McLennan Hamish,Dir,P - Purchase,$58.97,"+5,750","+$339,078","29,500"
@@ -496,6 +499,3 @@
 2026-08-07 17:25:30,2026-08-07,BRVE,"Braveheart Bio, Inc.",Forbion Growth Opportunities Fund III Cooperatief U.A.,10%,P - Purchase,$18.00,"+3,600,000","+$64,800,000","21,826,024"
 2026-08-07 16:41:40,2026-08-07,BRVE,"Braveheart Bio, Inc.",Rickey James Paul,CFO,P - Purchase,$18.00,"+27,777","+$499,986","703,575"
 2026-08-07 16:31:15,2026-08-07,BRVE,"Braveheart Bio, Inc.",Viehbacher Christopher,Dir,P - Purchase,$18.00,"+83,333","+$1,499,994","759,857"
-2026-08-07 16:30:52,2026-08-07,BRVE,"Braveheart Bio, Inc.",Murdoch Travis,"CEO, Pres",P - Purchase,$18.00,"+83,333","+$1,499,994","8,333,637"
-2026-08-07 16:30:35,2026-08-07,BRVE,"Braveheart Bio, Inc.",Lubner David Charles,Dir,P - Purchase,$18.00,"+55,555","+$999,990","55,555"
-2026-08-07 16:19:08,2026-08-05,AAT,"American Assets Trust, Inc.",Rady Ernest S,"Exec COB, 10%",P - Purchase,$22.84,"+35,763","+$816,772","13,585,206"
