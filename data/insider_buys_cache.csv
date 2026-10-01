@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-01 09:20:20,2026-09-30,XENE,Xenon Pharmaceuticals Inc.,Kelly Thomas Patrick,CFO,P - Purchase,$37.32,"+15,000","+$559,740","15,000"
+2026-10-01 09:19:28,2026-09-30,XENE,Xenon Pharmaceuticals Inc.,Mortimer Ian,"Pres, CEO",P - Purchase,$37.38,"+30,000","+$1,121,400","64,223"
 2026-09-30 20:46:46,2026-09-28,GPI,Group 1 Automotive Inc,"Conifer Management, L.L.C.",10%,P - Purchase,$242.15,"+273,712","+$66,278,316","1,912,290"
 2026-09-30 19:52:20,2026-09-28,LEN,Lennar Corp /New/,Berkshire Hathaway Inc,10%,P - Purchase,$81.59,"+660,410","+$53,882,588","26,587,436"
 2026-09-30 17:29:36,2026-09-28,ADRX,"Adarx Pharmaceuticals, Inc.",Chimovits Erez,Dir,P - Purchase,$17.00,"+61,516","+$1,045,772","9,292,025"
@@ -497,5 +499,3 @@
 2026-08-10 15:44:05,2026-08-07,OBK,"Origin Bancorp, Inc.",Jones Cecil W.,Dir,P - Purchase,$53.86,"+3,700","+$199,282","17,647"
 2026-08-10 15:06:59,2026-08-10,MATW,Matthews International Corp,Schawk David A,Dir,P - Purchase,$23.60,"+5,000","+$118,000","225,206"
 2026-08-10 14:23:25,2026-08-10,RRBI,Red River Bancshares Inc,Price Teddy Ray,Dir,P - Purchase,$99.91,"+1,119","+$111,798","449,999"
-2026-08-10 12:57:03,2026-08-06,VEON,Veon Ltd.,Fabela Augie K II,Dir,P - Purchase,$56.00,"+20,000","+$1,120,053","335,874"
-2026-08-10 12:23:17,2026-08-07,SON,Sonoco Products Co,Coker R. Howard,"Pres, CEO",P - Purchase,$57.41,"+4,345","+$249,446","560,466"
