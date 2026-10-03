@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-02 16:57:33,2026-10-02,GME,Gamestop Corp.,Cohen Ryan,"Pres, CEO, COB",P - Purchase,$24.41,"+700,000","+$17,084,270","41,648,522"
+2026-10-02 16:30:49,2026-09-30,PORT.,Southport Acquisition Corp. II,Southport Acquisition Sponsor II LLC,10%,P - Purchase,$10.00,"+500,000","+$5,000,000","500,000"
+2026-10-02 16:30:18,2026-09-30,PORT.,Southport Acquisition Corp. II,Spencer Jeb S.,"CEO, CFO, 10%",P - Purchase,$10.00,"+500,000","+$5,000,000","500,000"
+2026-10-02 16:30:05,2026-09-30,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$33.65,"+348,215","+$11,716,077","126,144,687"
 2026-10-02 08:36:48,2026-09-30,NYAX,Nayax Ltd.,Nechmad Yair,"CEO, Co Founder, COB",P - Purchase,$47.84,"+44,148","+$2,112,082","7,524,641"
 2026-10-01 20:55:48,2026-10-01,GME,Gamestop Corp.,Turner Nat,Dir,P - Purchase,$24.33,"+10,462","+$254,540","10,462"
 2026-10-01 17:42:53,2026-09-29,ORCL,Oracle Corp,Rusckowski Stephen H,Dir,P - Purchase,$139.35,"+25,000","+$3,483,800","25,450"
@@ -495,7 +499,3 @@
 2026-08-10 18:00:04,2026-08-07,ET,Energy Transfer LP,Perry James Richard,Dir,P - Purchase,$20.23,"+12,359","+$250,000","232,569"
 2026-08-10 17:26:17,2026-08-10,GLXY,Galaxy Digital Inc.,Bandrowczak Steven John,Dir,P - Purchase,$19.63,"+5,100","+$100,113","39,186"
 2026-08-10 17:07:45,2026-08-07,LINE,"Lineage, Inc.",Lemasters Robb A.,CFO,P - Purchase,$41.33,"+20,000","+$826,638","109,500"
-2026-08-10 17:03:08,2026-08-07,GPOR,Gulfport Energy Corp,Dell'Osso Domenic J Jr,"Pres, CEO",P - Purchase,$160.61,"+1,600","+$256,976","24,349"
-2026-08-10 17:00:53,2026-08-06,FBIN,"Fortune Brands Innovations, Inc.",Singh Jesse G,CEO,P - Purchase,$51.30,"+39,285","+$2,015,342","39,285"
-2026-08-10 16:33:52,2026-08-10,CWBC,Community West Bancshares,Gill Jagroop,Dir,P - Purchase,$24.88,"+4,770","+$118,678","588,067"
-2026-08-10 16:31:31,2026-08-07,PSN,Parsons Corp,Ball George L.,Dir,P - Purchase,$47.97,"+20,000","+$959,400","375,383"
