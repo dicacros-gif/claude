@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-05 12:12:58,2026-08-25,BBD,Bank Bradesco,Alvarez Denise Aguiar,Dir,P - Purchase,$16.69,"+345,000","+$5,757,279","13,017,855"
+2026-10-05 10:21:36,2026-08-31,BBD,Bank Bradesco,Alvarez Denise Aguiar,Dir,P - Purchase,$17.22,"+1,950,000","+$33,581,299","14,967,855"
 2026-10-02 16:57:33,2026-10-02,GME,Gamestop Corp.,Cohen Ryan,"Pres, CEO, COB",P - Purchase,$24.41,"+700,000","+$17,084,270","41,648,522"
 2026-10-02 16:30:49,2026-09-30,PORT.,Southport Acquisition Corp. II,Southport Acquisition Sponsor II LLC,10%,P - Purchase,$10.00,"+500,000","+$5,000,000","500,000"
 2026-10-02 16:30:18,2026-09-30,PORT.,Southport Acquisition Corp. II,Spencer Jeb S.,"CEO, CFO, 10%",P - Purchase,$10.00,"+500,000","+$5,000,000","500,000"
@@ -497,5 +499,3 @@
 2026-08-10 18:32:08,2026-08-10,BLSM,"Blossomhill Therapeutics, Inc.",Chen Bihua,"Dir, 10%",P - Purchase,$16.00,"+312,500","+$5,000,000","3,614,034"
 2026-08-10 18:07:36,2026-08-10,HUBS,Hubspot Inc,Dischler Gerald,Dir,P - Purchase,$215.93,+925,"+$199,735","1,940"
 2026-08-10 18:00:04,2026-08-07,ET,Energy Transfer LP,Perry James Richard,Dir,P - Purchase,$20.23,"+12,359","+$250,000","232,569"
-2026-08-10 17:26:17,2026-08-10,GLXY,Galaxy Digital Inc.,Bandrowczak Steven John,Dir,P - Purchase,$19.63,"+5,100","+$100,113","39,186"
-2026-08-10 17:07:45,2026-08-07,LINE,"Lineage, Inc.",Lemasters Robb A.,CFO,P - Purchase,$41.33,"+20,000","+$826,638","109,500"
