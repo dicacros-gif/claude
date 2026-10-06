@@ -1,4 +1,11 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-05 21:45:03,2026-10-01,ACCV,Accelevation Holdings Corp.,Rubiera Michael,CEO,P - Purchase,$18.00,"+203,200","+$3,657,600","1,496,308"
+2026-10-05 21:27:48,2026-10-01,ACCV,Accelevation Holdings Corp.,Jones Ginger M,Dir,P - Purchase,$18.00,"+10,000","+$180,000","10,000"
+2026-10-05 21:27:32,2026-10-01,ACCV,Accelevation Holdings Corp.,Donahue Paul D,Dir,P - Purchase,$18.00,"+7,000","+$126,000","7,000"
+2026-10-05 21:02:56,2026-10-01,LEN,Lennar Corp /New/,Berkshire Hathaway Inc,10%,P - Purchase,$79.65,"+2,418,637","+$192,634,433","29,006,073"
+2026-10-05 19:41:49,2026-10-01,NXRT,"Nexpoint Residential Trust, Inc.",McGraner Matt,See Remarks,P - Purchase,$18.65,"+10,780","+$201,049","500,275"
+2026-10-05 18:01:49,2026-07-31,CVNA,Carvana Co.,Maroone Michael E,Dir,P - Purchase,$61.80,"+25,000","+$1,544,981","975,365"
+2026-10-05 16:45:48,2026-10-01,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$33.07,"+272,208","+$9,002,473","126,416,895"
 2026-10-05 12:12:58,2026-08-25,BBD,Bank Bradesco,Alvarez Denise Aguiar,Dir,P - Purchase,$16.69,"+345,000","+$5,757,279","13,017,855"
 2026-10-05 10:21:36,2026-08-31,BBD,Bank Bradesco,Alvarez Denise Aguiar,Dir,P - Purchase,$17.22,"+1,950,000","+$33,581,299","14,967,855"
 2026-10-02 16:57:33,2026-10-02,GME,Gamestop Corp.,Cohen Ryan,"Pres, CEO, COB",P - Purchase,$24.41,"+700,000","+$17,084,270","41,648,522"
@@ -492,10 +499,3 @@
 2026-08-11 13:32:43,2026-08-07,GLRE,"Greenlight Capital Re, Ltd.",Goldberg Leonard R,Dir,P - Purchase,$15.52,"+12,000","+$186,240","309,467"
 2026-08-11 12:50:18,2026-08-10,BCML,Baycom Corp,Baron Christopher F,"Pres, CEO",P - Purchase,$30.39,"+8,250","+$250,718","9,247"
 2026-08-11 09:40:24,2026-08-07,NVR,Nvr Inc,Oliver George,Dir,P - Purchase,"$6,431.51",+63,"+$405,185",63
-2026-08-10 20:21:11,2026-08-10,LTGO,"Latigo Biotherapeutics, Inc.","Foresite Capital Management V, LLC",10%,P - Purchase,$18.00,"+140,000","+$2,520,000","3,414,544"
-2026-08-10 20:00:09,2026-08-10,LTGO,"Latigo Biotherapeutics, Inc.",Tananbaum James B.,"Dir, 10%",P - Purchase,$18.00,"+140,000","+$2,520,000","3,414,544"
-2026-08-10 19:15:13,2026-08-06,NATR,Natures Sunshine Products Inc,"Prescott Group Capital Management, L.L.C.",10%,P - Purchase,$16.40,"+141,389","+$2,318,912","1,924,486"
-2026-08-10 18:41:05,2026-08-03,BWMX,"Betterware De Mexico, S.A.P.I. De C.V",Campos Luis,"Chairman, 10%",P - Purchase,$17.00,"+25,015","+$425,255","20,278,497"
-2026-08-10 18:32:08,2026-08-10,BLSM,"Blossomhill Therapeutics, Inc.",Chen Bihua,"Dir, 10%",P - Purchase,$16.00,"+312,500","+$5,000,000","3,614,034"
-2026-08-10 18:07:36,2026-08-10,HUBS,Hubspot Inc,Dischler Gerald,Dir,P - Purchase,$215.93,+925,"+$199,735","1,940"
-2026-08-10 18:00:04,2026-08-07,ET,Energy Transfer LP,Perry James Richard,Dir,P - Purchase,$20.23,"+12,359","+$250,000","232,569"
