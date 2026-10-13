@@ -1,4 +1,7 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-13 10:30:46,2026-10-08,IIPR,Innovative Industrial Properties Inc,Gold Alan D,Exec COB,P - Purchase,$25.00,"+40,000","+$1,000,000","40,000"
+2026-10-13 10:13:36,2026-10-07,GOLD,"Gold.Com, Inc.","Tether Global Investments Fund, S.I.C.A.F., S.A.",10%,P - Purchase,$39.87,"+32,118","+$1,280,535","3,702,905"
+2026-10-13 08:11:17,2026-10-08,PED,Pedevco Corp,Kukes Simon G,10%,P - Purchase,$13.00,"+147,070","+$1,911,910","4,543,790"
 2026-10-09 21:18:38,2026-07-31,REF,Reformation Inc.,Coyle John Joseph,Dir,P - Purchase,$15.00,"+200,000","+$3,000,000","266,313"
 2026-10-09 16:33:21,2026-10-07,SAH,Sonic Automotive Inc,Rusnak Paul P.,10%,P - Purchase,$59.78,"+13,701","+$819,046","5,164,221"
 2026-10-09 16:16:08,2026-10-07,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$34.40,"+606,912","+$20,880,079","127,393,018"
@@ -496,6 +499,3 @@
 2026-08-11 17:53:03,2026-08-07,BRVE,"Braveheart Bio, Inc.","Ah Bio Fund Iv, L.P.",10%,P - Purchase,$18.00,"+1,100,000","+$19,800,000","10,232,420"
 2026-08-11 17:45:34,2026-08-11,DINO,Hf Sinclair Corp,Myers Franklin,CEO,P - Purchase,$85.30,"+15,000","+$1,279,500","194,841"
 2026-08-11 17:31:57,2026-08-07,BRVE,"Braveheart Bio, Inc.",Chimovits Erez,"Dir, 10%",P - Purchase,$18.00,"+1,940,000","+$34,920,000","273,333"
-2026-08-11 17:27:59,2026-08-07,BRVE,"Braveheart Bio, Inc.",Orbimed Advisors LLC,"Dir, 10%",P - Purchase,$18.00,"+1,940,000","+$34,920,000","273,333"
-2026-08-11 17:25:49,2026-08-07,FRPH,"Frp Holdings, Inc.",Baker John D. III,CEO,P - Purchase,$21.91,"+6,800","+$148,988","356,341"
-2026-08-11 17:15:13,2026-08-07,QVCG,"Qvc Group, Inc.",Goldentree Asset Management LP,10%,P - Purchase,$15.35,"+650,808","+$9,987,293","8,518,677"
