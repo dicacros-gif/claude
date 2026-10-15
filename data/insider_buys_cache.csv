@@ -1,4 +1,7 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-14 18:58:14,2026-10-14,INBX,"Inhibrx Biosciences, Inc.",Lappe Mark,CEO,P - Purchase,$84.56,"+10,040","+$848,977","970,453"
+2026-10-14 17:15:22,2026-10-09,QVCG,"Qvc Group, Inc.",Goldentree Asset Management LP,10%,P - Purchase,$12.35,"+1,352,000","+$16,697,200","12,679,754"
+2026-10-14 16:30:10,2026-10-09,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$34.20,"+479,940","+$16,412,297","128,134,156"
 2026-10-13 18:12:28,2026-10-13,RTSN,"Retension Pharmaceuticals, Inc.",Keller Eric L.,CEO,P - Purchase,$12.00,"+20,800","+$249,600","464,407"
 2026-10-13 18:10:58,2026-10-13,RTSN,"Retension Pharmaceuticals, Inc.",Berger Franklin M,Dir,P - Purchase,$12.00,"+10,000","+$120,000","22,517"
 2026-10-13 16:30:03,2026-10-08,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$34.30,"+261,198","+$8,958,804","127,654,216"
@@ -496,6 +499,3 @@
 2026-08-12 16:07:45,2026-08-11,BXSY,Bexil Investment Trust,Winmill & Co. Inc,"See ""Explanation of Responses""",P - Purchase,$17.95,"+10,250","+$183,988","306,432"
 2026-08-12 16:06:07,2026-08-11,AME,Ametek Inc/,Stanage Nick L,Dir,P - Purchase,$255.85,"+4,000","+$1,023,400","4,760"
 2026-08-12 16:05:44,2026-08-10,AMH,American Homes 4 Rent,Corrigan Jack E,Dir,P - Purchase,$22.80,"+5,000","+$113,980","60,000"
-2026-08-12 16:04:39,2026-08-12,PFE,Pfizer Inc,Bourla Albert,"COB, CEO",P - Purchase,$26.34,"+38,000","+$1,000,920","435,555"
-2026-08-12 16:04:33,2026-08-11,APTV,Aptiv Plc,Mahoney Sean O,Dir,P - Purchase,$50.24,"+11,000","+$552,683","31,514"
-2026-08-12 15:00:44,2026-08-11,AVBC,"Avidia Bancorp, Inc.",Saul Kennedy O,Dir,P - Purchase,$21.65,"+5,900","+$127,733","10,050"
