@@ -1,4 +1,9 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-15 16:40:32,2026-10-15,FLSC,Frazier Life Sciences Acquisition Corp. II,Cha Albert,"CEO, 10%",P - Purchase,$10.00,"+300,000","+$3,000,000","300,000"
+2026-10-15 16:33:52,2026-10-13,TRXB,"Trex Bio, Inc.","Alexandria Venture Investments, LLC",10%,P - Purchase,$14.00,"+178,571","+$2,499,994","1,346,501"
+2026-10-15 16:30:03,2026-10-13,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$34.68,"+253,776","+$8,801,941","128,387,932"
+2026-10-15 11:19:11,2026-10-13,GOLD,"Gold.Com, Inc.","Tether Global Investments Fund, S.I.C.A.F., S.A.",10%,P - Purchase,$39.81,"+67,882","+$2,702,484","3,770,787"
+2026-10-15 10:43:59,2026-09-18,BBD,Bank Bradesco,De Oliveira Andre Luis Duarte,Exec Officer,P - Purchase,$17.98,"+63,861","+$1,148,221","307,923"
 2026-10-14 18:58:14,2026-10-14,INBX,"Inhibrx Biosciences, Inc.",Lappe Mark,CEO,P - Purchase,$84.56,"+10,040","+$848,977","970,453"
 2026-10-14 17:15:22,2026-10-09,QVCG,"Qvc Group, Inc.",Goldentree Asset Management LP,10%,P - Purchase,$12.35,"+1,352,000","+$16,697,200","12,679,754"
 2026-10-14 16:30:10,2026-10-09,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$34.20,"+479,940","+$16,412,297","128,134,156"
@@ -494,8 +499,3 @@
 2026-08-12 16:30:00,2026-08-10,PRMB,Primo Brands Corp,Foss Eric J,"Exec. Chair, CEO",P - Purchase,$23.80,"+84,000","+$1,998,973","573,806"
 2026-08-12 16:17:22,2026-08-10,AAT,"American Assets Trust, Inc.",Rady Ernest S,"Exec COB, 10%",P - Purchase,$22.49,"+193,243","+$4,345,305","13,778,449"
 2026-08-12 16:15:19,2026-08-11,CHCT,Community Healthcare Trust Inc,Hensley Robert Z,Dir,P - Purchase,$15.21,"+8,000","+$121,680","103,702"
-2026-08-12 16:15:11,2026-08-10,RSG,"Republic Services, Inc.","Cascade Investment, L.L.C.",10%,P - Purchase,$215.57,"+501,664","+$108,145,762","111,305,646"
-2026-08-12 16:13:56,2026-08-12,WES,"Western Midstream Partners, LP",Forthuber Frederick A.,Dir,P - Purchase,$48.62,"+5,140","+$249,907","5,140"
-2026-08-12 16:07:45,2026-08-11,BXSY,Bexil Investment Trust,Winmill & Co. Inc,"See ""Explanation of Responses""",P - Purchase,$17.95,"+10,250","+$183,988","306,432"
-2026-08-12 16:06:07,2026-08-11,AME,Ametek Inc/,Stanage Nick L,Dir,P - Purchase,$255.85,"+4,000","+$1,023,400","4,760"
-2026-08-12 16:05:44,2026-08-10,AMH,American Homes 4 Rent,Corrigan Jack E,Dir,P - Purchase,$22.80,"+5,000","+$113,980","60,000"
