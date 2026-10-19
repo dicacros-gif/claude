@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-19 07:11:41,2026-10-16,APLD,Applied Digital Corp.,Cummins Wes,CEO; COB,P - Purchase,$18.04,"+55,803","+$1,006,686","23,477,489"
+2026-10-19 07:06:33,2026-10-16,APLD,Applied Digital Corp.,Zhang Jason Gechen,Pres,P - Purchase,$18.86,"+300,000","+$5,658,000","2,839,227"
 2026-10-16 17:45:52,2026-10-14,SAH,Sonic Automotive Inc,Rusnak Paul P.,10%,P - Purchase,$59.90,"+12,555","+$752,045","5,176,776"
 2026-10-16 16:30:03,2026-10-14,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$34.03,"+602,103","+$20,487,096","128,990,035"
 2026-10-16 16:02:53,2026-10-14,PEP,Pepsico Inc,Pohlad Robert C,Dir,P - Purchase,$128.28,"+184,646","+$23,686,389","455,990"
@@ -497,5 +499,3 @@
 2026-08-12 17:55:16,2026-08-10,BDSX,Biodesix Inc,Schuler Jack W,"Emeritus Director, 10%",P - Purchase,$24.13,"+27,600","+$665,940","2,340,810"
 2026-08-12 16:56:54,2026-08-11,Q,"Qnity Electronics, Inc.",De Bondt Karin,Dir,P - Purchase,$138.14,"+1,000","+$138,136","6,647"
 2026-08-12 16:55:13,2026-08-10,VIA,"Via Transportation, Inc.",Dinur Arnon,Dir,P - Purchase,$22.31,"+44,780","+$998,984","6,293,371"
-2026-08-12 16:46:16,2026-08-10,BLSM,"Blossomhill Therapeutics, Inc.",Gordon Carl L,Dir,P - Purchase,$16.00,"+625,000","+$10,000,000","2,714,279"
-2026-08-12 16:43:51,2026-08-12,FUN,Six Flags Entertainment Corporation/New,Reilly John T,"Pres, CEO",P - Purchase,$15.80,"+15,713","+$248,265","297,736"
