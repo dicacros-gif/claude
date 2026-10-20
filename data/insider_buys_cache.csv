@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-19 19:47:37,2026-10-16,IAM,"Iambic Therapeutics, Inc.",Rachlin Evan Lockwood,Dir,P - Purchase,$16.00,"+718,750","+$11,500,000","57,754"
+2026-10-19 17:38:59,2026-10-19,CTY,"City Therapeutics, Inc.","Arch Venture Partners Xii, LLC",10%,P - Purchase,$18.00,"+170,000","+$3,060,000","13,692,507"
+2026-10-19 17:37:43,2026-10-19,CTY,"City Therapeutics, Inc.",Nelsen Robert,"Dir, 10%",P - Purchase,$18.00,"+170,000","+$3,060,000","13,692,507"
+2026-10-19 16:30:14,2026-10-15,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$33.43,"+510,873","+$17,076,202","129,500,908"
 2026-10-19 07:11:41,2026-10-16,APLD,Applied Digital Corp.,Cummins Wes,CEO; COB,P - Purchase,$18.04,"+55,803","+$1,006,686","23,477,489"
 2026-10-19 07:06:33,2026-10-16,APLD,Applied Digital Corp.,Zhang Jason Gechen,Pres,P - Purchase,$18.86,"+300,000","+$5,658,000","2,839,227"
 2026-10-16 17:45:52,2026-10-14,SAH,Sonic Automotive Inc,Rusnak Paul P.,10%,P - Purchase,$59.90,"+12,555","+$752,045","5,176,776"
@@ -495,7 +499,3 @@
 2026-08-12 19:00:38,2026-08-10,PNAQ,Pinnacle Acquisition Corp,Rechtschaffen Andrew,"Dir, 10%",P - Purchase,$10.00,"+1,225,000","+$12,250,000","1,450,000"
 2026-08-12 19:00:08,2026-08-10,PNAQ,Pinnacle Acquisition Corp,Martin Karen Lynne,Dir,P - Purchase,$10.00,"+10,000","+$100,000","10,000"
 2026-08-12 18:30:04,2026-08-10,GLIBK,Liberty Capital Corp/Nv,Malone John C,"Dir, 10%",P - Purchase,$25.00,"+542,232","+$13,557,480","2,729,304"
-2026-08-12 18:27:26,2026-08-11,VIA,"Via Transportation, Inc.",Peres Nechemia Jacob,Dir,P - Purchase,$24.74,"+10,080","+$249,370","5,172,631"
-2026-08-12 17:55:16,2026-08-10,BDSX,Biodesix Inc,Schuler Jack W,"Emeritus Director, 10%",P - Purchase,$24.13,"+27,600","+$665,940","2,340,810"
-2026-08-12 16:56:54,2026-08-11,Q,"Qnity Electronics, Inc.",De Bondt Karin,Dir,P - Purchase,$138.14,"+1,000","+$138,136","6,647"
-2026-08-12 16:55:13,2026-08-10,VIA,"Via Transportation, Inc.",Dinur Arnon,Dir,P - Purchase,$22.31,"+44,780","+$998,984","6,293,371"
