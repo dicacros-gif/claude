@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-20 17:49:19,2026-10-20,DX,Dynex Capital Inc,Popenoe Smriti Laxman,"Co-CEO, Pres",P - Purchase,$13.05,"+12,000","+$156,560","548,203"
+2026-10-20 17:24:35,2026-10-16,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$34.71,"+347,195","+$12,052,562","129,848,103"
 2026-10-19 19:47:37,2026-10-16,IAM,"Iambic Therapeutics, Inc.",Rachlin Evan Lockwood,Dir,P - Purchase,$16.00,"+718,750","+$11,500,000","57,754"
 2026-10-19 17:38:59,2026-10-19,CTY,"City Therapeutics, Inc.","Arch Venture Partners Xii, LLC",10%,P - Purchase,$18.00,"+170,000","+$3,060,000","13,692,507"
 2026-10-19 17:37:43,2026-10-19,CTY,"City Therapeutics, Inc.",Nelsen Robert,"Dir, 10%",P - Purchase,$18.00,"+170,000","+$3,060,000","13,692,507"
@@ -497,5 +499,3 @@
 2026-08-12 19:02:19,2026-08-10,PNAQ,Pinnacle Acquisition Corp,Stoyan Paul J.,Dir,P - Purchase,$10.00,"+35,000","+$350,000","35,000"
 2026-08-12 19:01:33,2026-08-10,PNAQ,Pinnacle Acquisition Corp,"Pac Sponsor, LLC",10%,P - Purchase,$10.00,"+225,000","+$2,250,000","225,000"
 2026-08-12 19:00:38,2026-08-10,PNAQ,Pinnacle Acquisition Corp,Rechtschaffen Andrew,"Dir, 10%",P - Purchase,$10.00,"+1,225,000","+$12,250,000","1,450,000"
-2026-08-12 19:00:08,2026-08-10,PNAQ,Pinnacle Acquisition Corp,Martin Karen Lynne,Dir,P - Purchase,$10.00,"+10,000","+$100,000","10,000"
-2026-08-12 18:30:04,2026-08-10,GLIBK,Liberty Capital Corp/Nv,Malone John C,"Dir, 10%",P - Purchase,$25.00,"+542,232","+$13,557,480","2,729,304"
