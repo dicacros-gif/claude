@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-22 18:34:37,2026-10-20,DOLE,Dole Plc,Pale Fire Capital Se,10%,P - Purchase,$13.19,"+648,356","+$8,554,410","10,282,620"
+2026-10-22 17:03:49,2026-10-20,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$35.01,"+193,357","+$6,769,545","130,203,484"
+2026-10-22 16:56:38,2026-10-22,RAPP,"Rapport Therapeutics, Inc.",Paul Steven M,Dir,P - Purchase,$27.28,"+35,714","+$974,278","555,022"
+2026-10-22 16:56:25,2026-10-22,RAPP,"Rapport Therapeutics, Inc.",Maraganore John,Dir,P - Purchase,$26.45,"+9,411","+$248,891","9,411"
 2026-10-21 19:24:01,2026-10-20,FBK,Fb Financial Corp,Ingram Orrin H II,Dir,P - Purchase,$52.88,"+29,081","+$1,537,788","124,391"
 2026-10-21 17:46:54,2026-10-21,RAPP,"Rapport Therapeutics, Inc.",Ignelzi Troy A.,CFO,P - Purchase,$26.10,"+5,500","+$143,550","15,500"
 2026-10-21 16:52:12,2026-10-19,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$34.51,"+162,024","+$5,591,238","130,010,127"
@@ -495,7 +499,3 @@
 2026-08-13 06:57:28,2026-08-11,COE,51Talk Online Education Group,Huang Jack Jiajia,"CEO, 10%",P - Purchase,$19.93,"+592,320","+$11,804,395","85,470,620"
 2026-08-12 21:15:03,2026-08-10,NMM,Navios Maritime Partners L.P.,Frangou Angeliki,"See Remarks, 10%",P - Purchase,$78.88,"+3,169","+$249,978","5,779,973"
 2026-08-12 20:00:04,2026-08-10,UTI,Universal Technical Institute Inc,Devincenzi Robert Thomas,Dir,P - Purchase,$28.21,"+8,000","+$225,676","148,330"
-2026-08-12 19:39:15,2026-08-10,VISN,"Vistance Networks, Inc.",Gilstrap Charles A,"SVP, Treasury, Tax, CAO",P - Purchase,$10.75,"+10,000","+$107,500","302,417"
-2026-08-12 19:12:27,2026-08-11,FMX,Mexican Economic Development Inc,Kahn Michael David,Dir,P - Purchase,$118.13,"+2,100","+$248,073","2,100"
-2026-08-12 19:03:06,2026-08-10,PNAQ,Pinnacle Acquisition Corp,Brandler Harry,Dir,P - Purchase,$10.00,"+10,000","+$100,000","10,000"
-2026-08-12 19:02:45,2026-08-10,PNAQ,Pinnacle Acquisition Corp,Hudson Steven Kenneth,"CEO, 10%",P - Purchase,$10.00,"+1,475,000","+$14,750,000","1,500,000"
