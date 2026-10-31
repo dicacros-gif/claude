@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-10-30 19:32:45,2026-10-28,RAPP,"Rapport Therapeutics, Inc.",Healy James,Dir,P - Purchase,$21.00,"+969,480","+$20,359,080","2,873,888"
+2026-10-30 19:25:13,2026-10-28,LYCA,"Lycia Therapeutics, Inc.","Venrock Healthcare Capital Partners Iii, L.P.",10%,P - Purchase,$25.78,"+25,004","+$644,711","6,850,237"
+2026-10-30 18:04:50,2026-10-28,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$35.26,"+245,898","+$8,671,495","131,869,568"
+2026-10-30 14:46:30,2026-10-28,BFH,"Bread Financial Holdings, Inc.",Fawcett John J.,Dir,P - Purchase,$24.70,"+5,000","+$123,490","5,000"
 2026-10-29 17:25:26,2026-10-29,DINO,Hf Sinclair Corp,Myers Franklin,CEO,P - Purchase,$110.80,"+10,000","+$1,108,000","207,723"
 2026-10-29 17:07:56,2026-10-28,SCQCU,Spaccircle Acquisition Corp.,Das Soumen,"Dir, 10%",P - Purchase,$10.00,"+266,590","+$2,665,900","266,590"
 2026-10-29 16:50:47,2026-10-27,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$35.14,"+178,129","+$6,259,186","131,623,670"
@@ -495,7 +499,3 @@
 2026-08-17 08:23:22,2026-08-14,ONON,On Holding AG,Coppetti Caspar Felix,"Exec Officer, Co-CEO",P - Purchase,$30.67,"+65,000","+$1,993,791","2,440,855"
 2026-08-17 07:21:41,2026-08-14,REZI,"Resideo Technologies, Inc.",Surran Thomas A,"Pres, CEO",P - Purchase,$20.46,"+15,000","+$306,900","338,573"
 2026-08-17 07:02:55,2026-08-13,VFC,V F Corp,Carucci Richard,Dir,P - Purchase,$14.73,"+20,000","+$294,600","356,215"
-2026-08-14 20:09:13,2026-08-14,INFQ,"Infleqtion, Inc.",Maverick Capital Ltd,Dir,P - Purchase,$12.42,"+52,071","+$646,836","1,929,577"
-2026-08-14 18:23:26,2026-08-13,BROS,Dutch Bros Inc.,Penegor Todd Allan,Dir,P - Purchase,$51.56,"+2,000","+$103,120","7,358"
-2026-08-14 16:27:15,2026-08-11,INTC,Intel Corp,Tan Lip Bu,CEO,P - Purchase,$95.00,"+105,263","+$9,999,985","1,331,640"
-2026-08-14 16:20:28,2026-08-13,AAT,"American Assets Trust, Inc.",Rady Ernest S,"Exec COB, 10%",P - Purchase,$22.84,"+150,000","+$3,425,500","13,928,449"
