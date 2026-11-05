@@ -1,4 +1,7 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-05 08:33:22,2026-11-04,RRBI,Red River Bancshares Inc,Price Teddy Ray,Dir,P - Purchase,$107.76,"+1,045","+$112,606","451,044"
+2026-11-05 08:20:04,2026-11-03,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$18.81,"+15,000","+$282,214","19,154,102"
+2026-11-05 07:37:20,2026-11-03,CRH,Crh Public Ltd Co,Talbot Siobhan,Dir,P - Purchase,$94.63,"+2,000","+$189,260","10,507"
 2026-11-04 18:47:25,2026-11-02,ASPE,"Aspen Neuroscience, Inc.",Thompson Peter A.,"Dir, 10%",P - Purchase,$15.00,"+1,000,000","+$15,000,000","3,589,132"
 2026-11-04 18:43:12,2026-11-02,ASPE,"Aspen Neuroscience, Inc.",Orbimed Advisors LLC,"Dir, 10%",P - Purchase,$15.00,"+1,000,000","+$15,000,000","3,589,132"
 2026-11-04 18:18:54,2026-10-28,SCQCU,Spaccircle Acquisition Corp.,Das Soumen,"Dir, 10%",P - Purchase,$10.00,"+266,590","+$2,665,900","266,590"
@@ -496,6 +499,3 @@
 2026-08-19 16:18:31,2026-08-18,GLPI,"Gaming & Leisure Properties, Inc.",Shanks Earl C,Dir,P - Purchase,$42.24,"+10,000","+$422,400","107,259"
 2026-08-19 16:17:43,2026-08-18,SGRY,"Surgery Partners, Inc.",Deluca Teresa,Dir,P - Purchase,$14.35,"+10,000","+$143,500","66,843"
 2026-08-19 16:14:59,2026-08-19,DMLP,"Dorchester Minerals, L.P.",Moriyama Leslie A,CFO,P - Purchase,$28.30,"+5,197","+$147,075","103,405"
-2026-08-19 15:46:55,2026-08-18,UTGN,Utg Inc,First Southern Funding LLC,10%,P - Purchase,$59.00,"+4,808","+$283,672","1,698,491"
-2026-08-19 15:19:11,2026-08-18,UTGN,Utg Inc,Correll Jesse T,"COB, CEO, 10%",P - Purchase,$59.00,"+4,808","+$283,672","2,057,712"
-2026-08-18 21:02:43,2026-08-14,ASND,Ascendis Pharma A/S,Bienaime Jean Jacques,Dir,P - Purchase,$246.33,"+2,000","+$492,654","2,900"
