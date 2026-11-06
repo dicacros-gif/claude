@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-06 10:05:41,2026-07-26,YPF,Ypf Sociedad Anonima,Francos Guillermo Alberto,Dir,P - Purchase,$51.42,"+6,930","+$356,341","31,860"
+2026-11-06 09:48:20,2026-11-04,LKQ,Lkq Corp,Gove Sue,Dir,P - Purchase,$20.53,"+9,795","+$201,085","20,793"
 2026-11-05 21:00:03,2026-11-05,MTUS,Metallus Inc.,Rice Ronald A,Dir,P - Purchase,$16.61,"+10,000","+$166,100","161,818"
 2026-11-05 20:37:18,2026-02-27,TRAD,Apex Tech Acquisition Inc.,Liu Shaoren,"CEO, CFO, 10%",P - Purchase,$10.00,"+208,971","+$2,089,710","3,083,971"
 2026-11-05 20:30:03,2026-11-04,FLOC,Flowco Holdings Inc.,Fairbanks Jonathan B.,"See Remarks, 10%",P - Purchase,$19.35,"+15,140","+$292,924","722,833"
@@ -497,5 +499,3 @@
 2026-08-21 09:23:15,2026-08-19,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$18.63,"+19,515","+$363,655","18,946,180"
 2026-08-21 06:48:20,2026-04-10,COE,51Talk Online Education Group,Huang Jack Jiajia,"CEO, 10%",P - Purchase,$21.02,"+187,020","+$3,932,015","85,795,140"
 2026-08-20 21:05:40,2026-08-18,MOBI,"Mobia Medical, Inc.",Tansey Casey M,Dir,P - Purchase,$12.07,"+16,441","+$198,523","318,332"
-2026-08-20 20:43:03,2026-08-20,AMR,"Alpha Metallurgical Resources, Inc.",Courtis Kenneth S.,Dir,P - Purchase,$193.50,"+15,000","+$2,902,552","1,000,394"
-2026-08-20 18:10:28,2026-08-18,SGRY,"Surgery Partners, Inc.",Deluca Teresa,Dir,P - Purchase,$14.33,"+11,250","+$161,213","68,093"
