@@ -1,4 +1,9 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-09 15:01:56,2026-11-05,PAM,Pampa Energy Inc.,Mindlin Damian Miguel,VicePres,P - Purchase,$64.37,"+20,000","+$1,287,400","749,545"
+2026-11-09 12:16:40,2026-02-05,ADM,Archer-Daniels-Midland Co,McAtee David R II,Dir,P - Purchase,$64.90,"+7,500","+$486,720","7,500"
+2026-11-09 11:36:48,2026-11-06,LKFN,Lakeland Financial Corp,Bartels Robert E Jr,Dir,P - Purchase,$61.09,"+1,918","+$117,177","30,376"
+2026-11-09 10:52:23,2026-11-05,TTMI,Ttm Technologies Inc,Franklin Philip G,Dir,P - Purchase,$61.92,"+5,000","+$309,600","161,725"
+2026-11-09 08:18:33,2026-11-05,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$18.83,"+33,000","+$621,506","19,187,102"
 2026-11-09 07:41:53,2026-11-05,MTDR,Matador Resources Co,Foran Joseph Wm,"COB, CEO",P - Purchase,$51.36,"+5,000","+$256,800","5,485,230"
 2026-11-09 06:15:09,2026-11-05,TSM,Taiwan Semiconductor Manufacturing Co Ltd,Splinter Michael R,Dir,P - Purchase,$357.00,+840,"+$299,880","10,425"
 2026-11-06 18:43:53,2026-11-06,KMI,"Kinder Morgan, Inc.",Kinder Richard D,"Exec COB, 10%",P - Purchase,$29.99,"+500,000","+$14,994,200","258,586,579"
@@ -494,8 +499,3 @@
 2026-08-24 15:44:29,2026-08-24,TTMI,Ttm Technologies Inc,Geveden Rex D,Dir,P - Purchase,$104.90,"+5,000","+$524,500","99,824"
 2026-08-24 14:41:17,2026-08-17,BFC,Bank First Corp,Pearson Tracy C,Dir,P - Purchase,$156.97,"+1,024","+$160,737","1,024"
 2026-08-24 11:06:55,2026-08-21,SCTH,"Securetech Innovations, Inc.",Sitra J Scott,"Pres, CEO, 10%",P - Purchase,"$100,000.00","+1,000","+$100,000,000","126,390"
-2026-08-24 08:17:01,2026-08-24,BABA,Alibaba Group Holding Ltd,Tsai Joseph C,Dir,P - Purchase,$14.29,"+720,000","+$10,288,800","116,364,406"
-2026-08-24 07:08:38,2026-08-21,PODD,Insulet Corp,McEvoy Ashley,"Pres, CEO",P - Purchase,$147.47,"+1,100","+$162,217","23,735"
-2026-08-24 06:04:00,2026-08-24,BABA,Alibaba Group Holding Ltd,Wu Yongming,CEO,P - Purchase,$14.24,"+350,000","+$4,984,000","13,792,418"
-2026-08-21 16:59:34,2026-08-20,ALK,"Alaska Air Group, Inc.",Minicucci Benito,"CEO, Pres",P - Purchase,$40.06,"+25,000","+$1,001,510","256,582"
-2026-08-21 16:30:18,2026-08-19,NOMD,Nomad Foods Ltd,Baldew Ruben,CFO,P - Purchase,$11.85,"+28,290","+$335,231","367,172"
