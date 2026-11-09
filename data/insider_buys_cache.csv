@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-09 07:41:53,2026-11-05,MTDR,Matador Resources Co,Foran Joseph Wm,"COB, CEO",P - Purchase,$51.36,"+5,000","+$256,800","5,485,230"
+2026-11-09 06:15:09,2026-11-05,TSM,Taiwan Semiconductor Manufacturing Co Ltd,Splinter Michael R,Dir,P - Purchase,$357.00,+840,"+$299,880","10,425"
 2026-11-06 18:43:53,2026-11-06,KMI,"Kinder Morgan, Inc.",Kinder Richard D,"Exec COB, 10%",P - Purchase,$29.99,"+500,000","+$14,994,200","258,586,579"
 2026-11-06 17:30:38,2026-11-04,MDGL,"Madrigal Pharmaceuticals, Inc.",Baker Bros. Advisors LP,Dir,P - Purchase,$381.49,"+91,806","+$35,023,032","2,244,403"
 2026-11-06 16:55:41,2026-11-04,KOD,Kodiak Sciences Inc.,Baker Bros. Advisors LP,"Dir, 10%",P - Purchase,$98.51,"+247,090","+$24,340,836","20,424,859"
@@ -497,5 +499,3 @@
 2026-08-24 06:04:00,2026-08-24,BABA,Alibaba Group Holding Ltd,Wu Yongming,CEO,P - Purchase,$14.24,"+350,000","+$4,984,000","13,792,418"
 2026-08-21 16:59:34,2026-08-20,ALK,"Alaska Air Group, Inc.",Minicucci Benito,"CEO, Pres",P - Purchase,$40.06,"+25,000","+$1,001,510","256,582"
 2026-08-21 16:30:18,2026-08-19,NOMD,Nomad Foods Ltd,Baldew Ruben,CFO,P - Purchase,$11.85,"+28,290","+$335,231","367,172"
-2026-08-21 16:27:42,2026-08-21,AAT,"American Assets Trust, Inc.",Rady Ernest S,"Exec COB, 10%",P - Purchase,$22.75,"+50,000","+$1,137,500","14,042,035"
-2026-08-21 16:16:46,2026-08-20,ELAN,Elanco Animal Health Inc,Kurzius Lawrence Erik,Dir,P - Purchase,$23.40,"+40,000","+$935,920","188,647"
