@@ -1,4 +1,7 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-10 12:09:09,2026-11-09,ARLO,"Arlo Technologies, Inc.",Faison Ralph E,Dir,P - Purchase,$12.17,"+8,250","+$100,402","419,300"
+2026-11-10 09:22:07,2026-11-05,FLOC,Flowco Holdings Inc.,Edwards Joseph R,"Pres, CEO",P - Purchase,$19.49,"+20,000","+$389,732","341,420"
+2026-11-10 07:42:57,2026-11-06,CRH,Crh Public Ltd Co,Fearon Richard H,Dir,P - Purchase,$94.95,"+6,000","+$569,700","150,842"
 2026-11-09 21:17:20,2026-11-05,NXRT,"Nexpoint Residential Trust, Inc.",McGraner Matt,See Remarks,P - Purchase,$16.62,"+11,992","+$199,266","512,267"
 2026-11-09 21:16:58,2026-11-05,NXRT,"Nexpoint Residential Trust, Inc.",Richards Paul,See Remarks,P - Purchase,$16.36,"+6,300","+$103,053","42,191"
 2026-11-09 17:58:47,2026-11-06,UFCS,United Fire Group Inc,Milligan George D,Dir,P - Purchase,$47.41,"+5,000","+$237,050","95,034"
@@ -496,6 +499,3 @@
 2026-08-25 16:23:18,2026-08-21,AMT,American Tower Corp /Ma/,Kalathur Rajesh,Dir,P - Purchase,$177.00,"+2,829","+$500,733","7,936"
 2026-08-25 15:02:27,2026-08-21,AMR,"Alpha Metallurgical Resources, Inc.",Gorzynski Michael,"See Remarks, 10%",P - Purchase,$208.92,"+10,000","+$2,089,169","1,453,012"
 2026-08-25 13:26:39,2026-08-24,RBA,Rb Global Inc.,Harford Chloe,Dir,P - Purchase,$83.74,"+1,200","+$100,488","1,200"
-2026-08-25 11:55:47,2026-08-21,NGL,Ngl Energy Partners LP,Raymond John T,Dir,P - Purchase,$16.22,"+26,626","+$432,002","76,626"
-2026-08-25 10:59:38,2026-08-21,TISI,Team Inc,Roeder Clinton William,CFO,P - Purchase,$22.89,"+9,000","+$206,040","9,000"
-2026-08-25 09:58:15,2026-08-21,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$18.87,"+20,000","+$377,404","18,966,180"
