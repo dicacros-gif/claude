@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-13 09:06:48,2026-11-11,BH,Biglari Holdings Inc.,"Biglari, Sardar","COB, CEO, 10%",P - Purchase,"$1,514.12","+3,657","+$5,537,125","1,630,370"
 2026-11-12 21:36:26,2026-11-09,ASR,Southeast Airport Group,Perez Anton Jose Antonio,Dir,P - Purchase,$265.41,"+1,875","+$497,650","2,369"
 2026-11-12 18:34:10,2026-11-11,EQPT,Equipmentshare.Com Inc,Schlacks Jabbok,"Founder, CEO",P - Purchase,$15.42,"+16,212","+$249,989","14,447,760"
 2026-11-12 18:16:23,2026-11-11,BLMN,"Bloomin' Brands, Inc.",Spanos Mike,CEO,P - Purchase,$10.04,"+50,000","+$502,000","293,061"
@@ -498,4 +499,3 @@
 2026-08-31 07:35:29,2026-08-27,MTDR,Matador Resources Co,Calvert Christopher P,"EVP, CFO",P - Purchase,$56.64,"+2,500","+$141,600","129,624"
 2026-08-31 07:00:11,2026-08-27,ADC,Agree Realty Corp,Rakolta John Jr,Dir,P - Purchase,$73.23,"+20,136","+$1,474,599","622,343"
 2026-08-28 17:38:55,2026-08-05,ATTO,"Attovia Therapeutics, Inc.",Walsh Colin,Dir,P - Purchase,$17.58,"+585,000","+$10,285,000","3,020,632"
-2026-08-28 17:38:09,2026-08-05,ATTO,"Attovia Therapeutics, Inc.",Goldman Sachs Group Inc,Former 10% Owner,P - Purchase,$17.58,"+585,000","+$10,285,000","3,020,632"
