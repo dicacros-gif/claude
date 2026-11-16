@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-16 07:16:58,2026-11-12,DOX,Amdocs Ltd,De La Vega Rafael,Dir,P - Purchase,$44.51,"+2,297","+$102,228","38,191"
+2026-11-16 06:49:22,2026-11-12,TH,Target Hospitality Corp.,Schrenk Troy C.,Chief Commercial Officer,P - Purchase,$11.68,"+21,402","+$250,006","238,397"
+2026-11-16 06:08:10,2026-11-13,YUMC,"Yum China Holdings, Inc.",Dimitrief Alexander,Dir,P - Purchase,$49.50,"+5,000","+$247,500","8,691"
+2026-11-16 06:02:41,2026-11-09,DOX,Amdocs Ltd,Gelman Eliahu Meir,Dir,P - Purchase,$41.72,"+2,500","+$104,301","353,446"
 2026-11-13 21:21:30,2026-11-11,STWD,"Starwood Property Trust, Inc.",Pollack Jonathan Lee,Dir,P - Purchase,$11.86,"+169,800","+$2,013,450","296,595"
 2026-11-13 21:19:42,2026-11-11,STWD,"Starwood Property Trust, Inc.",Sternlicht Barry S,"CEO, COB",P - Purchase,$11.81,"+1,245,000","+$14,697,682","19,737,760"
 2026-11-13 19:17:56,2026-11-11,CTRI,"Centuri Holdings, Inc.",Patton Charles R.,Dir,P - Purchase,$22.72,"+11,000","+$249,920","40,309"
@@ -495,7 +499,3 @@
 2026-09-02 09:38:31,2026-08-31,VST,Vistra Corp.,Burke James A,"Pres, CEO",P - Purchase,$135.49,"+6,665","+$903,069","1,242,301"
 2026-09-02 09:19:26,2026-09-01,PNFP,"Pinnacle Financial Partners, Inc.",Blair Kevin S.,CEO,P - Purchase,$97.48,"+2,565","+$250,036","152,397"
 2026-09-02 08:17:45,2026-08-31,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$19.17,"+19,257","+$369,199","19,024,945"
-2026-09-01 19:50:18,2026-08-28,AUGO,Aura Minerals Inc.,Sousa Mauad Bruno,Dir,P - Purchase,$86.48,"+252,000","+$21,792,751","290,856"
-2026-09-01 17:07:55,2026-08-28,EQPT,Equipmentshare.Com Inc,Schlacks Jabbok,"Founder, CEO",P - Purchase,$17.62,"+25,000","+$440,395","14,381,548"
-2026-09-01 17:03:45,2026-09-01,DY,Dycom Industries Inc,Fallon David Joseph,Dir,P - Purchase,$286.92,+700,"+$200,844","1,043"
-2026-09-01 17:00:01,2026-08-28,LUCK,Lucky Strike Entertainment Corp,Young John Alan,Dir,P - Purchase,$150.94,"+4,200","+$633,944","89,718"
