@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-16 09:09:47,2026-11-12,SONO,Sonos Inc,Kennedy Joseph Jude,Dir,P - Purchase,$18.72,"+100,000","+$1,871,497","114,364"
+2026-11-16 08:40:19,2026-11-12,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$18.98,"+15,000","+$284,629","19,224,602"
+2026-11-16 08:07:23,2026-11-11,CSQR,"Csquare, Inc.",Kelley Philip M,Dir,P - Purchase,$17.24,"+10,000","+$172,400","20,000"
+2026-11-16 08:00:06,2026-11-13,HUBS,Hubspot Inc,Halligan Brian,CEO,P - Purchase,$217.44,"+22,985","+$4,997,858","436,139"
 2026-11-16 07:16:58,2026-11-12,DOX,Amdocs Ltd,De La Vega Rafael,Dir,P - Purchase,$44.51,"+2,297","+$102,228","38,191"
 2026-11-16 06:49:22,2026-11-12,TH,Target Hospitality Corp.,Schrenk Troy C.,Chief Commercial Officer,P - Purchase,$11.68,"+21,402","+$250,006","238,397"
 2026-11-16 06:08:10,2026-11-13,YUMC,"Yum China Holdings, Inc.",Dimitrief Alexander,Dir,P - Purchase,$49.50,"+5,000","+$247,500","8,691"
@@ -495,7 +499,3 @@
 2026-09-02 16:10:45,2026-09-02,MIR,"Mirion Technologies, Inc.",Schopfer Brian,CFO,P - Purchase,$15.60,"+20,000","+$312,000","1,333,225"
 2026-09-02 16:05:28,2026-08-31,ADC,Agree Realty Corp,Rakolta John Jr,Dir,P - Purchase,$72.42,"+10,000","+$724,200","632,343"
 2026-09-02 16:01:51,2026-09-01,NPB,Northpointe Bancshares Inc,Williams Charles Alan,"COB, CEO, 10%",P - Purchase,$16.74,"+85,000","+$1,422,926","3,310,180"
-2026-09-02 14:49:39,2026-08-31,AXIA,Axia Energia S.A.,Batista De Lima Filho Pedro,Dir,P - Purchase,$10.27,"+93,600","+$961,272","4,813,599"
-2026-09-02 09:38:31,2026-08-31,VST,Vistra Corp.,Burke James A,"Pres, CEO",P - Purchase,$135.49,"+6,665","+$903,069","1,242,301"
-2026-09-02 09:19:26,2026-09-01,PNFP,"Pinnacle Financial Partners, Inc.",Blair Kevin S.,CEO,P - Purchase,$97.48,"+2,565","+$250,036","152,397"
-2026-09-02 08:17:45,2026-08-31,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$19.17,"+19,257","+$369,199","19,024,945"
