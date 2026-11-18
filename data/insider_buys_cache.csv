@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-18 06:03:58,2026-11-17,TSM,Taiwan Semiconductor Manufacturing Co Ltd,Burns Ursula M,Dir,P - Purchase,$363.67,"+1,375","+$500,039","4,992"
 2026-11-17 17:28:49,2026-11-16,TEAM,Atlassian Corp,Cannon-Brookes Michael,"CEO, Co-Founder, 10%",P - Purchase,$149.16,"+13,400","+$1,998,767","329,540"
 2026-11-17 17:20:11,2026-11-13,PRAA,Pra Group Inc,Fredrickson Steven D,Chairman,P - Purchase,$11.80,"+25,000","+$295,000","266,201"
 2026-11-17 17:00:37,2026-11-16,UPST,"Upstart Holdings, Inc.",Gu Paul,CEO,P - Purchase,$19.00,"+50,000","+$950,000","1,447,546"
@@ -498,4 +499,3 @@
 2026-09-08 17:23:30,2026-09-08,INBX,"Inhibrx Biosciences, Inc.",Kayyem Jon Faiz,Dir,P - Purchase,$113.52,"+5,000","+$567,580","1,064,046"
 2026-09-08 16:33:27,2026-09-03,EIKN,"Eikon Therapeutics, Inc.","Column Group IV Gp, LP",10%,P - Purchase,$11.56,"+89,200","+$1,031,045","5,869,343"
 2026-09-08 16:32:27,2026-09-03,GOLD,"Gold.Com, Inc.","Tether Global Investments Fund, S.I.C.A.F., S.A.",10%,P - Purchase,$39.30,"+100,000","+$3,930,350","3,670,787"
-2026-09-08 16:26:03,2026-09-08,INBX,"Inhibrx Biosciences, Inc.",Forsyth Douglas,Dir,P - Purchase,$114.65,"+2,500","+$286,617","227,064"
