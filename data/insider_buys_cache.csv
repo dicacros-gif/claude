@@ -1,4 +1,6 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-19 07:19:51,2026-11-17,MTDR,Matador Resources Co,Foran Joseph Wm,"COB, CEO",P - Purchase,$50.98,"+2,500","+$127,450","5,490,230"
+2026-11-19 07:00:03,2026-11-17,CTGO,Contango Silver & Gold Inc.,Juneau John B,Dir,P - Purchase,$10.86,"+18,300","+$198,738","724,702"
 2026-11-18 20:10:51,2026-11-17,EQPT,Equipmentshare.Com Inc,Schlacks William J.,"Founder, Pres",P - Purchase,$14.54,"+10,000","+$145,400","795,235"
 2026-11-18 20:09:31,2026-11-16,EQPT,Equipmentshare.Com Inc,Schlacks Jabbok,"Founder, CEO ,",P - Purchase,$14.73,"+16,972","+$249,998","859,565"
 2026-11-18 19:47:50,2026-11-16,OIG,Orion180 Insurance Group Inc.,Deutsch Robert V,Dir,P - Purchase,$10.26,"+10,323","+$105,881","10,323"
@@ -497,5 +499,3 @@
 2026-09-11 09:04:26,2026-09-08,CYBN,Cybin Inc.,Glavine Paul,Chief Growth Officer,P - Purchase,$12.47,"+100,000","+$1,247,190","4,502,193"
 2026-09-11 09:03:44,2026-09-08,CYBN,Cybin Inc.,Glavine Paul,Chief Growth Officer,P - Purchase,$12.47,"+100,000","+$1,247,190","4,502,193"
 2026-09-11 09:01:28,2026-09-08,CYBN,Cybin Inc.,So Eric H. L.,Exec Chair,P - Purchase,$12.39,"+100,000","+$1,238,670","4,518,630"
-2026-09-11 08:59:28,2026-09-09,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$19.13,"+23,469","+$448,912","19,084,377"
-2026-09-10 20:01:53,2026-09-10,PRTS,"Carparts.Com, Inc.",Huffaker Michael,COO,P - Purchase,$10.06,"+13,250","+$133,295","152,810"
