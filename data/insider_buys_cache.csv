@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-23 08:46:36,2026-11-20,BWFG,"Bankwell Financial Group, Inc.",Seidman Lawrence B,"Dir, 10%",P - Purchase,$67.90,"+2,474","+$167,972","872,039"
 2026-11-20 20:22:19,2026-11-19,UPST,"Upstart Holdings, Inc.",Gu Paul,CEO,P - Purchase,$17.20,"+50,000","+$860,065","1,497,546"
 2026-11-20 20:21:55,2026-11-20,UPST,"Upstart Holdings, Inc.",Girouard Dave,"Dir, 10%",P - Purchase,$15.85,"+60,000","+$950,988","10,805,746"
 2026-11-20 17:43:13,2026-11-20,TTMI,Ttm Technologies Inc,Franklin Philip G,Dir,P - Purchase,$58.40,"+5,000","+$291,989","166,725"
@@ -498,4 +499,3 @@
 2026-09-16 16:30:21,2026-09-15,TH,Target Hospitality Corp.,Archer James Bradley,"Dir, CEO, Pres",P - Purchase,$18.69,"+13,385","+$250,166","1,845,441"
 2026-09-16 16:21:46,2026-09-14,AAT,"American Assets Trust, Inc.",Rady Ernest S,"Exec COB, 10%",P - Purchase,$21.65,"+50,000","+$1,082,500","14,438,400"
 2026-09-16 16:06:53,2026-09-11,USO,"United States Oil Fund, LP",Hrt Financial LP,10%,P - Purchase,$157.88,"+105,195","+$16,608,540","61,589"
-2026-09-16 15:54:56,2026-09-14,AXIA,Axia Energia S.A.,Batista De Lima Filho Pedro,Dir,P - Purchase,$10.49,"+512,900","+$5,378,042","5,043,199"
