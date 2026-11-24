@@ -1,4 +1,7 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-24 09:27:10,2026-11-20,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$18.98,"+17,500","+$332,212","19,269,915"
+2026-11-24 08:06:14,2026-11-20,PRE,Prenetics Global Ltd,Rosin Brian J,CFO of IM8 (US) LLC,P - Purchase,$10.11,"+40,000","+$404,200","63,100"
+2026-11-24 06:26:58,2026-11-23,HSHP,Himalaya Shipping Ltd.,Svensen Lars-Christian,Contracted CEO,P - Purchase,$15.16,"+6,800","+$103,088","29,986"
 2026-11-23 20:22:09,2026-11-19,FUN,Six Flags Entertainment Corporation/New,Jaffer Rehan,Dir,P - Purchase,$11.43,"+375,000","+$4,286,000","8,100,000"
 2026-11-23 19:40:37,2026-11-19,SAFTX,Sound Point Alternative Income Fund,Assured Guaranty Ltd,10%,P - Purchase,$20.40,"+245,098","+$5,000,000","629,007"
 2026-11-23 19:39:52,2026-11-20,FPS,"Forgent Power Solutions, Inc.",Spierkel Gregory M,Dir,P - Purchase,$18.48,"+25,000","+$462,000","170,215"
@@ -496,6 +499,3 @@
 2026-09-17 16:54:51,2026-09-16,BWMX,"Betterware De Mexico, S.A.P.I. De C.V",Chevallier Santiago Campos,MD Betterware Mexico,P - Purchase,$16.46,"+15,000","+$246,924","60,000"
 2026-09-17 16:54:17,2026-09-15,BWMX,"Betterware De Mexico, S.A.P.I. De C.V",Campos Luis,"Chairman, 10%",P - Purchase,$16.34,"+80,000","+$1,307,102","20,358,497"
 2026-09-17 16:53:32,2026-09-15,BWMX,"Betterware De Mexico, S.A.P.I. De C.V",Chevallier Andres Campos,CEO,P - Purchase,$16.44,"+45,000","+$739,785","275,000"
-2026-09-17 16:30:05,2026-09-15,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$35.02,"+210,903","+$7,385,802","122,980,307"
-2026-09-17 16:22:47,2026-09-16,COO,"Cooper Companies, Inc.",Kurzius Lawrence Erik,Dir,P - Purchase,$54.93,"+10,000","+$549,320","31,099"
-2026-09-17 14:28:47,2026-09-16,USO,"United States Oil Fund, LP",Hrt Financial LP,10%,P - Purchase,$155.30,"+43,638","+$6,776,820","128,543"
