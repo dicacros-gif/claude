@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-24 10:20:44,2026-11-20,FRD,Friedman Industries Inc,Taylor Mike J,"Pres ,  CEO ,  Dir",P - Purchase,$33.75,"+5,000","+$168,730","258,166"
 2026-11-24 09:27:10,2026-11-20,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$18.98,"+17,500","+$332,212","19,269,915"
 2026-11-24 08:06:14,2026-11-20,PRE,Prenetics Global Ltd,Rosin Brian J,CFO of IM8 (US) LLC,P - Purchase,$10.11,"+40,000","+$404,200","63,100"
 2026-11-24 06:26:58,2026-11-23,HSHP,Himalaya Shipping Ltd.,Svensen Lars-Christian,Contracted CEO,P - Purchase,$15.16,"+6,800","+$103,088","29,986"
@@ -498,4 +499,3 @@
 2026-09-17 17:11:13,2026-09-15,MNR,Mach Natural Resources LP,McMullen William Wallace,"See Remarks, 10%",P - Purchase,$11.27,"+34,514","+$388,902","74,894,431"
 2026-09-17 16:54:51,2026-09-16,BWMX,"Betterware De Mexico, S.A.P.I. De C.V",Chevallier Santiago Campos,MD Betterware Mexico,P - Purchase,$16.46,"+15,000","+$246,924","60,000"
 2026-09-17 16:54:17,2026-09-15,BWMX,"Betterware De Mexico, S.A.P.I. De C.V",Campos Luis,"Chairman, 10%",P - Purchase,$16.34,"+80,000","+$1,307,102","20,358,497"
-2026-09-17 16:53:32,2026-09-15,BWMX,"Betterware De Mexico, S.A.P.I. De C.V",Chevallier Andres Campos,CEO,P - Purchase,$16.44,"+45,000","+$739,785","275,000"
