@@ -1,4 +1,8 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-25 11:39:54,2026-11-24,WMB,"Williams Companies, Inc.",Turner Robb E,Dir,P - Purchase,$65.24,"+15,000","+$978,650","117,785"
+2026-11-25 11:21:20,2026-11-23,MED,Medifast Inc,Kiai Parsa,Dir,P - Purchase,$11.99,"+21,287","+$255,225","24,600"
+2026-11-25 11:01:03,2026-11-23,GOLD,"Gold.Com, Inc.","Tether Global Investments Fund, S.I.C.A.F., S.A.",10%,P - Purchase,$38.31,"+150,000","+$5,745,855","4,020,787"
+2026-11-25 09:16:50,2026-11-23,PRE,Prenetics Global Ltd,Lo Hoi Chun,CFO,P - Purchase,$10.22,"+12,435","+$127,140","586,083"
 2026-11-25 07:26:24,2006-11-25,SHMD,Schmid Group N.V.,Schuetz Arthur Josef Hermann,CFO Schmid Group N.V.,P - Purchase,"$1,731,430.00","+60,000","+$2,147,483,647","102,118"
 2026-11-24 20:43:01,2026-11-20,PLTR,Palantir Technologies Inc.,Thiel Peter,Dir,P - Purchase,$143.81,"+850,100","+$122,253,519","69,721,656"
 2026-11-24 20:40:59,2026-11-19,SAFTX,Sound Point Alternative Income Fund,Assured Guaranty Ltd,10%,P - Purchase,$20.40,"+245,098","+$5,000,000","629,007"
@@ -495,7 +499,3 @@
 2026-09-21 18:18:57,2026-09-18,CRM,"Salesforce, Inc.",Kirk David Blair,Dir,P - Purchase,$239.33,"+4,176","+$999,451","18,748"
 2026-09-21 17:55:20,2026-09-17,GLP,Global Partners LP,Global Gp LLC,General Partner,P - Purchase,$50.36,"+10,000","+$503,550","171,584"
 2026-09-21 17:37:47,2026-09-18,BBD,Bank Bradesco,Da Cunha Paulo Roberto Simoes,Dir,P - Purchase,$17.98,"+46,874","+$842,795","264,605"
-2026-09-21 17:07:57,2026-09-21,CYBN,Cybin Inc.,Halstead Michael,CEO,P - Purchase,$13.47,"+100,000","+$1,347,050","168,568"
-2026-09-21 17:04:15,2026-09-21,GME,Gamestop Corp.,Cohen Ryan,"Pres, CEO, COB",P - Purchase,$22.94,"+1,150,680","+$26,393,723","40,498,522"
-2026-09-21 16:44:42,2026-09-18,GSAT,"Globalstar, Inc.",Monroe James III,"Dir, 10%",P - Purchase,$82.52,"+361,600","+$29,839,232","74,419,849"
-2026-09-21 16:32:21,2026-09-17,GPI,Group 1 Automotive Inc,"Conifer Management, L.L.C.",10%,P - Purchase,$256.78,"+65,650","+$16,857,715","1,512,290"
