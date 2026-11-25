@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-25 07:26:24,2006-11-25,SHMD,Schmid Group N.V.,Schuetz Arthur Josef Hermann,CFO Schmid Group N.V.,P - Purchase,"$1,731,430.00","+60,000","+$2,147,483,647","102,118"
 2026-11-24 20:43:01,2026-11-20,PLTR,Palantir Technologies Inc.,Thiel Peter,Dir,P - Purchase,$143.81,"+850,100","+$122,253,519","69,721,656"
 2026-11-24 20:40:59,2026-11-19,SAFTX,Sound Point Alternative Income Fund,Assured Guaranty Ltd,10%,P - Purchase,$20.40,"+245,098","+$5,000,000","629,007"
 2026-11-24 18:50:03,2026-11-20,CSQR,"Csquare, Inc.",Brookfield Corp /On/,10%,P - Purchase,$14.44,"+297,797","+$4,299,980","104,185,170"
@@ -498,4 +499,3 @@
 2026-09-21 17:04:15,2026-09-21,GME,Gamestop Corp.,Cohen Ryan,"Pres, CEO, COB",P - Purchase,$22.94,"+1,150,680","+$26,393,723","40,498,522"
 2026-09-21 16:44:42,2026-09-18,GSAT,"Globalstar, Inc.",Monroe James III,"Dir, 10%",P - Purchase,$82.52,"+361,600","+$29,839,232","74,419,849"
 2026-09-21 16:32:21,2026-09-17,GPI,Group 1 Automotive Inc,"Conifer Management, L.L.C.",10%,P - Purchase,$256.78,"+65,650","+$16,857,715","1,512,290"
-2026-09-21 16:31:57,2026-09-17,CRBG,"Corebridge Financial, Inc.",Nippon Life Insurance Co,10%,P - Purchase,$35.20,"+174,760","+$6,150,731","123,475,852"
