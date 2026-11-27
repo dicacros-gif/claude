@@ -1,4 +1,5 @@
 ﻿신고일,거래일,티커,회사명,임원명,직책,거래유형,가격,수량,거래금액,보유주식
+2026-11-27 09:55:24,2026-11-24,DGICA,Donegal Group Inc,Donegal Mutual Insurance Co,10%,P - Purchase,$19.04,"+20,000","+$380,819","19,289,915"
 2026-11-25 18:20:23,2026-11-25,TEAM,Atlassian Corp,Cannon-Brookes Michael,"CEO, Co-Founder, 10%",P - Purchase,$138.85,"+13,400","+$1,860,561","423,340"
 2026-11-25 17:45:32,2026-11-24,BG,Bunge Global Sa,Zenuk Mark N,Dir,P - Purchase,$91.98,"+2,500","+$229,957","33,032"
 2026-11-25 17:20:25,2026-11-24,CLW,Clearwater Paper Corp,Toeldte Alexander,Dir,P - Purchase,$16.50,"+7,617","+$125,688","7,617"
@@ -498,4 +499,3 @@
 2026-09-22 11:07:49,2026-09-18,BBD,Bank Bradesco,Machado Silvana Rosa,Exec Officer,P - Purchase,$17.98,"+62,048","+$1,115,623","235,449"
 2026-09-22 11:03:24,2026-09-18,BBD,Bank Bradesco,Paris Roberto De Jesus,Exec Officer,P - Purchase,$17.98,"+96,702","+$1,738,702","367,829"
 2026-09-22 10:57:11,2026-09-18,BBD,Bank Bradesco,Mantarro Renata Geiser,Exec Officer,P - Purchase,$17.98,"+54,760","+$984,585","300,088"
-2026-09-22 10:50:57,2026-09-18,BBD,Bank Bradesco,Fernandes Oswaldo Tadeu,Exec Officer,P - Purchase,$17.98,"+79,782","+$1,434,480","348,575"
